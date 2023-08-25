@@ -18,6 +18,8 @@ public class AdminController {
 	public String krati() {
 		return "Hello welcome";
 	}
+
+	//this is comment
 	
 //	@PostMapping("/")
 //	public UserRegistration createAdmin(@RequestBody UserRegistration userReg) {
