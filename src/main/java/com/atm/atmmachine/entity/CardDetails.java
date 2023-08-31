@@ -4,6 +4,7 @@ import java.math.BigInteger;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -74,6 +75,9 @@ public class CardDetails {
 	private CardType cardType;
 	
 	@NotBlank(message="This field cant be empty or null")
+	private Double cardLimit;
+	
+	@NotBlank(message="This field cant be empty or null")
 	@Enumerated(EnumType.STRING)
 	private CardStatus cardstatus;
 	
@@ -102,6 +106,7 @@ public class CardDetails {
 			@NotBlank(message = "This field cant be empty or null") Integer cvv,
 			@NotBlank(message = "This field cant be empty or null") LocalDate validThrough,
 			@NotBlank(message = "This field cant be empty or null") CardType cardType,
+			@NotBlank(message="This field cant be empty or null") Double cardLimit,
 			@NotBlank(message = "This field cant be empty or null") CardStatus cardstatus,
 			@NotBlank(message = "This field cant be empty or null") Double amount,
 			@NotBlank(message = "This field cant be empty or null") Integer cardPin,
@@ -112,6 +117,7 @@ public class CardDetails {
 		this.cvv = cvv;
 		this.validThrough = validThrough;
 		this.cardType = cardType;
+		this.cardLimit = cardLimit;
 		this.cardstatus = cardstatus;
 		this.amount = amount;
 		this.cardPin = cardPin;
@@ -191,7 +197,15 @@ public class CardDetails {
 		this.cardType = cardType;
 	}
 
+	
 
+	public Double getCardLimit() {
+		return cardLimit;
+	}
+
+	public void setCardLimit(Double cardLimit) {
+		this.cardLimit = cardLimit;
+	}
 
 	public CardStatus getCardstatus() {
 		return cardstatus;

@@ -21,7 +21,7 @@ import com.atm.atmmachine.idGenerator.StringPrefixedSequenceIdGenerator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
-public class Transaction {
+public class TransactionDetails {
 	
 	@Id
 	@GeneratedValue(generator = "transaction_id",strategy = GenerationType.SEQUENCE)
@@ -42,7 +42,7 @@ public class Transaction {
 	private BigInteger toAccountNumber;
 	
 	@NotNull
-	@JsonFormat(pattern="YYYY-MM-dd hh:mm")
+	@JsonFormat(pattern="YYYY-MM-dd")
 	private LocalDate transactionDate;
 	
 	@NotNull
@@ -55,17 +55,17 @@ public class Transaction {
 	@OneToOne
 	private DTH dth;
 
-	public Transaction() {
+	public TransactionDetails() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public Transaction(CardDetails cardDetails,
+	public TransactionDetails(CardDetails cardDetails,
 			@NotBlank(message = "It should contain 12 numbers") BigInteger toAccountNumber,
 			@NotBlank(message = "It can't be empty") LocalDate transactionDate,
 			@NotBlank(message = "Amount paid") Double balance, ElectricityBill electricityBill, DTH dth) {
 		super();
-		this.transactionId = transactionId;
+//		this.transactionId = transactionId;
 		this.cardDetails = cardDetails;
 		this.toAccountNumber = toAccountNumber;
 		this.transactionDate = transactionDate;
