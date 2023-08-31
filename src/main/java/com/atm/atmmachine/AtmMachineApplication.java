@@ -2,7 +2,7 @@ package com.atm.atmmachine;
 
 import java.math.BigInteger;
 import java.time.LocalDate;
-import java.util.Optional;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -108,66 +108,136 @@ public class AtmMachineApplication implements CommandLineRunner{
 		 this.transactionRepository.save(transaction7);
 		 
 //create all vendors roughly
-		 Vendors vendor1 = new Vendors(TypeOfVendor.DTH,"Airtel",new BigInteger("126734582093"),22000.0);
-		 this.vendorsRepository.save(vendor1);
-		 Vendors vendor2 = new Vendors(TypeOfVendor.DTH,"Samsung",new BigInteger("126675423093"),22000.0);
-		 this.vendorsRepository.save(vendor2);
-		 Vendors vendor3 = new Vendors(TypeOfVendor.DTH,"Sony",new BigInteger("126734512345"),22000.0);
-		 this.vendorsRepository.save(vendor3);
-		 Vendors vendor4 = new Vendors(TypeOfVendor.DTH,"Personi",new BigInteger("999994582093"),22000.0);
-		 this.vendorsRepository.save(vendor4);
-		 Vendors vendor5 = new Vendors(TypeOfVendor.ElectricityBill,"Maharstra",new BigInteger("126734582999"),22000.0);
-		 this.vendorsRepository.save(vendor5);
-		 Vendors vendor6 = new Vendors(TypeOfVendor.ElectricityBill,"Delhi",new BigInteger("126774582093"),22000.0);
-		 this.vendorsRepository.save(vendor6);
-		 Vendors vendor7 = new Vendors(TypeOfVendor.ElectricityBill,"UttarPradesh",new BigInteger("106734582093"),22000.0);
-		 this.vendorsRepository.save(vendor7);
-		 Vendors vendor8 = new Vendors(TypeOfVendor.ElectricityBill,"MadhyaPradesh",new BigInteger("846734582093"),22000.0);
-		 this.vendorsRepository.save(vendor8);
-		 
+
+         Vendors vendor1 = new Vendors(TypeOfVendor.DTH,"Airtel",new BigInteger("126734582093"),22000.0);
+
+         this.vendorsRepository.save(vendor1);
+
+         Vendors vendor2 = new Vendors(TypeOfVendor.DTH,"Samsung",new BigInteger("126675423093"),22000.0);
+
+         this.vendorsRepository.save(vendor2);
+
+         Vendors vendor3 = new Vendors(TypeOfVendor.DTH,"Sony",new BigInteger("126734512345"),22000.0);
+
+         this.vendorsRepository.save(vendor3);
+
+         Vendors vendor4 = new Vendors(TypeOfVendor.DTH,"Personi",new BigInteger("999994582093"),22000.0);
+
+         this.vendorsRepository.save(vendor4);
+
+         Vendors vendor5 = new Vendors(TypeOfVendor.ElectricityBill,"Maharstra",new BigInteger("126734582999"),22000.0);
+
+         this.vendorsRepository.save(vendor5);
+
+         Vendors vendor6 = new Vendors(TypeOfVendor.ElectricityBill,"Delhi",new BigInteger("126774582093"),22000.0);
+
+         this.vendorsRepository.save(vendor6);
+
+         Vendors vendor7 = new Vendors(TypeOfVendor.ElectricityBill,"UttarPradesh",new BigInteger("106734582093"),22000.0);
+
+         this.vendorsRepository.save(vendor7);
+
+         Vendors vendor8 = new Vendors(TypeOfVendor.ElectricityBill,"MadhyaPradesh",new BigInteger("846734582093"),22000.0);
+
+         this.vendorsRepository.save(vendor8);
+
+         
+
 //Now entering data in UserRequest which is link to our -> UserRegistration
-		 UserRequest userRequest1 = new UserRequest(userRegistration1.getCardDetails().getAccountNumber(),"Card Replacement","My card is not working",LocalDate.now(),RequestStatus.Pending,null,userRegistration1);
-		 this.userRequestRepository.save(userRequest1);
-		 UserRequest userRequest2 = new UserRequest(userRegistration1.getCardDetails().getAccountNumber(),"Card Lost","My card is not Lost",LocalDate.now(),RequestStatus.Pending,null,userRegistration1);
-		 this.userRequestRepository.save(userRequest2);
-		 UserRequest userRequest3 = new UserRequest(userRegistration2.getCardDetails().getAccountNumber(),"Card Replacement","My card is not working",LocalDate.now(),RequestStatus.Pending,null,userRegistration2);
-		 this.userRequestRepository.save(userRequest3);
-		 UserRequest userRequest4 = new UserRequest(userRegistration3.getCardDetails().getAccountNumber(),"Card Replacement","My card is not working",LocalDate.now(),RequestStatus.Pending,null,userRegistration3);
-		 this.userRequestRepository.save(userRequest4);
-		 UserRequest userRequest5 = new UserRequest(userRegistration3.getCardDetails().getAccountNumber(),"Card Lost","My card is not Lost",LocalDate.now(),RequestStatus.Pending,null,userRegistration3);
-		 this.userRequestRepository.save(userRequest5);
-		 UserRequest userRequest6 = new UserRequest(userRegistration4.getCardDetails().getAccountNumber(),"Update Catrd","Please uopdate my Card",LocalDate.now(),RequestStatus.Pending,null,userRegistration1);
-		 this.userRequestRepository.save(userRequest6);
-		 
-		 
+
+         UserRequest userRequest1 = new UserRequest(userRegistration1.getCardDetails().getAccountNumber(),"Card Replacement","My card is not working",LocalDate.now(),RequestStatus.Pending,null,userRegistration1);
+
+         this.userRequestRepository.save(userRequest1);
+
+         UserRequest userRequest2 = new UserRequest(userRegistration1.getCardDetails().getAccountNumber(),"Card Lost","My card is not Lost",LocalDate.now(),RequestStatus.Pending,null,userRegistration1);
+
+         this.userRequestRepository.save(userRequest2);
+
+         UserRequest userRequest3 = new UserRequest(userRegistration2.getCardDetails().getAccountNumber(),"Card Replacement","My card is not working",LocalDate.now(),RequestStatus.Pending,null,userRegistration2);
+
+         this.userRequestRepository.save(userRequest3);
+
+         UserRequest userRequest4 = new UserRequest(userRegistration3.getCardDetails().getAccountNumber(),"Card Replacement","My card is not working",LocalDate.now(),RequestStatus.Pending,null,userRegistration3);
+
+         this.userRequestRepository.save(userRequest4);
+
+         UserRequest userRequest5 = new UserRequest(userRegistration3.getCardDetails().getAccountNumber(),"Card Lost","My card is not Lost",LocalDate.now(),RequestStatus.Pending,null,userRegistration3);
+
+         this.userRequestRepository.save(userRequest5);
+
+         UserRequest userRequest6 = new UserRequest(userRegistration4.getCardDetails().getAccountNumber(),"Update Catrd","Please uopdate my Card",LocalDate.now(),RequestStatus.Pending,null,userRegistration1);
+
+         this.userRequestRepository.save(userRequest6);
+
+         
+
+         
+
 ///Now entering electricityBill which is link to -> CardDetail -> Transaction -> Vendors
-		 ElectricityBill electricityBill1 = new ElectricityBill(carddetail1,2000.0,vendor5);
-		 this.electricityBillRepository.save(electricityBill1);
-		 TransactionDetails transaction8 = new TransactionDetails(carddetail1,new BigInteger("126734582999"),localDate.now(),2000.0,electricityBill1,null);
-		 this.transactionRepository.save(transaction8);
-		 ElectricityBill electricityBill2 = new ElectricityBill(carddetail1,3000.0,vendor6);
-		 this.electricityBillRepository.save(electricityBill2);
-		 TransactionDetails transaction9 = new TransactionDetails(carddetail1,new BigInteger("126774582093"),localDate.now(),3000.0,electricityBill2,null);
-		 this.transactionRepository.save(transaction9);
-		 ElectricityBill electricityBill3 = new ElectricityBill(carddetail2,5000.0,vendor7);
-		 this.electricityBillRepository.save(electricityBill3);
-		 TransactionDetails transaction10 = new TransactionDetails(carddetail2,new BigInteger("106734582093"),localDate.now(),5000.0,electricityBill1,null);
-		 this.transactionRepository.save(transaction10);
-		 
-		 
+
+         ElectricityBill electricityBill1 = new ElectricityBill(carddetail1,2000.0,vendor5);
+
+         this.electricityBillRepository.save(electricityBill1);
+
+         Transaction transaction8 = new Transaction(carddetail1,new BigInteger("126734582999"),localDate.now(),2000.0,electricityBill1,null);
+
+         this.transactionRepository.save(transaction8);
+
+         ElectricityBill electricityBill2 = new ElectricityBill(carddetail1,3000.0,vendor6);
+
+         this.electricityBillRepository.save(electricityBill2);
+
+         Transaction transaction9 = new Transaction(carddetail1,new BigInteger("126774582093"),localDate.now(),3000.0,electricityBill2,null);
+
+         this.transactionRepository.save(transaction9);
+
+         ElectricityBill electricityBill3 = new ElectricityBill(carddetail2,5000.0,vendor7);
+
+         this.electricityBillRepository.save(electricityBill3);
+
+         Transaction transaction10 = new Transaction(carddetail2,new BigInteger("106734582093"),localDate.now(),5000.0,electricityBill1,null);
+
+         this.transactionRepository.save(transaction10);
+
+         
+
+         
+
 //Now entering DTHBill which is link to -> CardDetail -> Transaction -> Vendors
-		 DTH dthBill1 = new DTH(carddetail1,200.0,vendor1);
-		 this.dthRepository.save(dthBill1);
-		 TransactionDetails transaction11 = new TransactionDetails(carddetail1,new BigInteger("126734582093"),localDate.now(),200.0,null,dthBill1);
-		 this.transactionRepository.save(transaction11);
-		 DTH dthBill2 = new DTH(carddetail1,300.0,vendor2);
-		 this.dthRepository.save(dthBill2);
-		 TransactionDetails transaction12 = new TransactionDetails(carddetail1,new BigInteger("126675423093"),localDate.now(),300.0,null,dthBill2);
-		 this.transactionRepository.save(transaction12);
-		 DTH dthBill3 = new DTH(carddetail2,500.0,vendor3);
-		 this.dthRepository.save(dthBill3);
-		 TransactionDetails transaction13 = new TransactionDetails(carddetail2,new BigInteger("126734512345"),localDate.now(),500.0,null,dthBill3);
-		 this.transactionRepository.save(transaction13);
+
+         DTH dthBill1 = new DTH(carddetail1,200.0,vendor1);
+
+         this.dthRepository.save(dthBill1);
+
+         Transaction transaction11 = new Transaction(carddetail1,new BigInteger("126734582093"),localDate.now(),200.0,null,dthBill1);
+
+         this.transactionRepository.save(transaction11);
+
+         DTH dthBill2 = new DTH(carddetail1,300.0,vendor2);
+
+         this.dthRepository.save(dthBill2);
+
+         Transaction transaction12 = new Transaction(carddetail1,new BigInteger("126675423093"),localDate.now(),300.0,null,dthBill2);
+
+         this.transactionRepository.save(transaction12);
+
+         DTH dthBill3 = new DTH(carddetail2,500.0,vendor3);
+
+         this.dthRepository.save(dthBill3);
+
+         Transaction transaction13 = new Transaction(carddetail2,new BigInteger("126734512345"),localDate.now(),500.0,null,dthBill3);
+
+         this.transactionRepository.save(transaction13);
+
+         
+
+         
+
+         System.out.println("Hello : "+this.userRequestRepository.findByRequestId("req1"));
+		 
+		 
+		 
+		 
 	}
 
 }

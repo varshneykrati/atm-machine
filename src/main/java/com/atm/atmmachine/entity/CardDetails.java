@@ -1,5 +1,6 @@
 package com.atm.atmmachine.entity;
 
+import java.io.Serializable;
 import java.math.BigInteger;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -25,6 +26,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import com.atm.atmmachine.idGenerator.StringPrefixedSequenceIdGenerator;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class CardDetails {
@@ -66,7 +68,7 @@ public class CardDetails {
 	private Integer cvv;
 	
 	@NotNull
-	@JsonFormat(pattern="YYYY-MM-DD")
+	@JsonFormat(pattern="yyyy-MM-dd")
 	@NotBlank(message="This field cant be empty or null")
 	private LocalDate validThrough;
 	
@@ -106,7 +108,7 @@ public class CardDetails {
 			@NotBlank(message = "This field cant be empty or null") Integer cvv,
 			@NotBlank(message = "This field cant be empty or null") LocalDate validThrough,
 			@NotBlank(message = "This field cant be empty or null") CardType cardType,
-			@NotBlank(message="This field cant be empty or null") Double cardLimit,
+			@NotBlank(message = "This field cant be empty or null") Double cardLimit,
 			@NotBlank(message = "This field cant be empty or null") CardStatus cardstatus,
 			@NotBlank(message = "This field cant be empty or null") Double amount,
 			@NotBlank(message = "This field cant be empty or null") Integer cardPin,

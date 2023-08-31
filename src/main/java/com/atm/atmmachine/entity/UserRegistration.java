@@ -55,12 +55,16 @@ public class UserRegistration {
 	private String userName;
 	
 	@NotBlank(message="This field cant be empty or null")
-	 @JsonFormat(pattern = "YYYY-MM-dd")
+	 
 	private LocalDate userDOB;
 	
 	@Column(unique=true)
 	@NotBlank(message="This field cant be empty or null")
 	private String phoneNo;
+	
+	@Column(unique=true)
+    @NotBlank(message="This field cant be empty or null")
+    private Long aadharNumber;
 	
 	@Column(unique=true)
 	@Email(message = "Email is not valid")
@@ -98,6 +102,7 @@ public class UserRegistration {
 	public UserRegistration(@NotBlank(message = "This field cant be empty or null") String userName,
 			@NotBlank(message = "This field cant be empty or null") LocalDate userDOB,
 			@NotBlank(message = "This field cant be empty or null") String phoneNo,
+			@NotBlank(message = "This field cant be empty or null") Long aadharNumber,
 			@Email(message = "Email is not valid") @NotBlank(message = "This field cant be empty or null") String emailId,
 			@NotBlank(message = "This field cant be empty or null") String password,
 			@NotBlank(message = "This field cant be empty or null") String confirmPassword,
@@ -106,6 +111,7 @@ public class UserRegistration {
 		this.userName = userName;
 		this.userDOB = userDOB;
 		this.phoneNo = phoneNo;
+		this.aadharNumber = aadharNumber;
 		this.emailId = emailId;
 		this.password = password;
 		this.confirmPassword = confirmPassword;
@@ -211,6 +217,16 @@ public class UserRegistration {
 
 	public void setCardDetails(CardDetails cardDetails) {
 		this.cardDetails = cardDetails;
+	}
+
+
+	public Long getAadharNumber() {
+		return aadharNumber;
+	}
+
+
+	public void setAadharNumber(Long aadharNumber) {
+		this.aadharNumber = aadharNumber;
 	}
 
 
