@@ -190,7 +190,6 @@ public class UserRegistration {
 		this.confirmPassword = confirmPassword;
 	}
 
-
 	public UserRegistrationApproval getUserRegistrationApproval() {
 		return userRegistrationApproval;
 	}
