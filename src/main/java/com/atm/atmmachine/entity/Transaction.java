@@ -1,5 +1,6 @@
 package com.atm.atmmachine.entity;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDate;
@@ -19,6 +20,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import com.atm.atmmachine.idGenerator.StringPrefixedSequenceIdGenerator;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Transaction {
@@ -33,6 +35,7 @@ public class Transaction {
             })
 	private String transactionId;
 	
+	
 	@ManyToOne
 	@JoinColumn(name="card_id", referencedColumnName = "cardId")
 	private CardDetails cardDetails;
@@ -42,7 +45,7 @@ public class Transaction {
 	private BigInteger toAccountNumber;
 	
 	@NotNull
-	@JsonFormat(pattern="YYYY-MM-dd hh:mm")
+	@JsonFormat(pattern="YYYY-MM-dd")
 	private LocalDate transactionDate;
 	
 	@NotNull
