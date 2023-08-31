@@ -1,7 +1,9 @@
 package com.atm.atmmachine.entity;
 
+import java.io.Serializable;
 import java.math.BigInteger;
 import java.time.LocalDate;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -20,6 +22,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import com.atm.atmmachine.idGenerator.StringPrefixedSequenceIdGenerator;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class UserRequest {
@@ -52,7 +55,8 @@ public class UserRequest {
 	
 	@NotNull
 	@NotBlank(message="It can' be empty")
-	@JsonFormat(pattern="dd-MM-yyyy hh:mm")
+	@JsonFormat(pattern="YYYY-MM-dd")
+	//@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	private LocalDate dateOfRequest;
 	
 	@Enumerated(EnumType.STRING)
@@ -61,10 +65,12 @@ public class UserRequest {
 	
 	private String adminRemark;
 	
+
 	@ManyToOne
 	@JoinColumn(name = "user_id", referencedColumnName = "userId")
 	private UserRegistration userRegistration;
-
+	
+	
 	
 	public UserRequest() {
 		super();

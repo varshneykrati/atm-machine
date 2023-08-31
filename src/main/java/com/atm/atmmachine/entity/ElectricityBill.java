@@ -1,5 +1,7 @@
 package com.atm.atmmachine.entity;
 
+import java.io.Serializable;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -9,14 +11,16 @@ import javax.persistence.ManyToOne;
 
 import org.hibernate.annotations.GenericGenerator;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import com.atm.atmmachine.idGenerator.StringPrefixedSequenceIdGenerator;
 
 @Entity
 public class ElectricityBill {
 	
 	@ManyToOne
-	@JoinColumn(name = "card_id")
-	private CardDetails cardDetails;
+    @JoinColumn(name = "card_id")
+    private CardDetails cardDetails;
 	
 	@Id
 	@GeneratedValue(generator = "electricityBill_id",strategy = GenerationType.SEQUENCE)
@@ -24,7 +28,7 @@ public class ElectricityBill {
     parameters = {
     		@org.hibernate.annotations.Parameter(name = StringPrefixedSequenceIdGenerator.INCREMENT_PARAM, value = "1"),
     		@org.hibernate.annotations.Parameter(name = StringPrefixedSequenceIdGenerator.VALUE_PREFIX_PARAMETER, value = "elec"),
-
+    		@org.hibernate.annotations.Parameter(name = StringPrefixedSequenceIdGenerator.NUMBER_FORMAT_PARAMETER, value = "1000%d")
             })
 	private String userElectricityId;
 	
@@ -40,25 +44,20 @@ public class ElectricityBill {
 		// TODO Auto-generated constructor stub
 	}
 
-	public ElectricityBill(CardDetails cardDetails, Double amountToBePaid, Vendors vendors) {
-		super();
-		this.cardDetails = cardDetails;
-		this.userElectricityId = userElectricityId;
-		this.amountToBePaid = amountToBePaid;
-		this.vendors = vendors;
-	}
 
-	public CardDetails getCardDetails() {
-		return cardDetails;
-	}
-
-	public void setCardDetails(CardDetails cardDetails) {
-		this.cardDetails = cardDetails;
-	}
+	
 
 	public String getUserElectricityId() {
 		return userElectricityId;
 	}
+
+	public ElectricityBill(CardDetails cardDetails, Double amountToBePaid, Vendors vendors) {
+	super();
+	this.cardDetails = cardDetails;
+	this.userElectricityId = userElectricityId;
+	this.amountToBePaid = amountToBePaid;
+	this.vendors = vendors;
+}
 
 	public void setUserElectricityId(String userElectricityId) {
 		this.userElectricityId = userElectricityId;
