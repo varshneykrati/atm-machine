@@ -52,7 +52,7 @@ public class UserRequest {
 	
 	@NotNull
 	@NotBlank(message="It can' be empty")
-	@JsonFormat(pattern="dd-MM-yyyy hh:mm")
+	@JsonFormat(pattern="dd-MM-yyyy")
 	private LocalDate dateOfRequest;
 	
 	@Enumerated(EnumType.STRING)

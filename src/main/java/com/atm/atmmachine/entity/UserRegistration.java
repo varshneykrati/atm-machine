@@ -29,6 +29,7 @@ import org.hibernate.annotations.GenericGenerator;
 import com.atm.atmmachine.idGenerator.StringPrefixedSequenceIdGenerator;
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 @Entity
@@ -74,15 +75,15 @@ public class UserRegistration {
 	@NotBlank(message="This field cant be empty or null")
 	private String confirmPassword;
 	
-	//@Enumerated(EnumType.STRING)
+	@Enumerated(EnumType.STRING)
 	@Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$")
-	private String userRegistrationApproval;
+	private UserRegistrationApproval userRegistrationApproval;
 	
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "address_id", referencedColumnName = "addressId")
 	private Address address;
 	
-	
+	@JsonIgnore
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "card_id", referencedColumnName = "cardId")
 	private CardDetails cardDetails;
@@ -100,7 +101,7 @@ public class UserRegistration {
 			@Email(message = "Email is not valid") @NotBlank(message = "This field cant be empty or null") String emailId,
 			@NotBlank(message = "This field cant be empty or null") String password,
 			@NotBlank(message = "This field cant be empty or null") String confirmPassword,
-			String userRegistrationApproval, Address address, CardDetails cardDetails) {
+			UserRegistrationApproval userRegistrationApproval, Address address, CardDetails cardDetails) {
 		super();
 		this.userName = userName;
 		this.userDOB = userDOB;
@@ -184,12 +185,12 @@ public class UserRegistration {
 	}
 
 
-	public String getUserRegistrationApproval() {
+	public UserRegistrationApproval getUserRegistrationApproval() {
 		return userRegistrationApproval;
 	}
 
 
-	public void setUserRegistrationApproval(String userRegistrationApproval) {
+	public void setUserRegistrationApproval(UserRegistrationApproval userRegistrationApproval) {
 		this.userRegistrationApproval = userRegistrationApproval;
 	}
 

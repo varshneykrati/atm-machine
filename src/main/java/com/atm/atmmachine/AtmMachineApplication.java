@@ -20,6 +20,7 @@ import com.atm.atmmachine.entity.DTH;
 import com.atm.atmmachine.entity.ElectricityBill;
 import com.atm.atmmachine.entity.Transaction;
 import com.atm.atmmachine.entity.UserRegistration;
+import com.atm.atmmachine.entity.UserRegistration.UserRegistrationApproval;
 import com.atm.atmmachine.entity.UserRequest;
 import com.atm.atmmachine.entity.UserRequest.RequestStatus;
 import com.atm.atmmachine.entity.Vendors;
@@ -66,11 +67,11 @@ public class AtmMachineApplication implements CommandLineRunner{
 		
 //Entering user registration detail form with the -> address  -----
 		Address address1 = new Address("405/8 Nai Basti","Firozabad",283203,"Uttar Pradesh");
-		UserRegistration userRegistration1 = new UserRegistration("Krati Varshney",localDate.now(),"9760286311","krativarshne@gmail.com","KVar@7777","KVar@7777","Inactive",address1,null);
-		UserRegistration userRegistration2 = new UserRegistration("Shivam",localDate.now(),"9760281111","shivam@gmail.com","shivam@7777","shivam@7777","Inactive",new Address("415/8 New Market","Agra",283203,"Uttar Pradesh"),null);
-		UserRegistration userRegistration3 = new UserRegistration("Sidhi",localDate.now(),"9712121111","sidhi@gmail.com","sidhi@7777","sidhi@7777","Inactive",new Address("415/8 Old Market","Agra",283203,"Madhya Pradesh"),null);
-		UserRegistration userRegistration4 = new UserRegistration("Mansi",localDate.now(),"9760281156","mansi@gmail.com","mansi@7777","mansi@7777","Inactive",new Address("905/8 New Market","Agra",283203,"Uttar Pradesh"),null);
-		UserRegistration userRegistration5 = new UserRegistration("Ram",localDate.now(),"9960281111","ram@gmail.com","ram@7700","ram@7700","Inactive",new Address("415/8 Navi Mumbai","Mumbai",283203,"Maharastra"),null);
+		UserRegistration userRegistration1 = new UserRegistration("Krati Varshney",localDate.now(),"9760286311","krativarshne@gmail.com","KVar@7777","KVar@7777",UserRegistrationApproval.Inactive,address1,null);
+		UserRegistration userRegistration2 = new UserRegistration("Shivam",localDate.now(),"9760281111","shivam@gmail.com","shivam@7777","shivam@7777",UserRegistrationApproval.Inactive,new Address("415/8 New Market","Agra",283203,"Uttar Pradesh"),null);
+		UserRegistration userRegistration3 = new UserRegistration("Sidhi",localDate.now(),"9712121111","sidhi@gmail.com","sidhi@7777","sidhi@7777",UserRegistrationApproval.Inactive,new Address("415/8 Old Market","Agra",283203,"Madhya Pradesh"),null);
+		UserRegistration userRegistration4 = new UserRegistration("Mansi",localDate.now(),"9760281156","mansi@gmail.com","mansi@7777","mansi@7777",UserRegistrationApproval.Inactive,new Address("905/8 New Market","Agra",283203,"Uttar Pradesh"),null);
+		UserRegistration userRegistration5 = new UserRegistration("Ram",localDate.now(),"9960281111","ram@gmail.com","ram@7700","ram@7700",UserRegistrationApproval.Inactive,new Address("415/8 Navi Mumbai","Mumbai",283203,"Maharastra"),null);
 		userRegistrationRepository.save(userRegistration1);
 		userRegistrationRepository.save(userRegistration2);
 		userRegistrationRepository.save(userRegistration3);
