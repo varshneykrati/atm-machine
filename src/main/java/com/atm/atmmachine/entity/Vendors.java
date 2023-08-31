@@ -24,7 +24,7 @@ public class Vendors {
 	}
 
 	@Id
-	@GeneratedValue(generator = "vendor_id",strategy = GenerationType.SEQUENCE)
+	@GeneratedValue(generator = "vendor_id",strategy = GenerationType.AUTO)
 	@GenericGenerator(name = "vendor_id", strategy = "com.atm.atmmachine.idGenerator.StringPrefixedSequenceIdGenerator",
     parameters = {
     		@org.hibernate.annotations.Parameter(name = StringPrefixedSequenceIdGenerator.INCREMENT_PARAM, value = "1"),
