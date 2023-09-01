@@ -26,7 +26,7 @@ import com.atm.atmmachine.service.AdminService;
 public class AdminController {
 	
 	@Autowired
-	AdminService adminService;
+	private AdminService adminService;
 	
 	
 	
@@ -65,11 +65,11 @@ public class AdminController {
 	
 	
 	//used to approve the cardLost request of specific requestid
-	@PatchMapping("/admin/cardlost/statuschange/{id}")
-	public RequestStatus changeRequestStatus(@PathVariable("id") String id) throws AdminException {
+	@PatchMapping("/admin/cardlost/statuschange/{reqid}")
+	public RequestStatus changeRequestStatus(@PathVariable("reqid") String reqId) throws AdminException {
 		UserRequest currentUserRequest;
 		try {
-			currentUserRequest = this.adminService.updateUserRequestStatus(id);
+			currentUserRequest = this.adminService.updateUserRequestStatus(reqId);
 		} catch (AdminException e) {
 			throw e;
 		}
@@ -85,10 +85,10 @@ public class AdminController {
 	}
 	
 	//to set user registration approval active
-	@PatchMapping("/admin/change/userregistrationapproval/{id}")
-	public UserRegistrationApproval changeUserRegistrationApproval(@PathVariable("id") String id) throws AdminException{
+	@PatchMapping("/admin/change/userregistrationapproval/{userid}")
+	public UserRegistrationApproval changeUserRegistrationApproval(@PathVariable("userid") String userId) throws AdminException{
 		try {
-			return this.adminService.updateUserRegistrationApproval(id);
+			return this.adminService.updateUserRegistrationApproval(userId);
 		} catch (AdminException e) {
 			throw e;
 		}
