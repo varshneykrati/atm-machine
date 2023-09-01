@@ -16,9 +16,9 @@ import java.util.List;
 @Service
 public class UserRequestServiceImpl implements UserRequestService {
 	@Autowired
-	UserRequestRepository requestRepository;
+	 private UserRequestRepository requestRepository;
 	@Autowired
-	UserRegistrationRepository userRegistrationRepository;
+	 private UserRegistrationRepository userRegistrationRepository;
 
 	@Override
 	public UserRequest getUserRequestById(String requestId) throws RequestException {
@@ -34,7 +34,7 @@ public class UserRequestServiceImpl implements UserRequestService {
 	@Override
 	public UserRequest addRequest(UserRequest newRequest)throws RequestException {
 		newRequest.setDateOfRequest(LocalDate.now());// for storing current date
-		Optional<UserRegistration> getUserOpt = this.userRegistrationRepository.findByUserId("user1");
+		Optional<UserRegistration> getUserOpt = this.userRegistrationRepository.findById("user1");
 		if(!getUserOpt.isPresent())
 		{
 			throw new RequestException(" Can't add  as User id is  not present");
@@ -79,7 +79,7 @@ public class UserRequestServiceImpl implements UserRequestService {
 
 	@Override
 	public List<UserRequest> getRequestByUserId(String userId)throws RequestException {
-		Optional<UserRegistration> userRegistrationOpt = this.userRegistrationRepository.findByUserId(userId);
+		Optional<UserRegistration> userRegistrationOpt = this.userRegistrationRepository.findById(userId);
 		if(userRegistrationOpt.isPresent())
 		{
 			UserRegistration getUser = userRegistrationOpt.get();
@@ -88,17 +88,14 @@ public class UserRequestServiceImpl implements UserRequestService {
 			return requestOpt;
 		}
 		else
-			throw new RequestException("User not present");
-		
-		
-		
+			throw new RequestException("User not present");	
 	}
 
 	@Override
-	public UserRequest UpdateRequest(UserRequest newRequest) throws RequestException {
+	public UserRequest updateRequest(UserRequest newRequest) throws RequestException {
 		Optional<UserRequest> getRequest = requestRepository.findById(newRequest.getRequestId());
 		if (getRequest.isPresent()) {
-			UserRequest updatedrequest = requestRepository.save(newRequest);
+			UserRequest updatedrequest = this.requestRepository.save(newRequest);
 			return updatedrequest;
 		}
 		return null;
