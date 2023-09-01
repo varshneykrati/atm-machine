@@ -26,13 +26,13 @@ import com.atm.atmmachine.repository.UserRequestRepository;
 public class AdminServiceImpl implements AdminService {
 
 	@Autowired
-	UserRequestRepository userRequestRepository;
+	private UserRequestRepository userRequestRepository;
 
 	@Autowired
-	UserRegistrationRepository userRegistrationRepository;
+	private UserRegistrationRepository userRegistrationRepository;
 
 	@Autowired
-	CardDetailsRepository cardDetailsRepository;
+	private CardDetailsRepository cardDetailsRepository;
 	
 	@Override
 	public Optional<UserRegistration> findByUserId(String userId) {
@@ -92,8 +92,8 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public UserRegistrationApproval updateUserRegistrationApproval(String id)throws AdminException {
-		Optional<UserRegistration> foundUser = this.userRegistrationRepository.findByUserId(id);
+	public UserRegistrationApproval updateUserRegistrationApproval(String userId)throws AdminException {
+		Optional<UserRegistration> foundUser = this.userRegistrationRepository.findByUserId(userId);
 		if(!foundUser.isPresent())
 			throw new AdminException("User doesn't exist");
 		
