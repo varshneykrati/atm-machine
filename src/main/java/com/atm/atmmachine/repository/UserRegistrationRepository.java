@@ -13,7 +13,7 @@ import com.atm.atmmachine.entity.UserRegistration.UserRegistrationApproval;
 public interface UserRegistrationRepository extends JpaRepository<UserRegistration, String>{
 
 	//admin
-	public Optional<UserRegistration> findByUserId(String id);
+//	public Optional<UserRegistration> findByUserId(String id);
 	
 	public List<UserRegistration> findByUserRegistrationApproval(UserRegistrationApproval userRegistrationApproval); 
 

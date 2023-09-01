@@ -92,8 +92,8 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public UserRegistrationApproval updateUserRegistrationApproval(String userId)throws AdminException {
-		Optional<UserRegistration> foundUser = this.userRegistrationRepository.findByUserId(userId);
+	public UserRegistrationApproval updateUserRegistrationApproval(String id)throws AdminException {
+		Optional<UserRegistration> foundUser = this.userRegistrationRepository.findById(id);
 		if(!foundUser.isPresent())
 			throw new AdminException("User doesn't exist");
 		
@@ -104,7 +104,7 @@ public class AdminServiceImpl implements AdminService {
 
 	@Override
 	public Optional<UserRegistration> getUsersById(String userId) throws AdminException {
-		Optional<UserRegistration> foundUserRegistration = this.userRegistrationRepository.findByUserId(userId);
+		Optional<UserRegistration> foundUserRegistration = this.userRegistrationRepository.findById(userId);
 		if(!foundUserRegistration.isPresent())
 			throw new AdminException("User doesn't exist");
 		

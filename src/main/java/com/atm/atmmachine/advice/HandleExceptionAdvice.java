@@ -15,7 +15,7 @@ import com.atm.atmmachine.exceptions.RequestException;
 
 	    @ExceptionHandler(RequestException.class)
 
-	    public ResponseEntity<String> handlerProductException(RequestException requestException){
+	    public ResponseEntity<String> handlerRequestException(RequestException requestException){
 
 	        return new ResponseEntity<String>(requestException.getMessage(),HttpStatus.NOT_ACCEPTABLE);
 
