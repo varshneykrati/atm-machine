@@ -18,7 +18,7 @@ import com.atm.atmmachine.entity.CardDetails.CardType;
 import com.atm.atmmachine.entity.CardDetails.UserTotallyRegister;
 import com.atm.atmmachine.entity.DTH;
 import com.atm.atmmachine.entity.ElectricityBill;
-import com.atm.atmmachine.entity.Transaction;
+import com.atm.atmmachine.entity.TransactionDetails;
 import com.atm.atmmachine.entity.UserRegistration;
 import com.atm.atmmachine.entity.UserRegistration.UserRegistrationApproval;
 import com.atm.atmmachine.entity.UserRequest;
@@ -119,31 +119,31 @@ public class AtmMachineApplication implements CommandLineRunner{
 
 // Now Add Transaction which is link to -> Address
 
-         Transaction transaction1 = new Transaction(carddetail1,new BigInteger("123412344321"),localDate.now(),500.0,null,null);
+         TransactionDetails transaction1 = new TransactionDetails(carddetail1,new BigInteger("123412344321"),LocalDate.of(2023, 6, 2),500.0,null,null);
 
          this.transactionRepository.save(transaction1);
 
-         Transaction transaction2 = new Transaction(carddetail1,new BigInteger("993412344321"),localDate.now(),1500.0,null,null);
+         TransactionDetails transaction2 = new TransactionDetails(carddetail1,new BigInteger("993412344321"),localDate.now(),1500.0,null,null);
 
          this.transactionRepository.save(transaction2);
 
-         Transaction transaction3 = new Transaction(carddetail1,new BigInteger("553412344321"),localDate.now(),200.0,null,null);
+         TransactionDetails transaction3 = new TransactionDetails(carddetail1,new BigInteger("553412344321"),localDate.now(),200.0,null,null);
 
          this.transactionRepository.save(transaction3);
 
-         Transaction transaction4 = new Transaction(carddetail2,new BigInteger("123412344321"),localDate.now(),100.0,null,null);
+         TransactionDetails transaction4 = new TransactionDetails(carddetail2,new BigInteger("123412344321"),localDate.now(),100.0,null,null);
 
          this.transactionRepository.save(transaction4);
 
-         Transaction transaction5 = new Transaction(carddetail3,new BigInteger("123412344321"),localDate.now(),1200.0,null,null);
+         TransactionDetails transaction5 = new TransactionDetails(carddetail3,new BigInteger("123412344321"),localDate.now(),1200.0,null,null);
 
          this.transactionRepository.save(transaction5);
 
-         Transaction transaction6 = new Transaction(carddetail3,new BigInteger("123412349921"),localDate.now(),400.0,null,null);
+         TransactionDetails transaction6 = new TransactionDetails(carddetail3,new BigInteger("123412349921"),localDate.now(),400.0,null,null);
 
          this.transactionRepository.save(transaction6);
 
-         Transaction transaction7 = new Transaction(carddetail4,new BigInteger("123412344329"),localDate.now(),5200.0,null,null);
+         TransactionDetails transaction7 = new TransactionDetails(carddetail4,new BigInteger("123412344329"),localDate.now(),5200.0,null,null);
 
          this.transactionRepository.save(transaction7);
 
@@ -221,7 +221,7 @@ public class AtmMachineApplication implements CommandLineRunner{
 
          this.electricityBillRepository.save(electricityBill1);
 
-         Transaction transaction8 = new Transaction(carddetail1,new BigInteger("126734582999"),localDate.now(),2000.0,electricityBill1,null);
+         TransactionDetails transaction8 = new TransactionDetails(carddetail1,new BigInteger("126734582999"),localDate.now(),2000.0,electricityBill1,null);
 
          this.transactionRepository.save(transaction8);
 
@@ -229,7 +229,7 @@ public class AtmMachineApplication implements CommandLineRunner{
 
          this.electricityBillRepository.save(electricityBill2);
 
-         Transaction transaction9 = new Transaction(carddetail1,new BigInteger("126774582093"),localDate.now(),3000.0,electricityBill2,null);
+         TransactionDetails transaction9 = new TransactionDetails(carddetail1,new BigInteger("126774582093"),localDate.now(),3000.0,electricityBill2,null);
 
          this.transactionRepository.save(transaction9);
 
@@ -237,7 +237,7 @@ public class AtmMachineApplication implements CommandLineRunner{
 
          this.electricityBillRepository.save(electricityBill3);
 
-         Transaction transaction10 = new Transaction(carddetail2,new BigInteger("106734582093"),localDate.now(),5000.0,electricityBill1,null);
+         TransactionDetails transaction10 = new TransactionDetails(carddetail2,new BigInteger("106734582093"),localDate.now(),5000.0,electricityBill1,null);
 
          this.transactionRepository.save(transaction10);
 
@@ -251,7 +251,7 @@ public class AtmMachineApplication implements CommandLineRunner{
 
          this.dthRepository.save(dthBill1);
 
-         Transaction transaction11 = new Transaction(carddetail1,new BigInteger("126734582093"),localDate.now(),200.0,null,dthBill1);
+         TransactionDetails transaction11 = new TransactionDetails(carddetail1,new BigInteger("126734582093"),localDate.now(),200.0,null,dthBill1);
 
          this.transactionRepository.save(transaction11);
 
@@ -259,7 +259,7 @@ public class AtmMachineApplication implements CommandLineRunner{
 
          this.dthRepository.save(dthBill2);
 
-         Transaction transaction12 = new Transaction(carddetail1,new BigInteger("126675423093"),localDate.now(),300.0,null,dthBill2);
+         TransactionDetails transaction12 = new TransactionDetails(carddetail1,new BigInteger("126675423093"),localDate.now(),300.0,null,dthBill2);
 
          this.transactionRepository.save(transaction12);
 
@@ -267,18 +267,10 @@ public class AtmMachineApplication implements CommandLineRunner{
 
          this.dthRepository.save(dthBill3);
 
-         Transaction transaction13 = new Transaction(carddetail2,new BigInteger("126734512345"),localDate.now(),500.0,null,dthBill3);
+         TransactionDetails transaction13 = new TransactionDetails(carddetail2,new BigInteger("126734512345"),localDate.now(),500.0,null,dthBill3);
 
          this.transactionRepository.save(transaction13);
 
-         
-
-         
-
-         System.out.println("Hello : "+this.userRequestRepository.findByRequestId("req1"));
-		 
-		 
-		 
 		 
 	}
 
