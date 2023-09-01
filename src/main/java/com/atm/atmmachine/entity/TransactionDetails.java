@@ -68,7 +68,7 @@ public class TransactionDetails {
 			@NotBlank(message = "It can't be empty") LocalDate transactionDate,
 			@NotBlank(message = "Amount paid") Double balance, ElectricityBill electricityBill, DTH dth) {
 		super();
-		this.transactionId = transactionId;
+//		this.transactionId = transactionId;
 		this.cardDetails = cardDetails;
 		this.toAccountNumber = toAccountNumber;
 		this.transactionDate = transactionDate;
