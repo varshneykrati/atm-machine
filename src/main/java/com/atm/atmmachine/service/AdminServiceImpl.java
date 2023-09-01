@@ -26,13 +26,13 @@ import com.atm.atmmachine.repository.UserRequestRepository;
 public class AdminServiceImpl implements AdminService {
 
 	@Autowired
-	UserRequestRepository userRequestRepository;
+	private UserRequestRepository userRequestRepository;
 
 	@Autowired
-	UserRegistrationRepository userRegistrationRepository;
+	private UserRegistrationRepository userRegistrationRepository;
 
 	@Autowired
-	CardDetailsRepository cardDetailsRepository;
+	private CardDetailsRepository cardDetailsRepository;
 	
 	@Override
 	public Optional<UserRegistration> findByUserId(String userId) {

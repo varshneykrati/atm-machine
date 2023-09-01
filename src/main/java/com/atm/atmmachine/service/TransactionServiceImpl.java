@@ -53,7 +53,7 @@ public class TransactionServiceImpl implements TransactionService {
 		String userId = withdraw.getUserId();
 		Double withdrawAmount = withdraw.getTransactionAmount();
 		Optional<UserRegistration> UserOpt = this.userRepo.findById(userId);
-		if (UserOpt.isEmpty()) {
+		if (!UserOpt.isPresent()) {
 			throw new TransactionException("User not present");
 		}
 		UserRegistration foundUser = UserOpt.get();
@@ -114,7 +114,7 @@ public class TransactionServiceImpl implements TransactionService {
 		Double total = 0.0;
 		//RazorPay
 		Optional<UserRegistration> UserOpt = this.userRepo.findById(userId);
-		if (UserOpt.isEmpty()) {
+		if (!UserOpt.isPresent()) {
 			throw new TransactionException("User not present");
 		}
 		UserRegistration foundUser = UserOpt.get();
@@ -148,7 +148,7 @@ public class TransactionServiceImpl implements TransactionService {
 			}
 		}
 		Optional<CardDetails> CardOpt = this.cardRepo.findByAccountNumber(toAccountNumber);
-		if (CardOpt.isEmpty()) {
+		if (!CardOpt.isPresent()) {
 			throw new TransactionException("Account no. dosen't exists,Re-enter the correct account number");
 		}
 		CardDetails tofoundCard = CardOpt.get();
