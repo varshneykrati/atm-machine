@@ -8,6 +8,7 @@ import com.atm.atmmachine.dto.CardLimit;
 
 import com.atm.atmmachine.entity.UserRegistration;
 import com.atm.atmmachine.entity.UserRegistration.UserRegistrationApproval;
+import com.atm.atmmachine.exceptions.AdminException;
 import com.atm.atmmachine.entity.UserRequest;
 
 
@@ -19,9 +20,9 @@ public interface AdminService {
 	
 	public List<UserRequest> displayRequestByStatus();
 	
-	public Optional<UserRequest> getRequestById(String requestId);
+	public Optional<UserRequest> getRequestById(String requestId)throws AdminException;
 	
-	public Optional<UserRegistration> getUsersById(String userId);
+	public Optional<UserRegistration> getUsersById(String userId) throws AdminException;
 	
 
 	
@@ -29,15 +30,15 @@ public interface AdminService {
 	
 	public List<UserRequest> displayAllCardReplacementRequests();
 	
-	public UserRequest updateUserRequestStatus(String requestId);
+	public UserRequest updateUserRequestStatus(String requestId) throws AdminException;
 	
 	public List<UserRegistration> displayUsersWithStatusInactive();
 	
-	public UserRegistrationApproval updateUserRegistrationApproval(String id);
+	public UserRegistrationApproval updateUserRegistrationApproval(String id) throws AdminException;
 	
-	public String setAdminRemark(String reqId,String remark);
+	public String setAdminRemark(String reqId,String remark) throws AdminException;
 	
 	public Double changeCardLimit(CardLimit cardLimit);
 	
-	public Boolean validAadharCard(String AadharNumber);
+	public Boolean validAadharCard(String aadharNumber);
 }
