@@ -21,9 +21,9 @@ public class UserRequestServiceImpl implements UserRequestService {
 	UserRegistrationRepository userRegistrationRepository;
 
 	@Override
-	public UserRequest getUserRequestById(String request_id) throws RequestException {
-		Optional<UserRequest> userRequestOpt = this.requestRepository.findById(request_id);
-		if(userRequestOpt.isEmpty())
+	public UserRequest getUserRequestById(String requestId) throws RequestException {
+		Optional<UserRequest> userRequestOpt = this.requestRepository.findById(requestId);
+		if(!userRequestOpt.isPresent())
 		{
 			throw new RequestException("In get user the user id is not present");
 		}
@@ -35,7 +35,7 @@ public class UserRequestServiceImpl implements UserRequestService {
 	public UserRequest addRequest(UserRequest newRequest)throws RequestException {
 		newRequest.setDateOfRequest(LocalDate.now());// for storing current date
 		Optional<UserRegistration> getUserOpt = this.userRegistrationRepository.findByUserId("user1");
-		if(getUserOpt.isEmpty())
+		if(!getUserOpt.isPresent())
 		{
 			throw new RequestException(" Can't add  as User id is  not present");
 		}
@@ -62,12 +62,12 @@ public class UserRequestServiceImpl implements UserRequestService {
 	}
 
 	@Override
-	public UserRequest deleteRequest(String request_id) throws RequestException {
-		if(request_id.isEmpty())
+	public UserRequest deleteRequest(String requestId) throws RequestException {
+		if(requestId.isEmpty())
 		{
 			throw new RequestException("User not present");
 		}
-		this.requestRepository.deleteById(request_id);
+		this.requestRepository.deleteById(requestId);
 		return null;
 	}
 
@@ -83,9 +83,9 @@ public class UserRequestServiceImpl implements UserRequestService {
 		if(userRegistrationOpt.isPresent())
 		{
 			UserRegistration getUser = userRegistrationOpt.get();
-			List<UserRequest> RequestOpt ;
-			RequestOpt = this.requestRepository.findAllByUserRegistration(getUser);
-			return RequestOpt;
+			List<UserRequest> requestOpt ;
+			requestOpt = this.requestRepository.findAllByUserRegistration(getUser);
+			return requestOpt;
 		}
 		else
 			throw new RequestException("User not present");
