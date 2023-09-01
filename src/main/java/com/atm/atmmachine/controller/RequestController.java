@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.atm.atmmachine.entity.UserRegistration;
 import com.atm.atmmachine.entity.UserRequest;
+import com.atm.atmmachine.exceptions.RequestException;
 import com.atm.atmmachine.repository.UserRegistrationRepository;
 import com.atm.atmmachine.repository.UserRequestRepository;
 import com.atm.atmmachine.service.UserRequestService;
@@ -28,49 +29,43 @@ public class RequestController {
 	@Autowired
 	UserRequestRepository request;
 	
-	@GetMapping("/admin1/")
-	public String krati() {
-		return "Hello welcome Sidhi";
-	}
 	//to get all user
 	@GetMapping("/request")
-	public List<UserRequest> getUserRequest()
+	public List<UserRequest> getUserRequest() throws RequestException
 	{
 		List<UserRequest>allrequest=this.userRequestService.getAllUserRequest();
 		return allrequest;
 	}
 	//to get particular user by id
 	@GetMapping("/request/{id}")//https://localhost8999/
-	public UserRequest getUserRequestById(@PathVariable("id") String Id)
+	public UserRequest getUserRequestById(@PathVariable("id") String Id) throws RequestException
 	{
 		return this.userRequestService.getUserRequestById(Id);
 	}
 	
 	@PostMapping("/request/")//https://localhost8999/
-	public UserRequest addRequest(@Valid @RequestBody UserRequest newRequest)
+	public UserRequest addRequest(@Valid @RequestBody UserRequest newRequest) throws RequestException
 	{
 		    
 			return this.userRequestService.addRequest(newRequest);
 	}
 
 	@DeleteMapping("/request/{id}")
-	public UserRequest deleteRequest(@PathVariable("id") String Id) {
+	public UserRequest deleteRequest(@PathVariable("id") String Id) throws RequestException {
 
 		return this.userRequestService.deleteRequest(Id);
 	}
-	@PutMapping("/request11/")
-	public UserRequest UpdateRequest(  @RequestBody UserRequest newRequest ) {
-//		this.userRequestService.deleteRequest(Id);
+	@PutMapping("/request_update/")
+	public UserRequest UpdateRequest(  @RequestBody UserRequest newRequest ) throws RequestException {
+
 		return this.userRequestService.UpdateRequest(newRequest);
 	}
 	
 	@GetMapping("/request1/{userId}")
-	public List<UserRequest> getRequestOfUser(@PathVariable("userId") String userId)
+	public List<UserRequest> getRequestOfUser(@PathVariable("userId") String userId) throws RequestException
 	{
-		System.out.println("Hii-----------------");
-		
-		List<UserRequest> getAllRequest = this.userRequestService.getRequestByUserId(userId);
-		
+		List<UserRequest> getAllRequest;
+		getAllRequest = this.userRequestService.getRequestByUserId(userId);
 		return getAllRequest;
 	}
 	
