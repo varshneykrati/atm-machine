@@ -67,11 +67,11 @@ public class AtmMachineApplication implements CommandLineRunner{
 		
 //Entering user registration detail form with the -> address  -----
 		Address address1 = new Address("405/8 Nai Basti","Firozabad",283203,"Uttar Pradesh");
-		UserRegistration userRegistration1 = new UserRegistration("Krati Varshney",localDate.now(),"9760286311","krativarshne@gmail.com","KVar@7777","KVar@7777",UserRegistrationApproval.Inactive,address1,null);
-		UserRegistration userRegistration2 = new UserRegistration("Shivam",localDate.now(),"+919307204212","shivam@gmail.com","shivam@7777","shivam@7777",UserRegistrationApproval.Active,new Address("415/8 New Market","Agra",283203,"Uttar Pradesh"),null);
-		UserRegistration userRegistration3 = new UserRegistration("Sidhi",localDate.now(),"9712121111","sidhi@gmail.com","sidhi@7777","sidhi@7777",UserRegistrationApproval.Inactive,new Address("415/8 Old Market","Agra",283203,"Madhya Pradesh"),null);
-		UserRegistration userRegistration4 = new UserRegistration("Mansi",localDate.now(),"9760281156","mansi@gmail.com","mansi@7777","mansi@7777",UserRegistrationApproval.Inactive,new Address("905/8 New Market","Agra",283203,"Uttar Pradesh"),null);
-		UserRegistration userRegistration5 = new UserRegistration("Ram",localDate.now(),"+919760286311","ram@gmail.com","ram@7700","ram@7700",UserRegistrationApproval.Inactive,new Address("415/8 Navi Mumbai","Mumbai",283203,"Maharastra"),null);
+		UserRegistration userRegistration1 = new UserRegistration("Krati Varshney",localDate.now(),"9760286311",962239611757L,"krativarshne@gmail.com","KVar@7777","KVar@7777",UserRegistrationApproval.Inactive,address1,null);
+		UserRegistration userRegistration2 = new UserRegistration("Shivam",localDate.now(),"+919307204212",301577650820L,"shivam@gmail.com","shivam@7777","shivam@7777",UserRegistrationApproval.Active,new Address("415/8 New Market","Agra",283203,"Uttar Pradesh"),null);
+		UserRegistration userRegistration3 = new UserRegistration("Sidhi",localDate.now(),"9712121111",767678355011L,"sidhi@gmail.com","sidhi@7777","sidhi@7777",UserRegistrationApproval.Inactive,new Address("415/8 Old Market","Agra",283203,"Madhya Pradesh"),null);
+		UserRegistration userRegistration4 = new UserRegistration("Mansi",localDate.now(),"9760281156",679967896789L,"mansi@gmail.com","mansi@7777","mansi@7777",UserRegistrationApproval.Inactive,new Address("905/8 New Market","Agra",283203,"Uttar Pradesh"),null);
+		UserRegistration userRegistration5 = new UserRegistration("Ram",localDate.now(),"+919760286311",678967896700L,"ram@gmail.com","ram@7700","ram@7700",UserRegistrationApproval.Inactive,new Address("415/8 Navi Mumbai","Mumbai",283203,"Maharastra"),null);
 		userRegistrationRepository.save(userRegistration1);
 		userRegistrationRepository.save(userRegistration2);
 		userRegistrationRepository.save(userRegistration3);
@@ -179,7 +179,7 @@ public class AtmMachineApplication implements CommandLineRunner{
 
          this.electricityBillRepository.save(electricityBill1);
 
-         Transaction transaction8 = new Transaction(carddetail1,new BigInteger("126734582999"),localDate.now(),2000.0,electricityBill1,null);
+         TransactionDetails transaction8 = new TransactionDetails(carddetail1,new BigInteger("126734582999"),localDate.now(),2000.0,electricityBill1,null);
 
          this.transactionRepository.save(transaction8);
 
@@ -187,7 +187,7 @@ public class AtmMachineApplication implements CommandLineRunner{
 
          this.electricityBillRepository.save(electricityBill2);
 
-         Transaction transaction9 = new Transaction(carddetail1,new BigInteger("126774582093"),localDate.now(),3000.0,electricityBill2,null);
+         TransactionDetails transaction9 = new TransactionDetails(carddetail1,new BigInteger("126774582093"),localDate.now(),3000.0,electricityBill2,null);
 
          this.transactionRepository.save(transaction9);
 
@@ -195,7 +195,7 @@ public class AtmMachineApplication implements CommandLineRunner{
 
          this.electricityBillRepository.save(electricityBill3);
 
-         Transaction transaction10 = new Transaction(carddetail2,new BigInteger("106734582093"),localDate.now(),5000.0,electricityBill1,null);
+         TransactionDetails transaction10 = new TransactionDetails(carddetail2,new BigInteger("106734582093"),localDate.now(),5000.0,electricityBill1,null);
 
          this.transactionRepository.save(transaction10);
 
@@ -209,7 +209,7 @@ public class AtmMachineApplication implements CommandLineRunner{
 
          this.dthRepository.save(dthBill1);
 
-         Transaction transaction11 = new Transaction(carddetail1,new BigInteger("126734582093"),localDate.now(),200.0,null,dthBill1);
+         TransactionDetails transaction11 = new TransactionDetails(carddetail1,new BigInteger("126734582093"),localDate.now(),200.0,null,dthBill1);
 
          this.transactionRepository.save(transaction11);
 
@@ -217,7 +217,7 @@ public class AtmMachineApplication implements CommandLineRunner{
 
          this.dthRepository.save(dthBill2);
 
-         Transaction transaction12 = new Transaction(carddetail1,new BigInteger("126675423093"),localDate.now(),300.0,null,dthBill2);
+         TransactionDetails transaction12 = new TransactionDetails(carddetail1,new BigInteger("126675423093"),localDate.now(),300.0,null,dthBill2);
 
          this.transactionRepository.save(transaction12);
 
@@ -225,18 +225,10 @@ public class AtmMachineApplication implements CommandLineRunner{
 
          this.dthRepository.save(dthBill3);
 
-         Transaction transaction13 = new Transaction(carddetail2,new BigInteger("126734512345"),localDate.now(),500.0,null,dthBill3);
+         TransactionDetails transaction13 = new TransactionDetails(carddetail2,new BigInteger("126734512345"),localDate.now(),500.0,null,dthBill3);
 
          this.transactionRepository.save(transaction13);
 
-         
-
-         
-
-         System.out.println("Hello : "+this.userRequestRepository.findByRequestId("req1"));
-		 
-		 
-		 
 		 
 	}
 
