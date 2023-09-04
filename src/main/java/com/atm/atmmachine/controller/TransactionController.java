@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.atm.atmmachine.dto.CheckBalance;
-import com.atm.atmmachine.dto.FundTransfer;
-import com.atm.atmmachine.dto.WithdrawAmount;
+import com.atm.atmmachine.dto.UserInfo;
+import com.atm.atmmachine.dto.FundTransferDto;
+import com.atm.atmmachine.dto.SelfTransferInfo;
 import com.atm.atmmachine.entity.CardDetails;
 import com.atm.atmmachine.entity.TransactionDetails;
 import com.atm.atmmachine.exceptions.TransactionException;
@@ -26,50 +26,39 @@ public class TransactionController {
 
 	@Autowired
 	TransactionService transactionService;
-	
-	
-	
-	@GetMapping("/user/")
-		public String Vaishnav() {
-			return "Hi Users!";
-		}
-	
-	@GetMapping("transactions")
-	public List<TransactionDetails> getAllTransaction(){
-		List<TransactionDetails> transactioncollection=this.transactionService.getAllTransactions();
+
+	@GetMapping("transactions/{userId}")
+	public List<TransactionDetails> getAllTransaction(@PathVariable String userId) {
+		List<TransactionDetails> transactioncollection;
+		transactioncollection = this.transactionService.getAllTransactions(userId);
 		return transactioncollection;
 	}
-	
-	@PostMapping("/withdraw/")
-	public Double withdrawfunds(@RequestBody WithdrawAmount withdraw) throws TransactionException { 
-		try {
-			return this.transactionService.withdrawFunds(withdraw);
-		} catch (TransactionException e) {
-			throw e;
-		}
-	}
-	
 
-	@PostMapping("/fundTransfer/")
-	public Double withdrawfunds(@RequestBody FundTransfer fundTransfer) throws TransactionException { 
-			try {
-				return this.transactionService.fundTransfer(fundTransfer);
-			} catch (TransactionException e) {
-				throw e;
-			}
-		
+	@PostMapping("/withdraw/funds")
+	public Double withdrawfunds(@RequestBody SelfTransferInfo withdraw) throws TransactionException {
+
+		return this.transactionService.withdrawFunds(withdraw);
+
 	}
-	
-	@PostMapping("/checkBalance/")
-	public Double checkBalance(@RequestBody CheckBalance checkBalance)throws TransactionException{
-		try {
-			return this.transactionService.checkBalance(checkBalance);
-		}catch (TransactionException e) {
-			throw e;
-		}
-		
+	@PostMapping("/add/funds")
+	public Double addfunds(@RequestBody SelfTransferInfo addFund) throws TransactionException {
+
+		return this.transactionService.addFunds(addFund);
+
 	}
-	
+
+	@PostMapping("/funds/transfer/")
+	public Double fundsTransfer(@RequestBody FundTransferDto fundTransfer) throws TransactionException {
+
+		return this.transactionService.fundTransfer(fundTransfer);
+
+	}
+
+	@PostMapping("/account/balance/")
+	public Double checkBalance(@RequestBody UserInfo checkBalance) throws TransactionException {
+
+		return this.transactionService.checkBalance(checkBalance);
+
+	}
+
 }
-
- 
