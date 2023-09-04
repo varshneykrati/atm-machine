@@ -13,10 +13,13 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import com.atm.atmmachine.idGenerator.StringPrefixedSequenceIdGenerator;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -24,12 +27,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class TransactionDetails {
-
 	
 	public enum TransactionType{
 		Deposit,Withdrawal
 	}
-
 	
 	@Id
 	@GeneratedValue(generator = "transaction_id", strategy = GenerationType.SEQUENCE)
@@ -162,7 +163,6 @@ public class TransactionDetails {
 	public void setTransactionType(TransactionType transactionType) {
 		this.transactionType = transactionType;
 	}
-
 	
 
 }

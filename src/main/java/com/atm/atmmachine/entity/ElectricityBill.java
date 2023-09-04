@@ -14,6 +14,7 @@ import org.hibernate.annotations.GenericGenerator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import com.atm.atmmachine.idGenerator.StringPrefixedSequenceIdGenerator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class ElectricityBill {

@@ -15,6 +15,8 @@ import com.atm.atmmachine.entity.CardDetails.CardType;
 @Repository
 public interface CardDetailsRepository extends JpaRepository<CardDetails, String>{
 
+	Optional<CardDetails> findByAccountNumberAndCardNumber(BigInteger accountNumber, BigInteger cardNumber);
+
 	Optional<CardDetails> findByAccountNumber(BigInteger toAccountNumber);
 
 	//admin

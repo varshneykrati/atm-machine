@@ -16,6 +16,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -25,6 +27,7 @@ import javax.validation.constraints.Pattern;
 
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import com.atm.atmmachine.idGenerator.StringPrefixedSequenceIdGenerator;
 import com.fasterxml.jackson.annotation.JsonAlias;
@@ -55,12 +58,17 @@ public class UserRegistration {
 	private String userName;
 	
 	@NotBlank(message="This field cant be empty or null")
-	 
+	@JsonFormat(shape = JsonFormat.Shape.STRING,pattern="yyyy-MM-dd")
 	private LocalDate userDOB;
 	
-	@Column(unique=true)
+	
 	@NotBlank(message="This field cant be empty or null")
 	private String phoneNo;
+	
+
+	@Column(unique=true)
+	@NotBlank(message="This field cant be empty or null")
+	private Long aadharNumber;
 	
 	@Column(unique=true)
     @NotBlank(message="This field cant be empty or null")
@@ -75,13 +83,14 @@ public class UserRegistration {
 	@Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$")
 	private String password;
 	
-//	@Transient
+	@Transient
 	@NotBlank(message="This field cant be empty or null")
 	private String confirmPassword;
 	
 	@Enumerated(EnumType.STRING)
 	@Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$")
 	private UserRegistrationApproval userRegistrationApproval;
+	
 	
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "address_id", referencedColumnName = "addressId")
@@ -158,6 +167,17 @@ public class UserRegistration {
 
 	public void setPhoneNo(String phoneNo) {
 		this.phoneNo = phoneNo;
+	}
+
+	
+
+	public Long getAadharNumber() {
+		return aadharNumber;
+	}
+
+
+	public void setAadharNumber(Long aadharNumber) {
+		this.aadharNumber = aadharNumber;
 	}
 
 
