@@ -19,15 +19,14 @@ import com.atm.atmmachine.entity.UserRegistration;
 import com.atm.atmmachine.entity.UserRequest;
 import com.atm.atmmachine.entity.UserRegistration.UserRegistrationApproval;
 import com.atm.atmmachine.entity.UserRequest.RequestStatus;
-
+import com.atm.atmmachine.exceptions.AdminException;
 import com.atm.atmmachine.service.AdminService;
 
 @RestController
 public class AdminController {
 	
 	@Autowired
-	AdminService adminService;
-	
+	private AdminService adminService;
 	
 	
 	
@@ -38,13 +37,17 @@ public class AdminController {
 	
 	//to display the requests by their id
 	@GetMapping("/admin/requests/{id}")
-	public Optional<UserRequest> displayRequestById(@PathVariable("id") String id) {
-		return this.adminService.getRequestById(id);
+	public Optional<UserRequest> displayRequestById(@PathVariable("id") String id) throws AdminException{
+		try {
+			return this.adminService.getRequestById(id);
+		} catch (AdminException e) {
+			throw e;
+		}
 	}
 
 	//used when admin wants to display all pending requests
 	@GetMapping("/admin/requests")
-	public List<UserRequest> displayAllUsers() {
+	public List<UserRequest> displayAllPendingRequests() {
 		return this.adminService.displayRequestByStatus();
 	}
 	
@@ -62,18 +65,18 @@ public class AdminController {
 	
 	
 	//used to approve the cardLost request of specific requestid
-	@PatchMapping("/admin/cardlost/statuschange/{id}")
-	public RequestStatus changeRequestStatus(@PathVariable("id") String id) {
-		UserRequest currentUserRequest = this.adminService.updateUserRequestStatus(id);
+	@PatchMapping("/admin/cardlost/statuschange/{reqid}")
+	public RequestStatus changeRequestStatus(@PathVariable("reqid") String reqId) throws AdminException {
+		UserRequest currentUserRequest;
+		try {
+			currentUserRequest = this.adminService.updateUserRequestStatus(reqId);
+		} catch (AdminException e) {
+			throw e;
+		}
 		return currentUserRequest.getRequestStatus();
 	}
 	
 
-	
-//	@PatchMapping("/admin/changecardlimit")
-//	public Double changeCardLimit() {
-//		return this.adminService
-//	}
 	
 	//to display users with status inactive
 	@GetMapping("/admin/userswithstatusinactive")
@@ -82,37 +85,39 @@ public class AdminController {
 	}
 	
 	//to set user registration approval active
-	@PatchMapping("/admin/change/userregistrationapproval/{id}")
-	public UserRegistrationApproval changeUserRegistrationApproval(@PathVariable("id") String id) {
-		return this.adminService.updateUserRegistrationApproval(id);
+	@PatchMapping("/admin/change/userregistrationapproval/{userid}")
+	public UserRegistrationApproval changeUserRegistrationApproval(@PathVariable("userid") String userId) throws AdminException{
+		try {
+			return this.adminService.updateUserRegistrationApproval(userId);
+		} catch (AdminException e) {
+			throw e;
+		}
 	}
 	
 	//to set the admin remark for specific req id
 	@PatchMapping("/admin/adminremark/{reqid}")
-	public String setAdminRemarkForRequest(@RequestBody AdminRemark adminRemark,@PathVariable("reqid") String reqId) {
-		return this.adminService.setAdminRemark(reqId,adminRemark.getRemarkOnRequest());
+	public String setAdminRemarkForRequest(@RequestBody AdminRemark adminRemark,@PathVariable("reqid") String reqId)throws AdminException {
+		try {
+			return this.adminService.setAdminRemark(reqId,adminRemark.getRemarkOnRequest());
+		} catch (AdminException e) {
+			throw e;
+		}
 	}
 	
 	//to change card limit of specific card type
 	@PatchMapping("/admin/changecardlimit/")
 	public Double setCardLimit(@RequestBody CardLimit cardLimit) {
-		System.out.println("in controller "+cardLimit.getCardType());
-		System.out.println("in controller "+cardLimit.getChangedCardLimit());
 		return this.adminService.changeCardLimit(cardLimit);
 	}
 	
 	//to validate aadhar card
 	@GetMapping("/admin/validate/aadharcard/{userid}")
-	public Boolean validateAadharCard(@PathVariable("userid") String userId) {
+	public Boolean validateAadharCard(@PathVariable("userid") String userId) throws AdminException{
 		Optional<UserRegistration> user = this.adminService.findByUserId(userId);
-		//if(user.isPresent())
-			
+		if(!user.isPresent())
+			throw new AdminException("User doesn't exist");
 		return this.adminService.validAadharCard(user.get().getAadharNumber().toString());
 	}
-	
-	
-	
-	
 	
 
 }

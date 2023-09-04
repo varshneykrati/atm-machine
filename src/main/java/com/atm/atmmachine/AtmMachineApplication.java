@@ -230,14 +230,6 @@ public class AtmMachineApplication implements CommandLineRunner{
 
          this.transactionRepository.save(transaction13);
 
-         
-
-         
-
-         System.out.println("Hello : "+this.userRequestRepository.findByRequestId("req1"));
-		 
-		 
-		 
 		 
 	}
 

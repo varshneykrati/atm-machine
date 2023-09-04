@@ -16,6 +16,7 @@ import com.atm.atmmachine.entity.UserRegistration;
 import com.atm.atmmachine.entity.UserRegistration.UserRegistrationApproval;
 import com.atm.atmmachine.entity.UserRequest;
 import com.atm.atmmachine.entity.UserRequest.RequestStatus;
+import com.atm.atmmachine.exceptions.AdminException;
 import com.atm.atmmachine.idGenerator.VerhoeffAlgorithm;
 import com.atm.atmmachine.repository.CardDetailsRepository;
 import com.atm.atmmachine.repository.UserRegistrationRepository;
@@ -25,13 +26,13 @@ import com.atm.atmmachine.repository.UserRequestRepository;
 public class AdminServiceImpl implements AdminService {
 
 	@Autowired
-	UserRequestRepository userRequestRepository;
+	private UserRequestRepository userRequestRepository;
 
 	@Autowired
-	UserRegistrationRepository userRegistrationRepository;
+	private UserRegistrationRepository userRegistrationRepository;
 
 	@Autowired
-	CardDetailsRepository cardDetailsRepository;
+	private CardDetailsRepository cardDetailsRepository;
 	
 	@Override
 	public Optional<UserRegistration> findByUserId(String userId) {
@@ -65,21 +66,22 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public UserRequest updateUserRequestStatus(String requestId) {
-
-		// this.adminRepository.updateUserRequestById(requestId,RequestStatus.Approved);
-
+	public UserRequest updateUserRequestStatus(String requestId) throws AdminException{
 		Optional<UserRequest> foundUserRequest = this.getRequestById(requestId);
+		if(!foundUserRequest.isPresent())
+			throw new AdminException("Request doesn't exist");
+			
 		foundUserRequest.get().setRequestStatus(RequestStatus.Approved);
 		this.userRequestRepository.save(foundUserRequest.get());
 		return foundUserRequest.get();
 	}
 
 	@Override
-	public Optional<UserRequest> getRequestById(String requestId) {
+	public Optional<UserRequest> getRequestById(String requestId) throws AdminException{
 		Optional<UserRequest> foundUserRequest = this.userRequestRepository.findByRequestId(requestId);
-		// if(!foundUserRequest.isPresent())
-
+		if(!foundUserRequest.isPresent())
+			throw new AdminException("Request doesn't exist");
+		
 		return foundUserRequest;
 	}
 
@@ -90,22 +92,31 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public UserRegistrationApproval updateUserRegistrationApproval(String id) {
-		Optional<UserRegistration> foundUser = this.userRegistrationRepository.findByUserId(id);
+	public UserRegistrationApproval updateUserRegistrationApproval(String id)throws AdminException {
+		Optional<UserRegistration> foundUser = this.userRegistrationRepository.findById(id);
+		if(!foundUser.isPresent())
+			throw new AdminException("User doesn't exist");
+		
 		foundUser.get().setUserRegistrationApproval(UserRegistrationApproval.Active);
 		this.userRegistrationRepository.save(foundUser.get());
 		return foundUser.get().getUserRegistrationApproval();
 	}
 
 	@Override
-	public Optional<UserRegistration> getUsersById(String userId) {
-		Optional<UserRegistration> foundUserRegistration = this.userRegistrationRepository.findByUserId(userId);
+	public Optional<UserRegistration> getUsersById(String userId) throws AdminException {
+		Optional<UserRegistration> foundUserRegistration = this.userRegistrationRepository.findById(userId);
+		if(!foundUserRegistration.isPresent())
+			throw new AdminException("User doesn't exist");
+		
 		return foundUserRegistration;
 	}
 
 	@Override
-	public String setAdminRemark(String reqId, String remark) {
+	public String setAdminRemark(String reqId, String remark) throws AdminException{
 		Optional<UserRequest> foundUser = this.userRequestRepository.findById(reqId);
+		if(!foundUser.isPresent())
+			throw new AdminException("Request doesn't exist");
+		
 		foundUser.get().setAdminRemark(remark);
 		this.userRequestRepository.save(foundUser.get());
 		return foundUser.get().getAdminRemark();
@@ -113,7 +124,6 @@ public class AdminServiceImpl implements AdminService {
 
 	@Override
 	public Double changeCardLimit(CardLimit cardLimit) {
-		System.out.println("in service"+cardLimit.getCardType());
 		List<CardDetails> foundCardDetails = this.cardDetailsRepository.findByCardType(CardType.valueOf(cardLimit.getCardType()));
 		for(CardDetails c:foundCardDetails) {
 			c.setCardLimit(cardLimit.getChangedCardLimit());
@@ -124,20 +134,15 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public Boolean validAadharCard(String AadharNumber) {
+	public Boolean validAadharCard(String aadharNumber) {
 		Pattern aadharPattern = Pattern.compile("\\d{12}");
-        boolean isValidAadhar = aadharPattern.matcher(AadharNumber).matches();
+        boolean isValidAadhar = aadharPattern.matcher(aadharNumber).matches();
         if(isValidAadhar){
-            isValidAadhar = VerhoeffAlgorithm.validateVerhoeff(AadharNumber);
+            isValidAadhar = VerhoeffAlgorithm.validateVerhoeff(aadharNumber);
         }
         return isValidAadhar;
 		
 	}
-
-
-
-	
-
 
 
 }
