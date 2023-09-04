@@ -1,7 +1,9 @@
 package com.atm.atmmachine.entity;
 
+import java.io.Serializable;
 import java.math.BigInteger;
 import java.time.LocalDate;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -56,7 +58,8 @@ public class UserRequest {
 	
 	
 	@NotBlank(message="It can' be empty")
-	@JsonFormat(pattern="yyyy-MM-dd")
+	@JsonFormat(pattern="YYYY-MM-dd")
+	//@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	private LocalDate dateOfRequest;
 	
 	@Enumerated(EnumType.STRING)
@@ -65,10 +68,12 @@ public class UserRequest {
 	
 	private String adminRemark;
 	
+
 	@ManyToOne
 	@JoinColumn(name = "user_id", referencedColumnName = "userId")
 	private UserRegistration userRegistration;
-
+	
+	
 	
 	public UserRequest() {
 		super();

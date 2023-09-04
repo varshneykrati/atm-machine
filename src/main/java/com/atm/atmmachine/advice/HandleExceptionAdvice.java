@@ -15,3 +15,19 @@ public class HandleExceptionAdvice {
 		return new ResponseEntity<String>(handleException.getMessage(),HttpStatus.NOT_ACCEPTABLE);
 	}
 }
+import com.atm.atmmachine.exceptions.RequestException;
+
+@RestControllerAdvice
+
+	public class HandleExceptionAdvice {
+
+	 
+
+	    @ExceptionHandler(RequestException.class)
+
+	    public ResponseEntity<String> handlerRequestException(RequestException requestException){
+
+	        return new ResponseEntity<String>(requestException.getMessage(),HttpStatus.NOT_ACCEPTABLE);
+
+	    }
+	}

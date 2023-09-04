@@ -71,6 +71,10 @@ public class UserRegistration {
 	private Long aadharNumber;
 	
 	@Column(unique=true)
+    @NotBlank(message="This field cant be empty or null")
+    private Long aadharNumber;
+	
+	@Column(unique=true)
 	@Email(message = "Email is not valid")
 	@NotBlank(message="This field cant be empty or null")
 	private String emailId;
@@ -83,9 +87,9 @@ public class UserRegistration {
 	@NotBlank(message="This field cant be empty or null")
 	private String confirmPassword;
 	
-	//@Enumerated(EnumType.STRING)
+	@Enumerated(EnumType.STRING)
 	@Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$")
-	private String userRegistrationApproval;
+	private UserRegistrationApproval userRegistrationApproval;
 	
 	
 	@OneToOne(cascade = CascadeType.ALL)
@@ -111,7 +115,7 @@ public class UserRegistration {
 			@Email(message = "Email is not valid") @NotBlank(message = "This field cant be empty or null") String emailId,
 			@NotBlank(message = "This field cant be empty or null") String password,
 			@NotBlank(message = "This field cant be empty or null") String confirmPassword,
-			String userRegistrationApproval, Address address, CardDetails cardDetails) {
+			UserRegistrationApproval userRegistrationApproval, Address address, CardDetails cardDetails) {
 		super();
 		this.userName = userName;
 		this.userDOB = userDOB;
@@ -206,13 +210,12 @@ public class UserRegistration {
 		this.confirmPassword = confirmPassword;
 	}
 
-
-	public String getUserRegistrationApproval() {
+	public UserRegistrationApproval getUserRegistrationApproval() {
 		return userRegistrationApproval;
 	}
 
 
-	public void setUserRegistrationApproval(String userRegistrationApproval) {
+	public void setUserRegistrationApproval(UserRegistrationApproval userRegistrationApproval) {
 		this.userRegistrationApproval = userRegistrationApproval;
 	}
 
@@ -234,6 +237,16 @@ public class UserRegistration {
 
 	public void setCardDetails(CardDetails cardDetails) {
 		this.cardDetails = cardDetails;
+	}
+
+
+	public Long getAadharNumber() {
+		return aadharNumber;
+	}
+
+
+	public void setAadharNumber(Long aadharNumber) {
+		this.aadharNumber = aadharNumber;
 	}
 
 

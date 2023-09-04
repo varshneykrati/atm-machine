@@ -1,11 +1,15 @@
 package com.atm.atmmachine.repository;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 import com.atm.atmmachine.dto.Email;
 import com.atm.atmmachine.entity.UserRegistration;
+import com.atm.atmmachine.entity.UserRegistration.UserRegistrationApproval;
 
 @Repository
 public interface UserRegistrationRepository extends JpaRepository<UserRegistration, String>{
@@ -19,5 +23,9 @@ public interface UserRegistrationRepository extends JpaRepository<UserRegistrati
 	Optional<UserRegistration> findByUserId(String userId);
 
 	Optional<UserRegistration> findByUserIdAndEmailId(String string, Email email);
+	//admin
+//	public Optional<UserRegistration> findByUserId(String id);
+	
+	public List<UserRegistration> findByUserRegistrationApproval(UserRegistrationApproval userRegistrationApproval); 
 
 }

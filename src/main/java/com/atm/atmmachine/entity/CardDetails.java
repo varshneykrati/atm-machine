@@ -1,9 +1,11 @@
 package com.atm.atmmachine.entity;
 
+import java.io.Serializable;
 import java.math.BigInteger;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -68,7 +70,8 @@ public class CardDetails {
 	@NotBlank(message="This field cant be empty or null")
 	private Integer cvv;
 	
-	
+	@NotNull
+	@JsonFormat(pattern="yyyy-MM-dd")
 	@NotBlank(message="This field cant be empty or null")
 	@JsonFormat(pattern="yyyy-MM-dd")
 	private LocalDate validThrough;
@@ -208,7 +211,15 @@ public class CardDetails {
 		this.cardType = cardType;
 	}
 
+	
 
+	public Double getCardLimit() {
+		return cardLimit;
+	}
+
+	public void setCardLimit(Double cardLimit) {
+		this.cardLimit = cardLimit;
+	}
 
 	public CardStatus getCardstatus() {
 		return cardstatus;

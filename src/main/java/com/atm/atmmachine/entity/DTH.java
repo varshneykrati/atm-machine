@@ -11,6 +11,8 @@ import javax.persistence.ManyToOne;
 
 import org.hibernate.annotations.GenericGenerator;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import com.atm.atmmachine.idGenerator.StringPrefixedSequenceIdGenerator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -18,8 +20,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class DTH {
 	
 	@ManyToOne
-	@JoinColumn(name = "card_id")
-	private CardDetails cardDetails;
+    @JoinColumn(name = "card_id")
+    private CardDetails cardDetails;
 	
 	@Id
 	@GeneratedValue(generator = "dth_id",strategy = GenerationType.SEQUENCE)
@@ -27,7 +29,7 @@ public class DTH {
     parameters = {
     		@org.hibernate.annotations.Parameter(name = StringPrefixedSequenceIdGenerator.INCREMENT_PARAM, value = "1"),
     		@org.hibernate.annotations.Parameter(name = StringPrefixedSequenceIdGenerator.VALUE_PREFIX_PARAMETER, value = "dth"),
-
+    		@org.hibernate.annotations.Parameter(name = StringPrefixedSequenceIdGenerator.NUMBER_FORMAT_PARAMETER, value = "1000%d")
             })
 	private String userDthCardNumber;
 	
@@ -43,25 +45,23 @@ public class DTH {
 		// TODO Auto-generated constructor stub
 	}
 
-	public DTH(CardDetails cardDetails, Double amountToBePaid, Vendors vendors) {
-		super();
-		this.cardDetails = cardDetails;
-		this.userDthCardNumber = userDthCardNumber;
-		this.amountToBePaid = amountToBePaid;
-		this.vendors = vendors;
-	}
 
-	public CardDetails getCardDetails() {
-		return cardDetails;
-	}
 
-	public void setCardDetails(CardDetails cardDetails) {
-		this.cardDetails = cardDetails;
-	}
+	
+
+	
 
 	public String getUserDthCardNumber() {
 		return userDthCardNumber;
 	}
+
+	public DTH(CardDetails cardDetails, Double amountToBePaid, Vendors vendors) {
+	super();
+	this.cardDetails = cardDetails;
+	
+	this.amountToBePaid = amountToBePaid;
+	this.vendors = vendors;
+}
 
 	public void setUserDthCardNumber(String userDthCardNumber) {
 		this.userDthCardNumber = userDthCardNumber;
