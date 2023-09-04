@@ -8,13 +8,14 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.atm.atmmachine.dto.CheckBalance;
-import com.atm.atmmachine.dto.FundTransfer;
-import com.atm.atmmachine.dto.WithdrawAmount;
+import com.atm.atmmachine.dto.UserInfo;
+import com.atm.atmmachine.dto.FundTransferDto;
+import com.atm.atmmachine.dto.SelfTransferInfo;
 import com.atm.atmmachine.entity.CardDetails;
 import com.atm.atmmachine.entity.CardDetails.CardStatus;
 import com.atm.atmmachine.entity.CardDetails.UserTotallyRegister;
 import com.atm.atmmachine.entity.TransactionDetails;
+import com.atm.atmmachine.entity.TransactionDetails.TransactionType;
 import com.atm.atmmachine.entity.UserRegistration;
 import com.atm.atmmachine.entity.UserRegistration.UserRegistrationApproval;
 import com.atm.atmmachine.exceptions.TransactionException;
@@ -40,27 +41,31 @@ public class TransactionServiceImpl implements TransactionService {
 	SMSController smsController;
 
 	SmsPojo smspojo = new SmsPojo();
-	TransactionDetails transaction = new TransactionDetails();
+	
+
+	String wrongPin = "Wrong Card Pin,Please enter again";
+	String userPresent="User not present";
 
 	@Override
-	public List<TransactionDetails> getAllTransactions() {
-		return this.transRepo.findByOrderByTransactionDateDesc();
+	public List<TransactionDetails> getAllTransactions(String userId) {
+		Optional<UserRegistration>userOpt=this.userRepo.findById(userId);
+		CardDetails foundCard=userOpt.get().getCardDetails();
+		return this.transRepo.findByCardDetailsOrderByTransactionDateDesc(foundCard);
 	}
 
 	@Override
-	public Double withdrawFunds(WithdrawAmount withdraw) throws TransactionException {
+	public Double withdrawFunds(SelfTransferInfo withdraw) throws TransactionException {
 		Double total = 0.0;
 		String userId = withdraw.getUserId();
 		Double withdrawAmount = withdraw.getTransactionAmount();
-		Optional<UserRegistration> UserOpt = this.userRepo.findById(userId);
-		if (UserOpt.isEmpty()) {
-			throw new TransactionException("User not present");
+		Optional<UserRegistration> userOpt = this.userRepo.findById(userId);
+		if (!userOpt.isPresent()) {
+			throw new TransactionException(userPresent);
 		}
-		UserRegistration foundUser = UserOpt.get();
+		UserRegistration foundUser = userOpt.get();
 		if (foundUser.getUserRegistrationApproval() == UserRegistrationApproval.Inactive) {
 			throw new TransactionException("User Registration is not yet approved");
 		}
-		smspojo.setTo(foundUser.getPhoneNo());
 		CardDetails foundCard = foundUser.getCardDetails();
 		if (foundCard.getUserTotallyRegister() == UserTotallyRegister.False) {
 			throw new TransactionException("User is not totally Registered,Complete the user profile");
@@ -70,7 +75,7 @@ public class TransactionServiceImpl implements TransactionService {
 			throw new TransactionException("Activate your Card");
 		}
 		if (!foundCard.getCardPin().equals(withdraw.getCardPin())) {
-			throw new TransactionException("Wrong Card Pin,Please enter again");
+			throw new TransactionException(wrongPin);
 		}
 		if (foundCard.getAmount() < withdrawAmount) {
 
@@ -88,15 +93,17 @@ public class TransactionServiceImpl implements TransactionService {
 				throw new TransactionException("Exceeds CardLimit");
 			}
 		}
-		foundCard.setAmount(foundCard.getAmount() - withdrawAmount);
+		foundCard.setAmount(foundCard.getAmount()-withdrawAmount);
 		this.cardRepo.save(foundCard);
+		TransactionDetails transactionDetails=new TransactionDetails();
+		transactionDetails.setCardDetails(foundCard);
+		transactionDetails.setFromAccountNumber(foundCard.getAccountNumber());
+		transactionDetails.setTransactionDate(LocalDate.now());
+		transactionDetails.setBalance(withdrawAmount);
+		transactionDetails.setTransactionType(TransactionType.Withdrawal);
+		this.transRepo.save(transactionDetails);
 
-		transaction.setCardDetails(foundCard);
-		transaction.setToAccountNumber(foundCard.getAccountNumber());
-		transaction.setTransactionDate(LocalDate.now());
-		transaction.setBalance(withdrawAmount);
-		this.transRepo.save(transaction);
-
+		smspojo.setTo(foundUser.getPhoneNo());
 		smspojo.setMessage("An amount of INR " + withdrawAmount + " has been debited to your Account "
 				+ foundCard.getAccountNumber() + " on " + org.joda.time.LocalDate.now() + ".Total Avail.bal INR "
 				+ foundCard.getAmount());
@@ -106,18 +113,62 @@ public class TransactionServiceImpl implements TransactionService {
 	}
 
 	@Override
-	public Double fundTransfer(FundTransfer fundTransfer) throws TransactionException {
+	public Double addFunds(SelfTransferInfo addFund) throws TransactionException {
+		String userId = addFund.getUserId();
+		Double addAmount = addFund.getTransactionAmount();
+		Optional<UserRegistration> userOpt = this.userRepo.findById(userId);
+		if (!userOpt.isPresent()) {
+			throw new TransactionException(userPresent);
+		}
+		UserRegistration foundUser = userOpt.get();
+		if (foundUser.getUserRegistrationApproval() == UserRegistrationApproval.Inactive) {
+			throw new TransactionException("User Registration is not yet approved");
+		}
+		smspojo.setTo(foundUser.getPhoneNo());
+		CardDetails foundCard = foundUser.getCardDetails();
+		if (foundCard.getUserTotallyRegister() == UserTotallyRegister.False) {
+			throw new TransactionException("User is not totally Registered,Complete the user profile");
+		}
+		if (foundCard.getCardstatus() == CardStatus.Inactive) {
+
+			throw new TransactionException("Activate your Card");
+		}
+		if (!foundCard.getCardPin().equals(addFund.getCardPin())) {
+			throw new TransactionException(wrongPin);
+		}
+		
+			foundCard.setAmount(foundCard.getAmount() + addAmount);
+		this.cardRepo.save(foundCard);
+		TransactionDetails transactionDetails=new TransactionDetails();
+		transactionDetails.setCardDetails(foundCard);
+		transactionDetails.setToAccountNumber(foundCard.getAccountNumber());
+		transactionDetails.setTransactionDate(LocalDate.now());
+		transactionDetails.setBalance(addAmount);
+		transactionDetails.setTransactionType(TransactionType.Deposit);
+		this.transRepo.save(transactionDetails);
+
+		smspojo.setMessage("An amount of INR " + addAmount + " has been credited to your Account "
+				+ foundCard.getAccountNumber() + " on " + org.joda.time.LocalDate.now() + ".Total Avail.bal INR "
+				+ foundCard.getAmount());
+
+		smsController.smsSubmit(smspojo);
+		return foundCard.getAmount();
+	}
+	
+	
+	@Override
+	public Double fundTransfer(FundTransferDto fundTransfer) throws TransactionException {
 
 		String userId = fundTransfer.getUserId();
 		BigInteger toAccountNumber = fundTransfer.getToAccountNumber();
 		Double fundTransactionAmount = fundTransfer.getTransactionAmount();
 		Double total = 0.0;
-		//RazorPay
-		Optional<UserRegistration> UserOpt = this.userRepo.findById(userId);
-		if (UserOpt.isEmpty()) {
-			throw new TransactionException("User not present");
+		// RazorPay
+		Optional<UserRegistration> userOpt = this.userRepo.findById(userId);
+		if (!userOpt.isPresent()) {
+			throw new TransactionException(userPresent);
 		}
-		UserRegistration foundUser = UserOpt.get();
+		UserRegistration foundUser = userOpt.get();
 		if (foundUser.getUserRegistrationApproval() == UserRegistrationApproval.Inactive) {
 			throw new TransactionException("User Registration is not yet approved");
 		}
@@ -130,7 +181,7 @@ public class TransactionServiceImpl implements TransactionService {
 			throw new TransactionException("Activate your Card");
 		}
 		if (!foundCard.getCardPin().equals(fundTransfer.getCardPin())) {
-			throw new TransactionException("Wrong Card Pin,Please enter again");
+			throw new TransactionException(wrongPin);
 		}
 		if (foundCard.getAmount() < fundTransactionAmount) {
 
@@ -142,16 +193,18 @@ public class TransactionServiceImpl implements TransactionService {
 
 			for (TransactionDetails transaction : cardLimitCheck)
 				total += transaction.getBalance();
-			if (foundCard.getCardLimit() < fundTransactionAmount) {
+			if (foundCard.getCardLimit() < fundTransactionAmount+total) {
 
 				throw new TransactionException("Exceeds CardLimit");
 			}
 		}
-		Optional<CardDetails> CardOpt = this.cardRepo.findByAccountNumber(toAccountNumber);
-		if (CardOpt.isEmpty()) {
+		
+		//check length of account no and patttern and null
+		Optional<CardDetails> cardOpt = this.cardRepo.findByAccountNumber(toAccountNumber);
+		if (cardOpt.isEmpty()) {
 			throw new TransactionException("Account no. dosen't exists,Re-enter the correct account number");
 		}
-		CardDetails tofoundCard = CardOpt.get();
+		CardDetails tofoundCard = cardOpt.get();
 		if (tofoundCard.getUserTotallyRegister() == UserTotallyRegister.False) {
 			throw new TransactionException("Receiver is not totally Registered");
 		}
@@ -167,7 +220,14 @@ public class TransactionServiceImpl implements TransactionService {
 				+ foundCard.getAmount());
 
 		smsController.smsSubmit(smspojo);
-
+		TransactionDetails transactionDetails=new TransactionDetails();
+		transactionDetails.setCardDetails(foundCard);
+		transactionDetails.setToAccountNumber(toAccountNumber);
+		transactionDetails.setTransactionDate(LocalDate.now());
+		transactionDetails.setBalance(fundTransactionAmount);
+		transactionDetails.setTransactionType(TransactionType.Withdrawal);
+		this.transRepo.save(transactionDetails);
+		
 		tofoundCard.setAmount(tofoundCard.getAmount() + fundTransactionAmount);
 		this.cardRepo.save(tofoundCard);
 		smspojo.setTo(tofoundCard.getUserRegistration().getPhoneNo());
@@ -176,24 +236,28 @@ public class TransactionServiceImpl implements TransactionService {
 				+ tofoundCard.getAmount());
 
 		smsController.smsSubmit(smspojo);
-		TransactionDetails transaction = new TransactionDetails();
-		transaction.setCardDetails(foundCard);
-		transaction.setToAccountNumber(toAccountNumber);
-		transaction.setTransactionDate(LocalDate.now());
-		transaction.setBalance(fundTransactionAmount);
-		this.transRepo.save(transaction);
+		TransactionDetails toTransactionDetails=new TransactionDetails();
+		toTransactionDetails.setCardDetails(tofoundCard);
+		toTransactionDetails.setFromAccountNumber(foundCard.getAccountNumber());
+		toTransactionDetails.setTransactionDate(LocalDate.now());
+		toTransactionDetails.setBalance(fundTransactionAmount);
+		toTransactionDetails.setTransactionType(TransactionType.Deposit);
+		this.transRepo.save(toTransactionDetails);
 		return foundCard.getAmount();
 	}
 
 	@Override
-	public Double checkBalance(CheckBalance checkBalance) throws TransactionException {
-		
-		String userId=checkBalance.getUserId();
-		Optional<UserRegistration> UserOpt = this.userRepo.findById(userId);
-		UserRegistration foundUser = UserOpt.get();
-		CardDetails foundCard=foundUser.getCardDetails();
-		if(!foundCard.getCardPin().equals(checkBalance.getCardPin())) {
-			throw new TransactionException("Wrong Card Pin,Please enter again");
+	public Double checkBalance(UserInfo checkBalance) throws TransactionException {
+
+		String userId = checkBalance.getUserId();
+		Optional<UserRegistration> userOpt = this.userRepo.findById(userId);
+		if (!userOpt.isPresent()) {
+			throw new TransactionException(userPresent);
+		}
+		UserRegistration foundUser = userOpt.get();
+		CardDetails foundCard = foundUser.getCardDetails();
+		if (!foundCard.getCardPin().equals(checkBalance.getCardPin())) {
+			throw new TransactionException(wrongPin);
 		}
 		return foundCard.getAmount();
 	}

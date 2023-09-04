@@ -2,16 +2,15 @@ package com.atm.atmmachine.dto;
 
 import javax.persistence.Column;
 
-public class CheckBalance {
+public class UserInfo {
 
 	String userId;
 	
 	@Column(length = 4)
     Integer cardPin;
 
-	public CheckBalance() {
+	public UserInfo() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public String getUserId() {

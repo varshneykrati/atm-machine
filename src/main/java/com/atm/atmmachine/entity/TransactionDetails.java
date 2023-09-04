@@ -24,40 +24,50 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class TransactionDetails {
+
+	
+	public enum TransactionType{
+		Deposit,Withdrawal
+	}
+
 	
 	@Id
-	@GeneratedValue(generator = "transaction_id",strategy = GenerationType.SEQUENCE)
-	@GenericGenerator(name = "transaction_id", strategy = "com.atm.atmmachine.idGenerator.StringPrefixedSequenceIdGenerator",
-    parameters = {
-    		@org.hibernate.annotations.Parameter(name = StringPrefixedSequenceIdGenerator.INCREMENT_PARAM, value = "1"),
-    		@org.hibernate.annotations.Parameter(name = StringPrefixedSequenceIdGenerator.VALUE_PREFIX_PARAMETER, value = "trans"),
+	@GeneratedValue(generator = "transaction_id", strategy = GenerationType.SEQUENCE)
+	@GenericGenerator(name = "transaction_id", strategy = "com.atm.atmmachine.idGenerator.StringPrefixedSequenceIdGenerator", parameters = {
+			@org.hibernate.annotations.Parameter(name = StringPrefixedSequenceIdGenerator.INCREMENT_PARAM, value = "1"),
+			@org.hibernate.annotations.Parameter(name = StringPrefixedSequenceIdGenerator.VALUE_PREFIX_PARAMETER, value = "trans"),
 
-            })
+	})
 	private String transactionId;
-	
-	
+
 	@ManyToOne
-	@JoinColumn(name="card_id", referencedColumnName = "cardId")
+	@JoinColumn(name = "card_id", referencedColumnName = "cardId")
 	private CardDetails cardDetails;
-	
+
 	@NotNull
-	@NotBlank(message="It should contain 12 numbers")
+	@NotBlank(message = "It should contain 12 numbers")
 	private BigInteger toAccountNumber;
-	
+
 	@NotNull
-	@JsonFormat(pattern="YYYY-MM-dd")
+	@NotBlank(message = "It should contain 12 numbers")
+	private BigInteger fromAccountNumber;
+
+	@NotNull
+	@JsonFormat(pattern = "YYYY-MM-dd")
 	private LocalDate transactionDate;
-	
+
 	@NotNull
-	@NotBlank(message="Amount paid")
+	@NotBlank(message = "Amount paid")
 	private Double balance;
 
 	@OneToOne
 	private ElectricityBill electricityBill;
-	
+
 	@OneToOne
 	private DTH dth;
-
+	
+	private TransactionType transactionType;
+	
 	public TransactionDetails() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -65,16 +75,19 @@ public class TransactionDetails {
 
 	public TransactionDetails(CardDetails cardDetails,
 			@NotBlank(message = "It should contain 12 numbers") BigInteger toAccountNumber,
+			@NotBlank(message = "It should contain 12 numbers") BigInteger fromAccountNumber,
 			@NotBlank(message = "It can't be empty") LocalDate transactionDate,
-			@NotBlank(message = "Amount paid") Double balance, ElectricityBill electricityBill, DTH dth) {
+			@NotBlank(message = "Amount paid") Double balance, ElectricityBill electricityBill, DTH dth,TransactionType transactionType) {
 		super();
 //		this.transactionId = transactionId;
 		this.cardDetails = cardDetails;
 		this.toAccountNumber = toAccountNumber;
+		this.fromAccountNumber = fromAccountNumber;
 		this.transactionDate = transactionDate;
 		this.balance = balance;
 		this.electricityBill = electricityBill;
 		this.dth = dth;
+		this.transactionType=transactionType;
 	}
 
 	public String getTransactionId() {
@@ -99,6 +112,15 @@ public class TransactionDetails {
 
 	public void setToAccountNumber(BigInteger toAccountNumber) {
 		this.toAccountNumber = toAccountNumber;
+	}
+
+	
+	public BigInteger getFromAccountNumber() {
+		return fromAccountNumber;
+	}
+
+	public void setFromAccountNumber(BigInteger fromAccountNumber) {
+		this.fromAccountNumber = fromAccountNumber;
 	}
 
 	public LocalDate getTransactionDate() {
@@ -132,11 +154,15 @@ public class TransactionDetails {
 	public void setDth(DTH dth) {
 		this.dth = dth;
 	}
+
+	public TransactionType getTransactionType() {
+		return transactionType;
+	}
+
+	public void setTransactionType(TransactionType transactionType) {
+		this.transactionType = transactionType;
+	}
+
 	
-	
-	
-	
-	
-	
-	
+
 }
