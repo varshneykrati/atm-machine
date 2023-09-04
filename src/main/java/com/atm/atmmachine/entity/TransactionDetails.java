@@ -1,5 +1,6 @@
 package com.atm.atmmachine.entity;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDate;
@@ -12,16 +13,24 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import com.atm.atmmachine.idGenerator.StringPrefixedSequenceIdGenerator;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-public class Transaction {
+public class TransactionDetails {
+	
+	public enum TransactionType{
+		Deposit,Withdrawal
+	}
 	
 	@Id
 	@GeneratedValue(generator = "transaction_id",strategy = GenerationType.SEQUENCE)
@@ -42,7 +51,11 @@ public class Transaction {
 	private BigInteger toAccountNumber;
 	
 	@NotNull
-	@JsonFormat(pattern="YYYY-MM-dd hh:mm")
+	@NotBlank(message="It should contain 12 numbers")
+	private BigInteger fromAccountNumber;
+	
+	
+	@JsonFormat(pattern="yyyy-MM-dd")
 	private LocalDate transactionDate;
 	
 	@NotNull
@@ -54,24 +67,29 @@ public class Transaction {
 	
 	@OneToOne
 	private DTH dth;
+	
+	private TransactionType transactionType;
 
-	public Transaction() {
+	public TransactionDetails() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public Transaction(CardDetails cardDetails,
+	public TransactionDetails(CardDetails cardDetails,
 			@NotBlank(message = "It should contain 12 numbers") BigInteger toAccountNumber,
+			@NotBlank(message = "It should contain 12 numbers") BigInteger fromAccountNumber,
 			@NotBlank(message = "It can't be empty") LocalDate transactionDate,
-			@NotBlank(message = "Amount paid") Double balance, ElectricityBill electricityBill, DTH dth) {
+			@NotBlank(message = "Amount paid") Double balance, ElectricityBill electricityBill, DTH dth, TransactionType transactionType) {
 		super();
 		this.transactionId = transactionId;
 		this.cardDetails = cardDetails;
 		this.toAccountNumber = toAccountNumber;
+		this.fromAccountNumber = fromAccountNumber;
 		this.transactionDate = transactionDate;
 		this.balance = balance;
 		this.electricityBill = electricityBill;
 		this.dth = dth;
+		this.transactionType = transactionType;
 	}
 
 	public String getTransactionId() {
@@ -128,6 +146,22 @@ public class Transaction {
 
 	public void setDth(DTH dth) {
 		this.dth = dth;
+	}
+
+	public BigInteger getFromAccountNumber() {
+		return fromAccountNumber;
+	}
+
+	public void setFromAccountNumber(BigInteger fromAccountNumber) {
+		this.fromAccountNumber = fromAccountNumber;
+	}
+
+	public TransactionType getTransactionType() {
+		return transactionType;
+	}
+
+	public void setTransactionType(TransactionType transactionType) {
+		this.transactionType = transactionType;
 	}
 	
 	

@@ -16,6 +16,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -25,10 +27,12 @@ import javax.validation.constraints.Pattern;
 
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import com.atm.atmmachine.idGenerator.StringPrefixedSequenceIdGenerator;
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 @Entity
@@ -54,12 +58,17 @@ public class UserRegistration {
 	private String userName;
 	
 	@NotBlank(message="This field cant be empty or null")
-	 @JsonFormat(pattern = "YYYY-MM-dd")
+	@JsonFormat(shape = JsonFormat.Shape.STRING,pattern="yyyy-MM-dd")
 	private LocalDate userDOB;
 	
-	@Column(unique=true)
+	
 	@NotBlank(message="This field cant be empty or null")
 	private String phoneNo;
+	
+
+	@Column(unique=true)
+	@NotBlank(message="This field cant be empty or null")
+	private Long aadharNumber;
 	
 	@Column(unique=true)
 	@Email(message = "Email is not valid")
@@ -70,7 +79,7 @@ public class UserRegistration {
 	@Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$")
 	private String password;
 	
-//	@Transient
+	@Transient
 	@NotBlank(message="This field cant be empty or null")
 	private String confirmPassword;
 	
@@ -78,11 +87,12 @@ public class UserRegistration {
 	@Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$")
 	private String userRegistrationApproval;
 	
+	
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "address_id", referencedColumnName = "addressId")
 	private Address address;
 	
-	
+	@JsonIgnore
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "card_id", referencedColumnName = "cardId")
 	private CardDetails cardDetails;
@@ -97,6 +107,7 @@ public class UserRegistration {
 	public UserRegistration(@NotBlank(message = "This field cant be empty or null") String userName,
 			@NotBlank(message = "This field cant be empty or null") LocalDate userDOB,
 			@NotBlank(message = "This field cant be empty or null") String phoneNo,
+			@NotBlank(message = "This field cant be empty or null") Long aadharNumber,
 			@Email(message = "Email is not valid") @NotBlank(message = "This field cant be empty or null") String emailId,
 			@NotBlank(message = "This field cant be empty or null") String password,
 			@NotBlank(message = "This field cant be empty or null") String confirmPassword,
@@ -105,6 +116,7 @@ public class UserRegistration {
 		this.userName = userName;
 		this.userDOB = userDOB;
 		this.phoneNo = phoneNo;
+		this.aadharNumber = aadharNumber;
 		this.emailId = emailId;
 		this.password = password;
 		this.confirmPassword = confirmPassword;
@@ -151,6 +163,17 @@ public class UserRegistration {
 
 	public void setPhoneNo(String phoneNo) {
 		this.phoneNo = phoneNo;
+	}
+
+	
+
+	public Long getAadharNumber() {
+		return aadharNumber;
+	}
+
+
+	public void setAadharNumber(Long aadharNumber) {
+		this.aadharNumber = aadharNumber;
 	}
 
 

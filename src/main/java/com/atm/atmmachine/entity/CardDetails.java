@@ -16,14 +16,18 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import com.atm.atmmachine.idGenerator.StringPrefixedSequenceIdGenerator;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class CardDetails {
@@ -51,27 +55,30 @@ public class CardDetails {
 	private String cardId;
 	
 	
-	@Column(length = 12,unique = true)
+	@Column(length = 12)
 	@NotBlank(message="This field cant be empty or null")
 	private BigInteger accountNumber; 
 	
 	
-	@Column(length = 16,unique = true)
+	@Column(length = 16)
 	@NotBlank(message="This field cant be empty or null")
 	private BigInteger cardNumber;
 	
-	@Column(length = 3,unique = true)
+	@Column(length = 3)
 	@NotBlank(message="This field cant be empty or null")
 	private Integer cvv;
 	
-	@NotNull
-	@JsonFormat(pattern="YYYY-MM-DD")
+	
 	@NotBlank(message="This field cant be empty or null")
+	@JsonFormat(pattern="yyyy-MM-dd")
 	private LocalDate validThrough;
 	
 	@NotBlank(message="This field cant be empty or null")
 	@Enumerated(EnumType.STRING)
 	private CardType cardType;
+	
+	@NotBlank(message="This field cant be empty or null")
+	private Double cardLimit;
 	
 	@NotBlank(message="This field cant be empty or null")
 	@Enumerated(EnumType.STRING)
@@ -81,7 +88,7 @@ public class CardDetails {
 	private Double amount;
 	
 	
-	@Column(length = 4)
+	@Column(length = 6)
 	private Integer cardPin;
 	
 	@Enumerated(EnumType.STRING)
@@ -102,6 +109,7 @@ public class CardDetails {
 			@NotBlank(message = "This field cant be empty or null") Integer cvv,
 			@NotBlank(message = "This field cant be empty or null") LocalDate validThrough,
 			@NotBlank(message = "This field cant be empty or null") CardType cardType,
+			@NotBlank(message = "This field cant be empty or null") Double cardLimit,
 			@NotBlank(message = "This field cant be empty or null") CardStatus cardstatus,
 			@NotBlank(message = "This field cant be empty or null") Double amount,
 			@NotBlank(message = "This field cant be empty or null") Integer cardPin,
@@ -112,6 +120,7 @@ public class CardDetails {
 		this.cvv = cvv;
 		this.validThrough = validThrough;
 		this.cardType = cardType;
+		this.cardLimit = cardLimit;
 		this.cardstatus = cardstatus;
 		this.amount = amount;
 		this.cardPin = cardPin;
@@ -120,6 +129,14 @@ public class CardDetails {
 	}
 
 
+
+	public Double getCardLimit() {
+		return cardLimit;
+	}
+
+	public void setCardLimit(Double cardLimit) {
+		this.cardLimit = cardLimit;
+	}
 
 	public String getCardId() {
 		return cardId;

@@ -8,4 +8,6 @@ import com.atm.atmmachine.entity.UserRequest;
 @Repository
 public interface UserRequestRepository extends JpaRepository<UserRequest, String>{
 
+	UserRequest findByRequestId(String req);
+
 }

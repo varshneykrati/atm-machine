@@ -1,5 +1,7 @@
 package com.atm.atmmachine.entity;
 
+import java.io.Serializable;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -10,6 +12,7 @@ import javax.persistence.ManyToOne;
 import org.hibernate.annotations.GenericGenerator;
 
 import com.atm.atmmachine.idGenerator.StringPrefixedSequenceIdGenerator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class ElectricityBill {
