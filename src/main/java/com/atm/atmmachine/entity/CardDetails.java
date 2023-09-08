@@ -70,8 +70,7 @@ public class CardDetails {
 	@NotBlank(message="This field cant be empty or null")
 	private Integer cvv;
 	
-	@NotNull
-	@JsonFormat(pattern="yyyy-MM-dd")
+
 	@NotBlank(message="This field cant be empty or null")
 	@JsonFormat(pattern="yyyy-MM-dd")
 	private LocalDate validThrough;
@@ -212,14 +211,6 @@ public class CardDetails {
 	}
 
 	
-
-	public Double getCardLimit() {
-		return cardLimit;
-	}
-
-	public void setCardLimit(Double cardLimit) {
-		this.cardLimit = cardLimit;
-	}
 
 	public CardStatus getCardstatus() {
 		return cardstatus;

@@ -1,6 +1,6 @@
 package com.atm.atmmachine.service;
 
-import com.atm.atmmachine.dto.Email;
+import com.atm.atmmachine.dto.EmailDto;
 import com.atm.atmmachine.dto.Password;
 import com.atm.atmmachine.dto.UserLogin;
 import com.atm.atmmachine.entity.CardDetails;
@@ -11,7 +11,7 @@ public interface UserRegistrationService {
 
 	public Integer userRegistrationDetails(UserRegistration userRegisteration) throws HandleException;
 	
-	public UserRegistration saveUserDetail(UserRegistration userRegisteration,Integer otp) throws HandleException;
+	public UserRegistration saveUserDetail(UserRegistration userRegisteration) throws HandleException;
 
 	public String checkLoginDetails(UserLogin userLogin) throws HandleException;
 
@@ -21,7 +21,7 @@ public interface UserRegistrationService {
 
 	public UserRegistration updateUserAddress(UserRegistration userRegistration,String userId) throws HandleException;
 
-	public Integer sendOtpOnEmail(Email email, String string) throws HandleException;
+	public Integer sendOtpOnEmail(EmailDto emailDto, String string) throws HandleException;
 
 	public UserRegistration savePassword(Password password, String userId) throws HandleException;
 }

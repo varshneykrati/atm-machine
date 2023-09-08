@@ -10,7 +10,7 @@ import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.atm.atmmachine.dto.Email;
+import com.atm.atmmachine.dto.EmailDto;
 import com.atm.atmmachine.dto.Password;
 import com.atm.atmmachine.dto.UserLogin;
 import com.atm.atmmachine.entity.CardDetails;
@@ -18,6 +18,7 @@ import com.atm.atmmachine.entity.CardDetails.CardStatus;
 import com.atm.atmmachine.entity.CardDetails.CardType;
 import com.atm.atmmachine.entity.CardDetails.UserTotallyRegister;
 import com.atm.atmmachine.entity.UserRegistration;
+import com.atm.atmmachine.entity.UserRegistration.UserRegistrationApproval;
 import com.atm.atmmachine.exception.HandleException;
 import com.atm.atmmachine.repository.CardDetailsRepository;
 import com.atm.atmmachine.repository.UserRegistrationRepository;
@@ -36,22 +37,24 @@ public class UserRegistrationServiceImpl implements UserRegistrationService{
 	
 	@Override
 	public Integer userRegistrationDetails(UserRegistration userRegisteration) throws HandleException {
+		
+		System.out.println("Hello->"+userRegisteration.getUserDOB()+"-----"+userRegisteration.getPhoneNo()+"----"+userRegisteration.getAadharNumber()+"-----"+userRegisteration.getAddress().getStreet());
 		Optional<UserRegistration> userEmailOpt = this.userRegistrationRepository.findByEmailId(userRegisteration.getEmailId());
 		Optional<UserRegistration> userPhoneOpt = this.userRegistrationRepository.findByPhoneNo(userRegisteration.getPhoneNo());
 		Optional<UserRegistration> userAadharOpt = this.userRegistrationRepository.findByAadharNumber(userRegisteration.getAadharNumber());
 		if(userAadharOpt.isPresent()) {
-			throw new HandleException("User with this Aahar number "+userRegisteration.getAadharNumber()+" already exist.");
+			throw new HandleException("Aadhar number is there already.");
 		}else if(userEmailOpt.isPresent()) {
-			throw new HandleException("User with this Email iD "+userRegisteration.getEmailId()+" already exist.");
+			throw new HandleException("EmailId already exist");
 		}else if(userPhoneOpt.isPresent()) {
-			throw new HandleException("User with this Phone number "+userRegisteration.getPhoneNo()+" already exist.");
+			throw new HandleException("Phone number already exist");
 		}
 		else if(!userRegisteration.getPassword().equals(userRegisteration.getConfirmPassword())) {
 			throw new HandleException("Passwords are not matching");
 		}
 		else {
 			Random random = new Random();
-			System.out.println("sending email now");
+			//System.out.println("sending email now");
 			generateOtp = random.nextInt(999999);
 			String message =""+"<h3>"+"Hey "+userRegisteration.getUserName()+ "!"+"</h3>"+"<p>"+"A sign in attempt requires further verification beacause we want to verify this email to create safe account for you in our bank"+"</p>"+"<strong>"+"Your OTP for verification : "+generateOtp+"</strong>";
 			String subject = "Verify your Email";
@@ -64,31 +67,44 @@ public class UserRegistrationServiceImpl implements UserRegistrationService{
 	}
 
 	@Override
-	public UserRegistration saveUserDetail(UserRegistration userRegistration, Integer otp) throws HandleException {
-		System.out.println("service : "+otp+" global otp: "+generateOtp+" -> user name : "+userRegistration.getUserName());
-		if(generateOtp.equals(otp)) {
-			System.out.println("Hii inside if condition");
+	public UserRegistration saveUserDetail(UserRegistration userRegistration) throws HandleException {
+	//	System.out.println("service : "+otp+" global otp: "+generateOtp+" -> user name : "+userRegistration.getUserName());
+		if(userRegistration!=null) {
+			userRegistration.setUserRegistrationApproval(UserRegistrationApproval.Inactive);
 			userRegistration.setPassword(BCrypt.hashpw(userRegistration.getPassword(), BCrypt.gensalt()));
-			System.out.println(userRegistration.getUserName());
+			
 			UserRegistration user = this.userRegistrationRepository.save(userRegistration);
 			
 ////--------------------Generate User Card----------------------------------			
 			//generate account number
 			Random random = new Random();
-			StringBuilder sb = new StringBuilder(12);
-			for (int i = 0; i < 12; i++) {
-	            int randomDigit = random.nextInt(10); 
-	            sb.append(randomDigit);
-	        }
-			BigInteger accountNumber = new BigInteger(sb.toString());
+			BigInteger accountNumber;
+			Optional<CardDetails> getUserAccountNo;
+			do {
+				StringBuilder sb = new StringBuilder(12);
+				for (int i = 0; i < 12; i++) {
+		            int randomDigit = random.nextInt(10); 
+		            sb.append(randomDigit);
+		        }
+				accountNumber = new BigInteger(sb.toString());
+				getUserAccountNo = this.cardDetailsRepository.findByAccountNumber(accountNumber);
+			}while(getUserAccountNo.isPresent());
+			
+			
 			
 			//generate card number
-			StringBuilder sb1 = new StringBuilder(16);
-			for (int i = 0; i < 16; i++) {
-	            int randomDigit = random.nextInt(10); 
-	            sb1.append(randomDigit);
-	        }
-			BigInteger cardNumber =new BigInteger(sb1.toString());
+			Optional<CardDetails> getUserCardNumber;
+			BigInteger cardNumber;
+			do {
+				
+				StringBuilder sb1 = new StringBuilder(16);
+				for (int i = 0; i < 16; i++) {
+					int randomDigit = random.nextInt(10); 
+					sb1.append(randomDigit);
+				}
+				cardNumber =new BigInteger(sb1.toString());
+				getUserCardNumber = this.cardDetailsRepository.findByCardNumber(cardNumber);
+			}while(getUserCardNumber.isPresent());
 			
 			//generate cvv
 			StringBuilder sb2 = new StringBuilder(3);
@@ -97,12 +113,11 @@ public class UserRegistrationServiceImpl implements UserRegistrationService{
 	            sb2.append(randomDigit);
 	        }
 			Integer cvv = Integer.parseInt(sb2.toString());
-			System.out.println(accountNumber+" "+cardNumber+" "+cvv);
+			//System.out.println(accountNumber+" "+cardNumber+" "+cvv);
 			
 			//expiryDate of Card
 			LocalDate currentCardDate = LocalDate.now();
 			LocalDate expiryDate = currentCardDate.plusYears(5);
-			System.out.println("Expiry Date : "+expiryDate);
 			
 			//sending email
 			String message =""+"<h3>"+"Dear "+userRegistration.getUserName()+ ","+"</h3>"+
@@ -125,11 +140,11 @@ public class UserRegistrationServiceImpl implements UserRegistrationService{
 			CardDetails getCard = this.cardDetailsRepository.save(userCard);
 			userRegistration.setCardDetails(userCard);
 			this.userRegistrationRepository.save(userRegistration);
-			System.out.println("Card Details : "+getCard);
+		//	System.out.println("Card Details : "+getCard);
 			return user;
 		}
 		else {
-			throw new  HandleException("Please enter correct OTP.");
+			throw new  HandleException("we dont have user");
 		}
 	}
 
@@ -147,7 +162,7 @@ public class UserRegistrationServiceImpl implements UserRegistrationService{
 				
 				return "Successfully loggedin";
 			}else {
-				return "Login credentials are wrong.";
+				throw new HandleException("Credentials are wrong.");
 			}
 		}
 
@@ -224,11 +239,11 @@ public class UserRegistrationServiceImpl implements UserRegistrationService{
 	}
 
 	@Override
-	public Integer sendOtpOnEmail(Email email, String string) throws HandleException {
-		Optional<UserRegistration> getUserOpt = this.userRegistrationRepository.findByUserIdAndEmailId(string, email);
+	public Integer sendOtpOnEmail(EmailDto emailDto, String string) throws HandleException {
+		Optional<UserRegistration> getUserOpt = this.userRegistrationRepository.findByUserIdAndEmailId(string, emailDto.getEmailId());
 		if(getUserOpt.isPresent()) {
 			Random random = new Random();
-			System.out.println("sending email now");
+		//	System.out.println("sending email now");
 			generateOtp = random.nextInt(999999);
 			String message =""+"<h3>"+"Hey "+getUserOpt.get().getUserName()+ "!"+"</h3>"+"<p>"+"A sign in attempt requires further verification beacause we want to verify this email to create safe account for you in our bank"+"</p>"+"<strong>"+"Your OTP for verification : "+generateOtp+"</strong>";
 			String subject = "Verify your Email";

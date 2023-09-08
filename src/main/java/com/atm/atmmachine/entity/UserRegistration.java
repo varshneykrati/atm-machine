@@ -29,10 +29,12 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.atm.atmmachine.CustomDate.CustomLocalDateDeserializer;
 import com.atm.atmmachine.idGenerator.StringPrefixedSequenceIdGenerator;
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 
 @Entity
@@ -58,6 +60,7 @@ public class UserRegistration {
 	private String userName;
 	
 	@NotBlank(message="This field cant be empty or null")
+	@JsonDeserialize(using = CustomLocalDateDeserializer.class)
 	@JsonFormat(shape = JsonFormat.Shape.STRING,pattern="yyyy-MM-dd")
 	private LocalDate userDOB;
 	
@@ -68,11 +71,7 @@ public class UserRegistration {
 
 	@Column(unique=true)
 	@NotBlank(message="This field cant be empty or null")
-	private Long aadharNumber;
-	
-	@Column(unique=true)
-    @NotBlank(message="This field cant be empty or null")
-    private Long aadharNumber;
+	private Long aadharNumber;	
 	
 	@Column(unique=true)
 	@Email(message = "Email is not valid")
@@ -239,15 +238,6 @@ public class UserRegistration {
 		this.cardDetails = cardDetails;
 	}
 
-
-	public Long getAadharNumber() {
-		return aadharNumber;
-	}
-
-
-	public void setAadharNumber(Long aadharNumber) {
-		this.aadharNumber = aadharNumber;
-	}
 
 
 	

@@ -18,9 +18,11 @@ public interface CardDetailsRepository extends JpaRepository<CardDetails, String
 	Optional<CardDetails> findByAccountNumberAndCardNumber(BigInteger accountNumber, BigInteger cardNumber);
 
 	Optional<CardDetails> findByAccountNumber(BigInteger toAccountNumber);
+	Optional<CardDetails> findByCardNumber(BigInteger cardNumber);
 
 	//admin
 	List<CardDetails> findByCardType(CardType cardType);
+
 	
 }
 
