@@ -51,19 +51,19 @@ public class AdminController {
 	}
 
 	// used to display when admin wants to see all cardlost requests
-	@GetMapping("/admin/users/cardlost")
+	@GetMapping("/admin/users/request/cardlost")
 	public List<UserRequest> displayCardLostRequests() {
 		return this.adminService.displayByRequest();
 	}
 
 	// used to display when admin wants to see all cardReplacement requests
-	@GetMapping("/admin/users/cardreplacement")
+	@GetMapping("/admin/users/request/cardreplacement")
 	public List<UserRequest> displayCardReplacementRequests() {
 		return this.adminService.displayAllCardReplacementRequests();
 	}
 
 	// used to approve the cardLost request of specific requestid
-	@PatchMapping("/admin/cardlost/statuschange/{reqid}")
+	@PatchMapping("/admin/request/status/{reqid}")
 	public RequestStatus changeRequestStatus(@PathVariable("reqid") String reqId) throws AdminException {
 		
 		UserRequest currentUserRequest;
@@ -77,7 +77,7 @@ public class AdminController {
 
 
 	// to display users with status inactive
-	@GetMapping("/admin/userswithstatusinactive")
+	@GetMapping("/admin/users/inactive")
 	public List<UserRegistration> displayUsersWithStatusInactive() {
 		return this.adminService.displayUsersWithStatusInactive();
 	}
@@ -105,13 +105,18 @@ public class AdminController {
 	}
 
 	// to change card limit of specific card type
-	@PatchMapping("/admin/changecardlimit/")
-	public Double setCardLimit(@RequestBody CardLimit cardLimit) {
-		return this.adminService.changeCardLimit(cardLimit);
+	@PatchMapping("/admin/cardlimit/")
+	public Double setCardLimit(@RequestBody CardLimit cardLimit) throws AdminException{
+		try {
+			return this.adminService.changeCardLimit(cardLimit);
+		} catch (AdminException e) {
+			throw e;
+			
+		}
 	}
 
 	// to validate aadhar card
-	@GetMapping("/admin/validate/aadharcard/{userid}")
+	@GetMapping("/admin/aadharcard/{userid}")
 	public Boolean validateAadharCard(@PathVariable("userid") String userId) throws AdminException {
 		Optional<UserRegistration> user = this.adminService.findByUserId(userId);
 		if (!user.isPresent())

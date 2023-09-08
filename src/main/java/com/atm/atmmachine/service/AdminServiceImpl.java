@@ -174,9 +174,13 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public Double changeCardLimit(CardLimit cardLimit) {
+	public Double changeCardLimit(CardLimit cardLimit) throws AdminException{
+		if(cardLimit.getCardType().equals("") && cardLimit.getChangedCardLimit().equals(0))
+			throw new AdminException("Check inputs properly");
 		List<CardDetails> foundCardDetails = this.cardDetailsRepository
 				.findByCardType(CardType.valueOf(cardLimit.getCardType()));
+		
+		
 		for (CardDetails c : foundCardDetails) {
 			c.setCardLimit(cardLimit.getChangedCardLimit());
 			this.cardDetailsRepository.save(c);
