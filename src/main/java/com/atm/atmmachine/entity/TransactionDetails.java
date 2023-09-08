@@ -60,6 +60,7 @@ public class TransactionDetails {
 	@NotBlank(message = "Amount paid")
 	private Double balance;
 
+	private String Particulars;
 	@OneToOne
 	private ElectricityBill electricityBill;
 
@@ -77,7 +78,7 @@ public class TransactionDetails {
 			@NotBlank(message = "It should contain 12 numbers") BigInteger toAccountNumber,
 			@NotBlank(message = "It should contain 12 numbers") BigInteger fromAccountNumber,
 			@NotBlank(message = "It can't be empty") LocalDate transactionDate,
-			@NotBlank(message = "Amount paid") Double balance, ElectricityBill electricityBill, DTH dth,TransactionType transactionType) {
+			@NotBlank(message = "Amount paid") Double balance,String particulars, ElectricityBill electricityBill, DTH dth,TransactionType transactionType) {
 		super();
 //		this.transactionId = transactionId;
 		this.cardDetails = cardDetails;
@@ -85,6 +86,7 @@ public class TransactionDetails {
 		this.fromAccountNumber = fromAccountNumber;
 		this.transactionDate = transactionDate;
 		this.balance = balance;
+		this.Particulars=particulars;
 		this.electricityBill = electricityBill;
 		this.dth = dth;
 		this.transactionType=transactionType;
@@ -137,6 +139,14 @@ public class TransactionDetails {
 
 	public void setBalance(Double balance) {
 		this.balance = balance;
+	}
+
+	public String getParticulars() {
+		return Particulars;
+	}
+
+	public void setParticulars(String particulars) {
+		Particulars = particulars;
 	}
 
 	public ElectricityBill getElectricityBill() {
