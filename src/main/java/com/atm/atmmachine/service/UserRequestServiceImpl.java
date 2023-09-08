@@ -42,7 +42,7 @@ public class UserRequestServiceImpl implements UserRequestService {
 			UserRegistration getUser = getUserOpt.get();
 			newRequest.setUserRegistration(getUser);
 			newRequest.setAccountNumber(getUser.getCardDetails().getAccountNumber());
-		
+		    
 		boolean condition = true;
 		List<UserRequest> allUser = this.requestRepository.findAll();
 
@@ -58,7 +58,11 @@ public class UserRequestServiceImpl implements UserRequestService {
 		if (condition) {
 			return this.requestRepository.save(newRequest);
 		}
-		return null;
+		else
+		{
+			throw new RequestException("You make same request earlier");
+		}
+		
 	}
 
 	@Override
@@ -94,6 +98,16 @@ public class UserRequestServiceImpl implements UserRequestService {
 	@Override
 	public UserRequest updateRequest(UserRequest newRequest) throws RequestException {
 		Optional<UserRequest> getRequest = requestRepository.findById(newRequest.getRequestId());
+		newRequest.setDateOfRequest(LocalDate.now());
+		Optional<UserRegistration> getUserOpt = this.userRegistrationRepository.findById("user1");
+		if(!getUserOpt.isPresent())
+		{
+			throw new RequestException(" Can't add  as User id is  not present");
+		}
+			UserRegistration getUser = getUserOpt.get();
+			newRequest.setUserRegistration(getUser);
+			newRequest.setAccountNumber(getUser.getCardDetails().getAccountNumber());
+		
 		if (getRequest.isPresent()) {
 			UserRequest updatedrequest = this.requestRepository.save(newRequest);
 			return updatedrequest;
