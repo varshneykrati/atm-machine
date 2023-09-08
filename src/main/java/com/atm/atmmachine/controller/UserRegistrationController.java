@@ -5,6 +5,7 @@ import java.util.Optional;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.atm.atmmachine.dto.Email;
+import com.atm.atmmachine.dto.EmailDto;
 import com.atm.atmmachine.dto.Password;
 import com.atm.atmmachine.dto.UserLogin;
 import com.atm.atmmachine.entity.CardDetails;
@@ -25,6 +26,7 @@ import com.atm.atmmachine.repository.UserRequestRepository;
 import com.atm.atmmachine.service.UserRegistrationService;
 
 @RestController
+@CrossOrigin(origins="http://localhost:4200/")
 public class UserRegistrationController {
 	@Autowired
 	UserRegistrationService userRegistrationService;
@@ -32,22 +34,22 @@ public class UserRegistrationController {
 	UserRegistration userRegisterDetails=null;
 	Integer otp=null;
 	
-	@GetMapping("/")
-	public String krati() {
-		return "Hello welcome";
-	}
+//	@GetMapping("/")
+//	public String krati() {
+//		return "Hello welcome";
+//	}
 	
 	@PostMapping("/user/")
 	public Integer registerUser(@RequestBody UserRegistration userRegistration) throws HandleException {
-		System.out.println("we are adding");
+		//System.out.println("we are adding");
 		userRegisterDetails = userRegistration;
 		otp = this.userRegistrationService.userRegistrationDetails(userRegistration);
 		return otp;
 	}
 	
-	@PostMapping("/verifyOtp/{otp}")
-	public UserRegistration verifyAndSaveRegisterUser(@PathVariable("otp") Integer otp) throws HandleException {
-		return this.userRegistrationService.saveUserDetail(userRegisterDetails,otp);
+	@PostMapping("/saveUser/")
+	public UserRegistration verifyAndSaveRegisterUser(@RequestBody UserRegistration userRegisterDetails) throws HandleException {
+		return this.userRegistrationService.saveUserDetail(userRegisterDetails);
 		
 	}
 	
@@ -56,7 +58,7 @@ public class UserRegistrationController {
 		return this.userRegistrationService.addUserCard(userRegisterDetails, cardDetails);
 	}
 	
-	@PostMapping("/userLogin/")
+	@PostMapping("/user/login/")
 	public String login(@RequestBody UserLogin userLogin) throws HandleException {
 		return this.userRegistrationService.checkLoginDetails(userLogin); //redirect to portal after success.
 	}
@@ -72,8 +74,9 @@ public class UserRegistrationController {
 	}
 	
 	@PostMapping("/email/")
-	public Integer verifyEmailAndSendOtp(@RequestBody Email email) throws HandleException {
-		otp = this.userRegistrationService.sendOtpOnEmail(email, "user1");
+	public Integer verifyEmailAndSendOtp(@RequestBody EmailDto emailDto) throws HandleException {
+		//System.out.println("hii email dto");
+		otp = this.userRegistrationService.sendOtpOnEmail(emailDto, "user1");
 		return otp;
 	}
 	
