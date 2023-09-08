@@ -34,7 +34,7 @@ public class UserRequestServiceImpl implements UserRequestService {
 	@Override
 	public UserRequest addRequest(UserRequest newRequest)throws RequestException {
 		newRequest.setDateOfRequest(LocalDate.now());// for storing current date
-		Optional<UserRegistration> getUserOpt = this.userRegistrationRepository.findByUserId("user1");
+		Optional<UserRegistration> getUserOpt = this.userRegistrationRepository.findById("user1");
 		if(!getUserOpt.isPresent())
 		{
 			throw new RequestException(" Can't add  as User id is  not present");
@@ -79,7 +79,7 @@ public class UserRequestServiceImpl implements UserRequestService {
 
 	@Override
 	public List<UserRequest> getRequestByUserId(String userId)throws RequestException {
-		Optional<UserRegistration> userRegistrationOpt = this.userRegistrationRepository.findByUserId(userId);
+		Optional<UserRegistration> userRegistrationOpt = this.userRegistrationRepository.findById(userId);
 		if(userRegistrationOpt.isPresent())
 		{
 			UserRegistration getUser = userRegistrationOpt.get();
