@@ -23,9 +23,11 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.atm.atmmachine.CustomDate.CustomLocalDateDeserializer;
 import com.atm.atmmachine.idGenerator.StringPrefixedSequenceIdGenerator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 @Entity
 public class UserRequest {
@@ -43,6 +45,8 @@ public class UserRequest {
             })
 	private String requestId;
 	
+	
+
 	@Column(length = 12)
 	@NotNull
 	@NotBlank(message="It can' be empty")
@@ -58,8 +62,9 @@ public class UserRequest {
 	
 	
 	@NotBlank(message="It can' be empty")
-	@JsonFormat(pattern="YYYY-MM-dd")
-	//@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+	@JsonDeserialize(using = CustomLocalDateDeserializer.class)
+	//@JsonFormat(pattern="YYYY-MM-dd")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	private LocalDate dateOfRequest;
 	
 	@Enumerated(EnumType.STRING)
