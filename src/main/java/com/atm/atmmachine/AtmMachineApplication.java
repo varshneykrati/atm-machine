@@ -19,6 +19,7 @@ import com.atm.atmmachine.entity.CardDetails.UserTotallyRegister;
 import com.atm.atmmachine.entity.DTH;
 import com.atm.atmmachine.entity.ElectricityBill;
 import com.atm.atmmachine.entity.TransactionDetails;
+import com.atm.atmmachine.entity.TransactionDetails.TransactionType;
 import com.atm.atmmachine.entity.UserRegistration;
 import com.atm.atmmachine.entity.UserRegistration.UserRegistrationApproval;
 import com.atm.atmmachine.entity.UserRequest;
@@ -69,9 +70,9 @@ public class AtmMachineApplication implements CommandLineRunner{
 		Address address1 = new Address("405/8 Nai Basti","Firozabad",283203,"Uttar Pradesh");
 		UserRegistration userRegistration1 = new UserRegistration("Krati Varshney",localDate.now(),"9760286311",962239611757L,"krativarshne@gmail.com","KVar@7777","KVar@7777",UserRegistrationApproval.Inactive,address1,null);
 		UserRegistration userRegistration2 = new UserRegistration("Shivam",localDate.now(),"+919307204212",301577650820L,"shivam@gmail.com","shivam@7777","shivam@7777",UserRegistrationApproval.Active,new Address("415/8 New Market","Agra",283203,"Uttar Pradesh"),null);
-		UserRegistration userRegistration3 = new UserRegistration("Sidhi",localDate.now(),"9712121111",767678355011L,"sidhi@gmail.com","sidhi@7777","sidhi@7777",UserRegistrationApproval.Inactive,new Address("415/8 Old Market","Agra",283203,"Madhya Pradesh"),null);
+		UserRegistration userRegistration3 = new UserRegistration("Sidhi",localDate.now(),"+918178234554",767678355011L,"sidhi@gmail.com","sidhi@7777","sidhi@7777",UserRegistrationApproval.Inactive,new Address("415/8 Old Market","Agra",283203,"Madhya Pradesh"),null);
 		UserRegistration userRegistration4 = new UserRegistration("Mansi",localDate.now(),"9760281156",679967896789L,"mansi@gmail.com","mansi@7777","mansi@7777",UserRegistrationApproval.Inactive,new Address("905/8 New Market","Agra",283203,"Uttar Pradesh"),null);
-		UserRegistration userRegistration5 = new UserRegistration("Ram",localDate.now(),"+919760286311",678967896700L,"ram@gmail.com","ram@7700","ram@7700",UserRegistrationApproval.Inactive,new Address("415/8 Navi Mumbai","Mumbai",283203,"Maharastra"),null);
+		UserRegistration userRegistration5 = new UserRegistration("Ram",localDate.now(),"+919760286311",967739611757L,"ram@gmail.com","ram@7700","ram@7700",UserRegistrationApproval.Inactive,new Address("415/8 Navi Mumbai","Mumbai",283203,"Maharastra"),null);
 		userRegistrationRepository.save(userRegistration1);
 		userRegistrationRepository.save(userRegistration2);
 		userRegistrationRepository.save(userRegistration3);
@@ -81,30 +82,30 @@ public class AtmMachineApplication implements CommandLineRunner{
 //Entering Card Detail of the user ->link with USER Registration
 		CardDetails carddetail1 = new CardDetails(new BigInteger("123412341234"),new BigInteger("7890789078907890"),456,localDate.now(),CardType.Silver,25000.0,CardStatus.Active,20000.0,3456,UserTotallyRegister.True,userRegistration2);
 		 userRegistration2.setCardDetails(carddetail1);cardDetailsRepository.save(carddetail1); userRegistrationRepository.save(userRegistration2);
-		 CardDetails carddetail2 = new CardDetails(new BigInteger("123412344321"),new BigInteger("7890789078900965"),789,localDate.now(),CardType.Silver,25000.0,CardStatus.Inactive,2000.0,null,UserTotallyRegister.False,userRegistration1);
+		 CardDetails carddetail2 = new CardDetails(new BigInteger("123412344321"),new BigInteger("7890789078900965"),789,localDate.now(),CardType.Silver,25000.0,CardStatus.Active,2000.0,null,UserTotallyRegister.False,userRegistration1);
 		 userRegistration1.setCardDetails(carddetail2);cardDetailsRepository.save(carddetail2); userRegistrationRepository.save(userRegistration1);
-		 CardDetails carddetail3 = new CardDetails(new BigInteger("1234123456678"),new BigInteger("7890789078999890"),459,localDate.now(),CardType.Silver,25000.0,CardStatus.Inactive,2000.0,null,UserTotallyRegister.False,userRegistration3);
+		 CardDetails carddetail3 = new CardDetails(new BigInteger("1234123456678"),new BigInteger("7890789078999890"),459,localDate.now(),CardType.Silver,25000.0,CardStatus.Active,2000.0,null,UserTotallyRegister.False,userRegistration3);
 		 userRegistration3.setCardDetails(carddetail3);cardDetailsRepository.save(carddetail3); userRegistrationRepository.save(userRegistration3);
-		 CardDetails carddetail4 = new CardDetails(new BigInteger("123424561234"),new BigInteger("7890789008907890"),956,localDate.now(),CardType.Silver,25000.0,CardStatus.Inactive,2000.0,null,UserTotallyRegister.False,userRegistration4);
+		 CardDetails carddetail4 = new CardDetails(new BigInteger("123424561234"),new BigInteger("7890789008907890"),956,localDate.now(),CardType.Silver,25000.0,CardStatus.Active,2000.0,null,UserTotallyRegister.False,userRegistration4);
 		 userRegistration4.setCardDetails(carddetail4);cardDetailsRepository.save(carddetail4); userRegistrationRepository.save(userRegistration4);
-		 CardDetails carddetail5 = new CardDetails(new BigInteger("678412341234"),new BigInteger("7891789078907890"),756,localDate.now(),CardType.Silver,25000.0,CardStatus.Inactive,2000.0,null,UserTotallyRegister.False,userRegistration5);
+		 CardDetails carddetail5 = new CardDetails(new BigInteger("678412341234"),new BigInteger("7891789078907890"),756,localDate.now(),CardType.Silver,25000.0,CardStatus.Active,2000.0,null,UserTotallyRegister.True,userRegistration5);
 		 userRegistration5.setCardDetails(carddetail5);cardDetailsRepository.save(carddetail5); userRegistrationRepository.save(userRegistration5);
 		 
 		 
 // Now Add Transaction which is link to -> Address
-		 TransactionDetails transaction1 = new TransactionDetails(carddetail1,new BigInteger("123412344321"),LocalDate.of(2002, 9, 01),500.0,null,null);
+		 TransactionDetails transaction1 = new TransactionDetails(carddetail1,new BigInteger("123412344321"),null,LocalDate.of(2002, 9, 01),500.0,null,null,TransactionType.Deposit);
 		 this.transactionRepository.save(transaction1);
-		 TransactionDetails transaction2 = new TransactionDetails(carddetail1,new BigInteger("993412344321"),LocalDate.of(2001, 9, 01),1500.0,null,null);
+		 TransactionDetails transaction2 = new TransactionDetails(carddetail1,new BigInteger("993412344321"),null,LocalDate.of(2001, 9, 01),1500.0,null,null,TransactionType.Deposit);
 		 this.transactionRepository.save(transaction2);
-		 TransactionDetails transaction3 = new TransactionDetails(carddetail1,new BigInteger("553412344321"),LocalDate.of(2003, 9, 01),200.0,null,null);
+		 TransactionDetails transaction3 = new TransactionDetails(carddetail1,new BigInteger("553412344321"),null,LocalDate.of(2003, 9, 01),200.0,null,null,TransactionType.Deposit);
 		 this.transactionRepository.save(transaction3);
-		 TransactionDetails transaction4 = new TransactionDetails(carddetail2,new BigInteger("123412344321"),LocalDate.of(2004, 9, 01),100.0,null,null);
+		 TransactionDetails transaction4 = new TransactionDetails(carddetail2,new BigInteger("123412344321"),null,LocalDate.of(2004, 9, 01),100.0,null,null,TransactionType.Deposit);
 		 this.transactionRepository.save(transaction4);
-		 TransactionDetails transaction5 = new TransactionDetails(carddetail3,new BigInteger("123412344321"),LocalDate.of(2005, 9, 01),1200.0,null,null);
+		 TransactionDetails transaction5 = new TransactionDetails(carddetail3,new BigInteger("123412344321"),null,LocalDate.of(2005, 9, 01),1200.0,null,null,TransactionType.Deposit);
 		 this.transactionRepository.save(transaction5);
-		 TransactionDetails transaction6 = new TransactionDetails(carddetail3,new BigInteger("123412349921"),LocalDate.of(2005, 8, 01),400.0,null,null);
+		 TransactionDetails transaction6 = new TransactionDetails(carddetail3,new BigInteger("123412349921"),null,LocalDate.of(2005, 8, 01),400.0,null,null,TransactionType.Deposit);
 		 this.transactionRepository.save(transaction6);
-		 TransactionDetails transaction7 = new TransactionDetails(carddetail4,new BigInteger("123412344329"),localDate.now(),5200.0,null,null);
+		 TransactionDetails transaction7 = new TransactionDetails(carddetail4,new BigInteger("123412344329"),null,localDate.now(),5200.0,null,null,TransactionType.Deposit);
 		 this.transactionRepository.save(transaction7);
 		 
 //create all vendors roughly
@@ -179,7 +180,7 @@ public class AtmMachineApplication implements CommandLineRunner{
 
          this.electricityBillRepository.save(electricityBill1);
 
-         TransactionDetails transaction8 = new TransactionDetails(carddetail1,new BigInteger("126734582999"),localDate.now(),2000.0,electricityBill1,null);
+         TransactionDetails transaction8 = new TransactionDetails(carddetail1,new BigInteger("126734582999"),null,localDate.now(),2000.0,electricityBill1,null,TransactionType.Withdrawal);
 
          this.transactionRepository.save(transaction8);
 
@@ -187,7 +188,7 @@ public class AtmMachineApplication implements CommandLineRunner{
 
          this.electricityBillRepository.save(electricityBill2);
 
-         TransactionDetails transaction9 = new TransactionDetails(carddetail1,new BigInteger("126774582093"),localDate.now(),3000.0,electricityBill2,null);
+         TransactionDetails transaction9 = new TransactionDetails(carddetail1,new BigInteger("126774582093"),null,localDate.now(),3000.0,electricityBill2,null,TransactionType.Withdrawal);
 
          this.transactionRepository.save(transaction9);
 
@@ -195,7 +196,7 @@ public class AtmMachineApplication implements CommandLineRunner{
 
          this.electricityBillRepository.save(electricityBill3);
 
-         TransactionDetails transaction10 = new TransactionDetails(carddetail2,new BigInteger("106734582093"),localDate.now(),5000.0,electricityBill1,null);
+         TransactionDetails transaction10 = new TransactionDetails(carddetail2,new BigInteger("106734582093"),null,localDate.now(),5000.0,electricityBill1,null,TransactionType.Withdrawal);
 
          this.transactionRepository.save(transaction10);
 
@@ -209,7 +210,7 @@ public class AtmMachineApplication implements CommandLineRunner{
 
          this.dthRepository.save(dthBill1);
 
-         TransactionDetails transaction11 = new TransactionDetails(carddetail1,new BigInteger("126734582093"),localDate.now(),200.0,null,dthBill1);
+         TransactionDetails transaction11 = new TransactionDetails(carddetail1,new BigInteger("126734582093"),null,localDate.now(),200.0,null,dthBill1,TransactionType.Withdrawal);
 
          this.transactionRepository.save(transaction11);
 
@@ -217,7 +218,7 @@ public class AtmMachineApplication implements CommandLineRunner{
 
          this.dthRepository.save(dthBill2);
 
-         TransactionDetails transaction12 = new TransactionDetails(carddetail1,new BigInteger("126675423093"),localDate.now(),300.0,null,dthBill2);
+         TransactionDetails transaction12 = new TransactionDetails(carddetail1,new BigInteger("126675423093"),null,localDate.now(),300.0,null,dthBill2,TransactionType.Withdrawal);
 
          this.transactionRepository.save(transaction12);
 
@@ -225,7 +226,7 @@ public class AtmMachineApplication implements CommandLineRunner{
 
          this.dthRepository.save(dthBill3);
 
-         TransactionDetails transaction13 = new TransactionDetails(carddetail2,new BigInteger("126734512345"),localDate.now(),500.0,null,dthBill3);
+         TransactionDetails transaction13 = new TransactionDetails(carddetail2,new BigInteger("126734512345"),null,localDate.now(),500.0,null,dthBill3,TransactionType.Withdrawal);
 
          this.transactionRepository.save(transaction13);
 

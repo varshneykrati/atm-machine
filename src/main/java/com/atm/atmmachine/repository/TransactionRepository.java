@@ -14,5 +14,5 @@ public interface TransactionRepository extends JpaRepository<TransactionDetails,
 
 	 List<TransactionDetails> findByTransactionDateAndCardDetails(LocalDate transactionDate,CardDetails cardDetails);
 	
-	 List<TransactionDetails> findByOrderByTransactionDateDesc();
+	 List<TransactionDetails> findByCardDetailsOrderByTransactionDateDesc(CardDetails cardDetails);
 }

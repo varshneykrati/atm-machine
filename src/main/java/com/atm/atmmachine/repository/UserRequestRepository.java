@@ -13,18 +13,14 @@ import com.atm.atmmachine.entity.UserRequest.RequestStatus;
 @Repository
 public interface UserRequestRepository extends JpaRepository<UserRequest, String>{
 
-	List<UserRequest> findAllByUserRegistration(UserRegistration userId);
-
-//	List<UserRequest> findByuser_id(String user_id);
-//	
-	//admin
-	public List<UserRequest> findAll();
 	
+	List<UserRequest> findAllByUserRegistration(UserRegistration userId);
+	
+	//admin
 	public List<UserRequest> findByRequestStatus(RequestStatus status);
 	
 	public List<UserRequest> findByRequest(String request);
 	
-	public Optional<UserRequest> findByRequestId(String id);
 	
 	
 
