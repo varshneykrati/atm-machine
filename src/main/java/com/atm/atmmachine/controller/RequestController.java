@@ -23,50 +23,53 @@ import com.atm.atmmachine.service.UserRequestService;
 @RestController
 public class RequestController {
 	@Autowired
-	UserRequestService userRequestService;
+	 private UserRequestService userRequestService;
 	@Autowired
-	UserRegistrationRepository userRegistrationRepository;
+	 private UserRegistrationRepository userRegistrationRepository;
 	@Autowired
-	UserRequestRepository request;
+	 private UserRequestRepository request;
+  
 	
-	//to get all user
+	//to get all user request
 	@GetMapping("/request")
 	public List<UserRequest> getUserRequest() throws RequestException
 	{
-		List<UserRequest>allrequest=this.userRequestService.getAllUserRequest();
+		List<UserRequest>allrequest;
+		allrequest=this.userRequestService.getAllUserRequest();
 		return allrequest;
 	}
-	//to get particular user by id
+	//to get particular request by id
 	@GetMapping("/request/{id}")//https://localhost8999/
 	public UserRequest getUserRequestById(@PathVariable("id") String Id) throws RequestException
 	{
 		return this.userRequestService.getUserRequestById(Id);
 	}
-	
-	@PostMapping("/request/")//https://localhost8999/
-	public UserRequest addRequest(@Valid @RequestBody UserRequest newRequest) throws RequestException
-	{
-		    
-			return this.userRequestService.addRequest(newRequest);
-	}
-
-	@DeleteMapping("/request/{id}")
-	public UserRequest deleteRequest(@PathVariable("id") String Id) throws RequestException {
-
-		return this.userRequestService.deleteRequest(Id);
-	}
-	@PutMapping("/request_update/")
-	public UserRequest UpdateRequest(  @RequestBody UserRequest newRequest ) throws RequestException {
-
-		return this.userRequestService.UpdateRequest(newRequest);
-	}
-	
-	@GetMapping("/request1/{userId}")
+	//to get request of particular user by userId 
+	@GetMapping("/requests/{userId}")
 	public List<UserRequest> getRequestOfUser(@PathVariable("userId") String userId) throws RequestException
 	{
 		List<UserRequest> getAllRequest;
 		getAllRequest = this.userRequestService.getRequestByUserId(userId);
 		return getAllRequest;
 	}
+	@PostMapping("/request/")//https://localhost8999/
+	public UserRequest addRequest(@Valid @RequestBody UserRequest newRequest) throws RequestException
+	{
+		    
+			return this.userRequestService.addRequest(newRequest);
+	}
+   
+	@DeleteMapping("/request/{id}")
+	public UserRequest deleteRequest(@PathVariable("id") String Id) throws RequestException {
+
+		return this.userRequestService.deleteRequest(Id);
+	}
+	@PutMapping("/request/")
+	public UserRequest updateRequest(  @RequestBody UserRequest newRequest ) throws RequestException {
+
+		return this.userRequestService.updateRequest(newRequest);
+	}
+	
+	
 	
 }

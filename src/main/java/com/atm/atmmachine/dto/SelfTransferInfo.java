@@ -2,7 +2,7 @@ package com.atm.atmmachine.dto;
 
 import javax.persistence.Column;
 
-public class WithdrawAmount {
+public class SelfTransferInfo {
 
 	String userId;
 	Double transactionAmount;
@@ -10,7 +10,7 @@ public class WithdrawAmount {
 	@Column(length = 4)
     Integer cardPin;
 	
-	public WithdrawAmount() {
+	public SelfTransferInfo() {
 		super();
 		// TODO Auto-generated constructor stub
 		

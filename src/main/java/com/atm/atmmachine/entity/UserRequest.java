@@ -14,11 +14,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import com.atm.atmmachine.idGenerator.StringPrefixedSequenceIdGenerator;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -53,7 +56,7 @@ public class UserRequest {
 	@NotBlank(message="It can' be empty")
 	private String requestDesc;
 	
-	@NotNull
+	
 	@NotBlank(message="It can' be empty")
 	@JsonFormat(pattern="YYYY-MM-dd")
 	//@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
@@ -171,7 +174,8 @@ public class UserRequest {
 	public void setUserRegistration(UserRegistration userRegistration) {
 		this.userRegistration = userRegistration;
 	}
-	
+
+
 	
 
 	

@@ -38,13 +38,6 @@ public class SMSController {
 
     }
 
-//    @RequestMapping(value = "/smscallback", method = RequestMethod.POST,
-//            consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-//    public void smsCallback(@RequestBody MultiValueMap<String, String> map) {
-//       service.receive(map);
-//       webSocket.convertAndSend(TOPIC_DESTINATION, getTimeStamp() + ": Twilio has made a callback request! Here are the contents: "+map.toString());
-//    }
-
     private String getTimeStamp() {
        return DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(LocalDateTime.now());
     }
