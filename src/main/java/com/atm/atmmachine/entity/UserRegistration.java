@@ -86,6 +86,8 @@ public class UserRegistration {
 	@NotBlank(message="This field cant be empty or null")
 	private String confirmPassword;
 	
+	private boolean isAdmin;
+	
 	@Enumerated(EnumType.STRING)
 	@Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$")
 	private UserRegistrationApproval userRegistrationApproval;
@@ -114,6 +116,7 @@ public class UserRegistration {
 			@Email(message = "Email is not valid") @NotBlank(message = "This field cant be empty or null") String emailId,
 			@NotBlank(message = "This field cant be empty or null") String password,
 			@NotBlank(message = "This field cant be empty or null") String confirmPassword,
+			boolean isAdmin,
 			UserRegistrationApproval userRegistrationApproval, Address address, CardDetails cardDetails) {
 		super();
 		this.userName = userName;
@@ -123,6 +126,7 @@ public class UserRegistration {
 		this.emailId = emailId;
 		this.password = password;
 		this.confirmPassword = confirmPassword;
+		this.isAdmin = isAdmin;
 		this.userRegistrationApproval = userRegistrationApproval;
 		this.address = address;
 		this.cardDetails = cardDetails;

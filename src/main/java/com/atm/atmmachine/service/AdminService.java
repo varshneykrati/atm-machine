@@ -38,7 +38,7 @@ public interface AdminService {
 	
 	public String setAdminRemark(String reqId,String remark) throws AdminException;
 	
-	public Double changeCardLimit(CardLimit cardLimit);
+	public Double changeCardLimit(CardLimit cardLimit) throws AdminException;
 	
 	public Boolean validAadharCard(String aadharNumber);
 }

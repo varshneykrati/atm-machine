@@ -35,7 +35,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class CardDetails {
 	
 	public enum CardType {
-		Silver,Gold,Platinum;
+		Silver,Gold,Platinum
 	}
 	
 	public enum CardStatus{
