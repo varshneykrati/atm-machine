@@ -16,6 +16,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -25,11 +27,14 @@ import javax.validation.constraints.Pattern;
 
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import com.atm.atmmachine.CustomDate.CustomLocalDateDeserializer;
 import com.atm.atmmachine.idGenerator.StringPrefixedSequenceIdGenerator;
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 
 @Entity
@@ -55,16 +60,18 @@ public class UserRegistration {
 	private String userName;
 	
 	@NotBlank(message="This field cant be empty or null")
-	 
+	@JsonDeserialize(using = CustomLocalDateDeserializer.class)
+	@JsonFormat(shape = JsonFormat.Shape.STRING,pattern="yyyy-MM-dd")
 	private LocalDate userDOB;
 	
-	@Column(unique=true)
+	
 	@NotBlank(message="This field cant be empty or null")
 	private String phoneNo;
 	
+
 	@Column(unique=true)
-    @NotBlank(message="This field cant be empty or null")
-    private Long aadharNumber;
+	@NotBlank(message="This field cant be empty or null")
+	private Long aadharNumber;	
 	
 	@Column(unique=true)
 	@Email(message = "Email is not valid")
@@ -75,13 +82,16 @@ public class UserRegistration {
 	@Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$")
 	private String password;
 	
-//	@Transient
+	@Transient
 	@NotBlank(message="This field cant be empty or null")
 	private String confirmPassword;
+	
+	private boolean isAdmin;
 	
 	@Enumerated(EnumType.STRING)
 	@Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$")
 	private UserRegistrationApproval userRegistrationApproval;
+	
 	
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "address_id", referencedColumnName = "addressId")
@@ -106,6 +116,7 @@ public class UserRegistration {
 			@Email(message = "Email is not valid") @NotBlank(message = "This field cant be empty or null") String emailId,
 			@NotBlank(message = "This field cant be empty or null") String password,
 			@NotBlank(message = "This field cant be empty or null") String confirmPassword,
+			boolean isAdmin,
 			UserRegistrationApproval userRegistrationApproval, Address address, CardDetails cardDetails) {
 		super();
 		this.userName = userName;
@@ -115,6 +126,7 @@ public class UserRegistration {
 		this.emailId = emailId;
 		this.password = password;
 		this.confirmPassword = confirmPassword;
+		this.isAdmin = isAdmin;
 		this.userRegistrationApproval = userRegistrationApproval;
 		this.address = address;
 		this.cardDetails = cardDetails;
@@ -158,6 +170,17 @@ public class UserRegistration {
 
 	public void setPhoneNo(String phoneNo) {
 		this.phoneNo = phoneNo;
+	}
+
+	
+
+	public Long getAadharNumber() {
+		return aadharNumber;
+	}
+
+
+	public void setAadharNumber(Long aadharNumber) {
+		this.aadharNumber = aadharNumber;
 	}
 
 
@@ -219,15 +242,6 @@ public class UserRegistration {
 		this.cardDetails = cardDetails;
 	}
 
-
-	public Long getAadharNumber() {
-		return aadharNumber;
-	}
-
-
-	public void setAadharNumber(Long aadharNumber) {
-		this.aadharNumber = aadharNumber;
-	}
 
 
 	
