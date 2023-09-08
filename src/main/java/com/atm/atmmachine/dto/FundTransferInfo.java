@@ -6,7 +6,7 @@ import javax.persistence.Column;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-public class FundTransferDto {
+public class FundTransferInfo {
 
 	String userId;
 	Double transactionAmount;
@@ -18,7 +18,7 @@ public class FundTransferDto {
 	@Column(length = 4)
     Integer cardPin;
 	
-	public FundTransferDto() {
+	public FundTransferInfo() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
