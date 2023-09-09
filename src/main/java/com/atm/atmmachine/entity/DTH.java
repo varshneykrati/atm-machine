@@ -37,14 +37,12 @@ public class DTH {
 
 	public DTH() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public DTH(CardDetails cardDetails, Double amountToBePaid, Vendors vendors) {
 		super();
 		this.cardDetails = cardDetails;
-		this.userDthCardNumber = userDthCardNumber;
-		this.amountToBePaid = amountToBePaid;
+			this.amountToBePaid = amountToBePaid;
 		this.vendors = vendors;
 	}
 

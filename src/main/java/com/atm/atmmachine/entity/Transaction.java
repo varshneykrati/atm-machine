@@ -1,9 +1,7 @@
 package com.atm.atmmachine.entity;
 
-import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -22,50 +20,48 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
 public class Transaction {
-	
-	@Id
-	@GeneratedValue(generator = "transaction_id",strategy = GenerationType.SEQUENCE)
-	@GenericGenerator(name = "transaction_id", strategy = "com.atm.atmmachine.idGenerator.StringPrefixedSequenceIdGenerator",
-    parameters = {
-    		@org.hibernate.annotations.Parameter(name = StringPrefixedSequenceIdGenerator.INCREMENT_PARAM, value = "1"),
-    		@org.hibernate.annotations.Parameter(name = StringPrefixedSequenceIdGenerator.VALUE_PREFIX_PARAMETER, value = "trans"),
 
-            })
+	@Id
+	@GeneratedValue(generator = "transaction_id", strategy = GenerationType.SEQUENCE)
+	@GenericGenerator(name = "transaction_id", strategy = "com.atm.atmmachine.idGenerator.StringPrefixedSequenceIdGenerator", parameters = {
+			@org.hibernate.annotations.Parameter(name = StringPrefixedSequenceIdGenerator.INCREMENT_PARAM, value = "1"),
+			@org.hibernate.annotations.Parameter(name = StringPrefixedSequenceIdGenerator.VALUE_PREFIX_PARAMETER, value = "trans"),
+
+	})
 	private String transactionId;
-	
+
 	@ManyToOne
-	@JoinColumn(name="card_id", referencedColumnName = "cardId")
+	@JoinColumn(name = "card_id", referencedColumnName = "cardId")
 	private CardDetails cardDetails;
-	
+
 	@NotNull
-	@NotBlank(message="It should contain 12 numbers")
+	@NotBlank(message = "It should contain 12 numbers")
 	private BigInteger toAccountNumber;
-	
+
 	@NotNull
-	@JsonFormat(pattern="YYYY-MM-dd hh:mm")
+	@JsonFormat(pattern = "YYYY-MM-dd")
 	private LocalDate transactionDate;
-	
+
 	@NotNull
-	@NotBlank(message="Amount paid")
+	@NotBlank(message = "Amount paid")
 	private Double balance;
 
 	@OneToOne
 	private ElectricityBill electricityBill;
-	
+
 	@OneToOne
 	private DTH dth;
 
 	public Transaction() {
 		super();
-		// TODO Auto-generated constructor stub
-	}
+		}
 
 	public Transaction(CardDetails cardDetails,
 			@NotBlank(message = "It should contain 12 numbers") BigInteger toAccountNumber,
 			@NotBlank(message = "It can't be empty") LocalDate transactionDate,
 			@NotBlank(message = "Amount paid") Double balance, ElectricityBill electricityBill, DTH dth) {
 		super();
-		this.transactionId = transactionId;
+
 		this.cardDetails = cardDetails;
 		this.toAccountNumber = toAccountNumber;
 		this.transactionDate = transactionDate;
@@ -129,11 +125,5 @@ public class Transaction {
 	public void setDth(DTH dth) {
 		this.dth = dth;
 	}
-	
-	
-	
-	
-	
-	
-	
+
 }

@@ -37,13 +37,11 @@ public class ElectricityBill {
 
 	public ElectricityBill() {
 		super();
-		// TODO Auto-generated constructor stub
-	}
+		}
 
 	public ElectricityBill(CardDetails cardDetails, Double amountToBePaid, Vendors vendors) {
 		super();
 		this.cardDetails = cardDetails;
-		this.userElectricityId = userElectricityId;
 		this.amountToBePaid = amountToBePaid;
 		this.vendors = vendors;
 	}
