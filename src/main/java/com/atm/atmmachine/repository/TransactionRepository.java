@@ -7,11 +7,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import com.atm.atmmachine.entity.CardDetails;
-import com.atm.atmmachine.entity.Transaction;
+import com.atm.atmmachine.entity.TransactionDetails;
 
 @Repository
-public interface TransactionRepository extends JpaRepository<Transaction, String>{
+public interface TransactionRepository extends JpaRepository<TransactionDetails, String>{
 
-	List<Transaction> findByTransactionDateAndCardDetails(LocalDate transactionDate, CardDetails cardDetails);
-
+	 List<TransactionDetails> findByTransactionDateAndCardDetails(LocalDate transactionDate,CardDetails cardDetails);
+	
+	 List<TransactionDetails> findByCardDetailsOrderByTransactionDateDesc(CardDetails cardDetails);
 }

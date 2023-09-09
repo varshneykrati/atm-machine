@@ -1,7 +1,13 @@
 package com.atm.atmmachine.entity;
 
+import java.io.Serializable;
 import java.math.BigInteger;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -11,19 +17,23 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import com.atm.atmmachine.idGenerator.StringPrefixedSequenceIdGenerator;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class CardDetails {
 	
 	public enum CardType {
-		Silver,Gold,Platinum;
+		Silver,Gold,Platinum
 	}
 	
 	public enum CardStatus{
@@ -45,22 +55,22 @@ public class CardDetails {
 	private String cardId;
 	
 	
-	@Column(length = 12,unique = true)
+	@Column(length = 12)
 	@NotBlank(message="This field cant be empty or null")
 	private BigInteger accountNumber; 
 	
 	
-	@Column(length = 16,unique = true)
+	@Column(length = 16)
 	@NotBlank(message="This field cant be empty or null")
 	private BigInteger cardNumber;
 	
-	@Column(length = 3,unique = true)
+	@Column(length = 3)
 	@NotBlank(message="This field cant be empty or null")
 	private Integer cvv;
 	
-	@NotNull
-	@JsonFormat(pattern="YYYY-MM-DD")
+
 	@NotBlank(message="This field cant be empty or null")
+	@JsonFormat(pattern="yyyy-MM-dd")
 	private LocalDate validThrough;
 	
 	@NotBlank(message="This field cant be empty or null")
@@ -72,6 +82,9 @@ public class CardDetails {
 	private Double cardLimit ;
 	
 	@NotBlank(message="This field cant be empty or null")
+	private Double cardLimit;
+	
+	@NotBlank(message="This field cant be empty or null")
 	@Enumerated(EnumType.STRING)
 	private CardStatus cardstatus;
 	
@@ -79,7 +92,7 @@ public class CardDetails {
 	private Double amount;
 	
 	
-	@Column(length = 4)
+	@Column(length = 6)
 	private Integer cardPin;
 	
 	@Enumerated(EnumType.STRING)
@@ -113,13 +126,21 @@ public class CardDetails {
 		this.cvv = cvv;
 		this.validThrough = validThrough;
 		this.cardType = cardType;
-		this.cardLimit=cardLimit;
+		this.cardLimit = cardLimit;
 		this.cardstatus = cardstatus;
 		this.amount = amount;
 		
 		this.cardPin = cardPin;
 		this.userTotallyRegister = userTotallyRegister;
 		this.userRegistration = userRegistration;
+	}
+
+	public Double getCardLimit() {
+		return cardLimit;
+	}
+
+	public void setCardLimit(Double cardLimit) {
+		this.cardLimit = cardLimit;
 	}
 
 	public Double getCardLimit() {
@@ -177,6 +198,8 @@ public class CardDetails {
 	public void setCardType(CardType cardType) {
 		this.cardType = cardType;
 	}
+
+	
 
 	public CardStatus getCardstatus() {
 		return cardstatus;
