@@ -78,8 +78,6 @@ public class CardDetails {
 	private CardType cardType;
 	
 	
-	@NotBlank(message="This field cant be empty or null")
-	private Double cardLimit ;
 	
 	@NotBlank(message="This field cant be empty or null")
 	private Double cardLimit;
@@ -133,14 +131,6 @@ public class CardDetails {
 		this.cardPin = cardPin;
 		this.userTotallyRegister = userTotallyRegister;
 		this.userRegistration = userRegistration;
-	}
-
-	public Double getCardLimit() {
-		return cardLimit;
-	}
-
-	public void setCardLimit(Double cardLimit) {
-		this.cardLimit = cardLimit;
 	}
 
 	public Double getCardLimit() {

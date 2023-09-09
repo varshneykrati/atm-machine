@@ -1,3 +1,5 @@
+package com.atm.atmmachine.entity;
+
 
 import java.io.Serializable;
 import java.math.BigDecimal;

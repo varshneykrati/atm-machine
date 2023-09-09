@@ -44,12 +44,12 @@ public class DTH {
 		super();
 	}
 
-	public DTH(CardDetails cardDetails, Double amountToBePaid, Vendors vendors) {
-		super();
-		this.cardDetails = cardDetails;
-			this.amountToBePaid = amountToBePaid;
-		this.vendors = vendors;
-	}
+//	public DTH(CardDetails cardDetails, Double amountToBePaid, Vendors vendors) {
+//		super();
+//		this.cardDetails = cardDetails;
+//			this.amountToBePaid = amountToBePaid;
+//		this.vendors = vendors;
+//	}
 
 
 	
@@ -58,6 +58,14 @@ public class DTH {
 
 	public String getUserDthCardNumber() {
 		return userDthCardNumber;
+	}
+
+	public CardDetails getCardDetails() {
+		return cardDetails;
+	}
+
+	public void setCardDetails(CardDetails cardDetails) {
+		this.cardDetails = cardDetails;
 	}
 
 	public DTH(CardDetails cardDetails, Double amountToBePaid, Vendors vendors) {

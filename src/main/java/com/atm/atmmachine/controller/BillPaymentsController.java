@@ -16,7 +16,7 @@ import com.atm.atmmachine.dto.DthBill;
 import com.atm.atmmachine.dto.ElectricityBillDto;
 import com.atm.atmmachine.entity.DTH;
 import com.atm.atmmachine.entity.ElectricityBill;
-import com.atm.atmmachine.entity.TransactionDetails;
+import com.atm.atmmachine.dto.Transaction;
 import com.atm.atmmachine.entity.Vendors;
 import com.atm.atmmachine.entity.Vendors.TypeOfVendor;
 import com.atm.atmmachine.exception.BillPaymentsException;
@@ -32,7 +32,7 @@ public class BillPaymentsController {
 
 	// 1/respective vendors-list would be visible to user when user selects on DTH
 	// OR ELECTRICITY
-	@GetMapping("/vendor/vendorList/{vendorname}")
+	@GetMapping("/vendors/{vendorname}")
 	public List<String> vendorname(@PathVariable("vendorname") TypeOfVendor typeOfVendor) {
 		List<Vendors> vendors_name = this.billPaymentsService.getVendorByName(typeOfVendor);
 		List<String> vendors = new ArrayList<>();
@@ -43,7 +43,7 @@ public class BillPaymentsController {
 
 	// 2/Razorpay will create transaction
 	@GetMapping("/create/transaction/{amount}")
-	public TransactionDetails createTransaction(@PathVariable(name = "amount") Integer amount)
+	public Transaction createTransaction(@PathVariable(name = "amount") Integer amount)
 			throws BillPaymentsException {
 		return billPaymentsService.createTransactionAmount(amount);
 	}

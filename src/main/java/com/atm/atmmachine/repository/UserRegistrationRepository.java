@@ -13,7 +13,6 @@ import com.atm.atmmachine.entity.UserRegistration.UserRegistrationApproval;
 
 @Repository
 public interface UserRegistrationRepository extends JpaRepository<UserRegistration, String>{
-	Optional<UserRegistration> findByUserId(String string);
 
 	Optional<UserRegistration> findByEmailId(String userId);
 
@@ -21,8 +20,7 @@ public interface UserRegistrationRepository extends JpaRepository<UserRegistrati
 
 	Optional<UserRegistration> findByAadharNumber(Long aadharNumber);
 
-	Optional<UserRegistration> findByUserId(String userId);
-
+	
 	Optional<UserRegistration> findByUserIdAndEmailId(String string, String email);
 	//admin
 //	public Optional<UserRegistration> findByUserId(String id);
