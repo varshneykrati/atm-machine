@@ -165,7 +165,7 @@ public class AtmMachineApplication implements CommandLineRunner{
 
          this.userRequestRepository.save(userRequest5);
 
-         UserRequest userRequest6 = new UserRequest(userRegistration4.getCardDetails().getAccountNumber(),"Update Catrd","Please uopdate my Card",LocalDate.now(),RequestStatus.Pending,null,userRegistration1);
+         UserRequest userRequest6 = new UserRequest(userRegistration4.getCardDetails().getAccountNumber(),"Card Lost","Please uopdate my Card",LocalDate.now(),RequestStatus.Pending,null,userRegistration1);
 
          this.userRequestRepository.save(userRequest6);
 

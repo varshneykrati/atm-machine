@@ -67,14 +67,14 @@ public class AdminServiceImpl implements AdminService {
 
 	@Override
 	public List<UserRequest> displayByRequest() {
-
-		return this.userRequestRepository.findByRequest("Card Lost");
+		
+		return this.userRequestRepository.findByRequestAndRequestStatus("Card Lost",RequestStatus.Pending);
 	}
 
 	@Override
 	public List<UserRequest> displayAllCardReplacementRequests() {
 
-		return this.userRequestRepository.findByRequest("Card Replacement");
+		return this.userRequestRepository.findByRequestAndRequestStatus("Card Replacement",RequestStatus.Pending);
 	}
 
 	@Override
