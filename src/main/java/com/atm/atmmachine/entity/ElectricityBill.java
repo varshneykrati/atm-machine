@@ -44,12 +44,12 @@ public class ElectricityBill {
 		super();
 		}
 
-	public ElectricityBill(CardDetails cardDetails, Double amountToBePaid, Vendors vendors) {
-		super();
-		this.cardDetails = cardDetails;
-		this.amountToBePaid = amountToBePaid;
-		this.vendors = vendors;
-	}
+//	public ElectricityBill(CardDetails cardDetails, Double amountToBePaid, Vendors vendors) {
+//		super();
+//		this.cardDetails = cardDetails;
+//		this.amountToBePaid = amountToBePaid;
+//		this.vendors = vendors;
+//	}
 
 	
 
@@ -64,6 +64,14 @@ public class ElectricityBill {
 	this.amountToBePaid = amountToBePaid;
 	this.vendors = vendors;
 }
+
+	public CardDetails getCardDetails() {
+		return cardDetails;
+	}
+
+	public void setCardDetails(CardDetails cardDetails) {
+		this.cardDetails = cardDetails;
+	}
 
 	public void setUserElectricityId(String userElectricityId) {
 		this.userElectricityId = userElectricityId;

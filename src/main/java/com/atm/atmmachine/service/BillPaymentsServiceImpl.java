@@ -14,8 +14,9 @@ import com.atm.atmmachine.entity.CardDetails.CardStatus;
 import com.atm.atmmachine.entity.CardDetails.UserTotallyRegister;
 import com.atm.atmmachine.entity.DTH;
 import com.atm.atmmachine.entity.ElectricityBill;
-import com.atm.atmmachine.entity.Transaction;
 import com.atm.atmmachine.entity.TransactionDetails;
+import com.atm.atmmachine.entity.TransactionDetails.TransactionType;
+import com.atm.atmmachine.dto.Transaction;
 import com.atm.atmmachine.entity.UserRegistration;
 import com.atm.atmmachine.entity.Vendors;
 import com.atm.atmmachine.entity.Vendors.TypeOfVendor;
@@ -62,10 +63,10 @@ public class BillPaymentsServiceImpl implements BillPaymentsService {
 	SmsPojo smspojo = new SmsPojo();
 
 	@Override
-	public TransactionDetails createTransactionAmount(Integer amount) throws BillPaymentsException {
+	public Transaction createTransactionAmount(Integer amount) throws BillPaymentsException {
 
 		try {
-			Optional<UserRegistration> getUserOpt = this.userRegistrationRepository.findByUserId("user2");
+			Optional<UserRegistration> getUserOpt = this.userRegistrationRepository.findById("user2");
 
 			CardDetails getUserCard = getUserOpt.get().getCardDetails();
 
@@ -81,7 +82,7 @@ public class BillPaymentsServiceImpl implements BillPaymentsService {
 			RazorpayClient razorpayClient = new RazorpayClient(KEY, KEY_SECRET);
 
 			Order order = razorpayClient.orders.create(jsonObject);
-			TransactionDetails transactionDetails = prepareTransactionDetails(order);
+			Transaction transactionDetails = prepareTransactionDetails(order);
 
 			return transactionDetails;
 		} catch (Exception e) {
@@ -90,13 +91,13 @@ public class BillPaymentsServiceImpl implements BillPaymentsService {
 		return null;
 	}
 
-	private TransactionDetails prepareTransactionDetails(Order order) throws BillPaymentsException {
+	private Transaction prepareTransactionDetails(Order order) throws BillPaymentsException {
 
 		String orderId = order.get("id");
 		String currency = order.get("currency");
 		Integer amount = order.get("amount");
 
-		TransactionDetails transactionDetails = new TransactionDetails(orderId, currency, amount, KEY);
+		Transaction transactionDetails = new Transaction(orderId, currency, amount, KEY);
 		return transactionDetails;
 	}
 
@@ -115,7 +116,7 @@ public class BillPaymentsServiceImpl implements BillPaymentsService {
 			throw new BillPaymentsException("Wrong account no.");
 		}
 
-		Optional<UserRegistration> getUserOpt = this.userRegistrationRepository.findByUserId("user2");
+		Optional<UserRegistration> getUserOpt = this.userRegistrationRepository.findById("user2");
 		CardDetails getUserCard = getUserOpt.get().getCardDetails();
 
 		if (getUserCard.getUserTotallyRegister() == UserTotallyRegister.False) {
@@ -149,7 +150,7 @@ public class BillPaymentsServiceImpl implements BillPaymentsService {
 			throw new BillPaymentsException("Wrong account no.");
 		}
 
-		Optional<UserRegistration> getUserOpt = this.userRegistrationRepository.findByUserId("user1");
+		Optional<UserRegistration> getUserOpt = this.userRegistrationRepository.findById("user1");
 		CardDetails getUserCard = getUserOpt.get().getCardDetails();
 
 		if (getUserCard.getUserTotallyRegister() == UserTotallyRegister.False) {
@@ -187,7 +188,7 @@ public class BillPaymentsServiceImpl implements BillPaymentsService {
 		Optional<DTH> getUserDthOpt = this.dthRepository.findByUserDthCardNumber(dthBill.getUserDthCardNumber());
 		if (getUserDthOpt.isPresent()) {
 			Optional<Vendors> getVendorOpt = this.vendorRepository.findByVendorName(vendorName);
-			Optional<UserRegistration> getUserOpt = this.userRegistrationRepository.findByUserId("user1");
+			Optional<UserRegistration> getUserOpt = this.userRegistrationRepository.findById("user1");
 
 			CardDetails getUserCard = getUserOpt.get().getCardDetails();
 
@@ -211,23 +212,23 @@ public class BillPaymentsServiceImpl implements BillPaymentsService {
 
 			}
 
-//			List<Transaction> cardLimitCheck = this.transactionRepository.findByTransactionDateAndCardDetails(
-//					LocalDate.now(),
-//
-//					getUserCard);
-//
-//			if (cardLimitCheck.size() > 0) {
-//
-//				for (Transaction transaction : cardLimitCheck)
-//					total += transaction.getBalance();
-//				
-//				if (getUserCard.getCardLimit() < getUserDthOpt.get().getAmountToBePaid()+ total) {
-//
-//					throw new VendorsException("Exceeds CardLimit");
-//
-//				}
-//
-//			}
+			List<TransactionDetails> cardLimitCheck = this.transactionRepository.findByTransactionDateAndCardDetails(
+					LocalDate.now(),
+
+					getUserCard);
+
+			if (cardLimitCheck.size() > 0) {
+
+				for (TransactionDetails transaction : cardLimitCheck)
+					total += transaction.getBalance();
+				
+				if (getUserCard.getCardLimit() < getUserDthOpt.get().getAmountToBePaid()+ total) {
+
+					throw new BillPaymentsException("Exceeds CardLimit");
+
+				}
+
+			}
 
 			System.out.println("Amount that user have to Pay : " + getUserDthOpt.get().getAmountToBePaid()
 					+ " which you cant change");
@@ -244,8 +245,8 @@ public class BillPaymentsServiceImpl implements BillPaymentsService {
 			this.vendorRepository.save(getVendorOpt.get());
 
 			// Now add this in transaction table
-			Transaction dthTransaction = new Transaction(getUserCard, getVendorOpt.get().getVendorAccountNumber(),
-					LocalDate.now(), getUserDthOpt.get().getAmountToBePaid(), null, getUserDthOpt.get());
+			TransactionDetails dthTransaction = new TransactionDetails(getUserCard, getVendorOpt.get().getVendorAccountNumber(),
+					getUserCard.getAccountNumber(),LocalDate.now(), getUserDthOpt.get().getAmountToBePaid(), "DTH",null, getUserDthOpt.get(),TransactionType.Withdrawal);
 			this.transactionRepository.save(dthTransaction);
 			// Optional<UserRegistration> userOpt
 			// =this.userRegistrationRepository.findById(userId)}
@@ -272,7 +273,7 @@ public class BillPaymentsServiceImpl implements BillPaymentsService {
 				.findByUserElectricityId(electricityBill.getUserElectricityId());
 		if (getUserElectrictyOpt.isPresent()) {
 			Optional<Vendors> getVendorOpt = this.vendorRepository.findByVendorName(vendorName);
-			Optional<UserRegistration> getUserOpt = this.userRegistrationRepository.findByUserId("user1");
+			Optional<UserRegistration> getUserOpt = this.userRegistrationRepository.findById("user1");
 			CardDetails getUserCard = getUserOpt.get().getCardDetails();
 
 			if (getUserCard.getUserTotallyRegister() == UserTotallyRegister.False) {
@@ -283,11 +284,11 @@ public class BillPaymentsServiceImpl implements BillPaymentsService {
 			if (getUserCard.getCardstatus() == CardStatus.Inactive) {
 				throw new BillPaymentsException("Activate your card.");
 			}
-//			if (!getUserCard.getCardPin().equals(ElectricityBillDto.getCardPin())) {
-//
-//				throw new VendorsException("Wrong Card Pin,Please enter again");
-//
-//			}
+			if (!getUserCard.getCardPin().equals(electricityBill.getCardPin())) {
+
+				throw new BillPaymentsException("Wrong Card Pin,Please enter again");
+
+			}
 
 			if (getUserCard.getAmount() < getUserElectrictyOpt.get().getAmountToBePaid()) {
 
@@ -295,14 +296,14 @@ public class BillPaymentsServiceImpl implements BillPaymentsService {
 
 			}
 
-			List<Transaction> cardLimitCheck = this.transactionRepository.findByTransactionDateAndCardDetails(
+			List<TransactionDetails> cardLimitCheck = this.transactionRepository.findByTransactionDateAndCardDetails(
 					LocalDate.now(),
 
 					getUserCard);
 
 			if (cardLimitCheck.size() > 0) {
 
-				for (Transaction transaction : cardLimitCheck)
+				for (TransactionDetails transaction : cardLimitCheck)
 					total += transaction.getBalance();
 
 				if (getUserCard.getCardLimit() < getUserElectrictyOpt.get().getAmountToBePaid() + total) {
@@ -328,8 +329,8 @@ public class BillPaymentsServiceImpl implements BillPaymentsService {
 			this.vendorRepository.save(getVendorOpt.get());
 
 			// Now add this in transaction table
-			Transaction dthTransaction = new Transaction(getUserCard, getVendorOpt.get().getVendorAccountNumber(),
-					LocalDate.now(), getUserElectrictyOpt.get().getAmountToBePaid(), getUserElectrictyOpt.get(), null);
+			TransactionDetails dthTransaction = new TransactionDetails(getUserCard, getVendorOpt.get().getVendorAccountNumber(),
+					getUserCard.getAccountNumber(),LocalDate.now(), getUserElectrictyOpt.get().getAmountToBePaid(),"Electricity" ,getUserElectrictyOpt.get(), null,TransactionType.Withdrawal);
 			this.transactionRepository.save(dthTransaction);
 
 			smspojo.setTo(getUserOpt.get().getPhoneNo());
