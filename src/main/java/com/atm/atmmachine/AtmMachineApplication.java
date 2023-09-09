@@ -68,7 +68,7 @@ public class AtmMachineApplication implements CommandLineRunner{
 		
 //Entering user registration detail form with the -> address  -----
 		Address address1 = new Address("405/8 Nai Basti","Firozabad",283203,"Uttar Pradesh");
-		UserRegistration userRegistration1 = new UserRegistration("Krati Varshney",localDate.now(),"9760286311",962239611757L,"krativarshne@gmail.com","KVar@7777","KVar@7777",false,UserRegistrationApproval.Inactive,address1,null);
+		UserRegistration userRegistration1 = new UserRegistration("Krati Varshney",localDate.now(),"+919760286311",962239611757L,"krativarshne@gmail.com","KVar@7777","KVar@7777",false,UserRegistrationApproval.Inactive,address1,null);
 		UserRegistration userRegistration2 = new UserRegistration("Shivam",localDate.now(),"+919307204212",301577650820L,"shivam@gmail.com","shivam@7777","shivam@7777",false,UserRegistrationApproval.Active,new Address("415/8 New Market","Agra",283203,"Uttar Pradesh"),null);
 		UserRegistration userRegistration3 = new UserRegistration("Sidhi",localDate.now(),"+918178234554",767678355011L,"sidhi@gmail.com","sidhi@7777","sidhi@7777",false,UserRegistrationApproval.Inactive,new Address("415/8 Old Market","Agra",283203,"Madhya Pradesh"),null);
 		UserRegistration userRegistration4 = new UserRegistration("Mansi",localDate.now(),"9760281156",679967896789L,"mansi@gmail.com","mansi@7777","mansi@7777",false,UserRegistrationApproval.Inactive,new Address("905/8 New Market","Agra",283203,"Uttar Pradesh"),null);
@@ -86,7 +86,7 @@ public class AtmMachineApplication implements CommandLineRunner{
 		 userRegistration2.setCardDetails(carddetail1);cardDetailsRepository.save(carddetail1); userRegistrationRepository.save(userRegistration2);
 		 CardDetails carddetail2 = new CardDetails(new BigInteger("123412344321"),new BigInteger("7890789078900965"),789,localDate.now(),CardType.Silver,25000.0,CardStatus.Active,2000.0,null,UserTotallyRegister.False,userRegistration1);
 		 userRegistration1.setCardDetails(carddetail2);cardDetailsRepository.save(carddetail2); userRegistrationRepository.save(userRegistration1);
-		 CardDetails carddetail3 = new CardDetails(new BigInteger("1234123456678"),new BigInteger("7890789078999890"),459,localDate.now(),CardType.Silver,25000.0,CardStatus.Active,2000.0,null,UserTotallyRegister.False,userRegistration3);
+		 CardDetails carddetail3 = new CardDetails(new BigInteger("1234123456678"),new BigInteger("7890789078999890"),459,localDate.now(),CardType.Silver,25000.0,CardStatus.Active,150.0,null,UserTotallyRegister.False,userRegistration3);
 		 userRegistration3.setCardDetails(carddetail3);cardDetailsRepository.save(carddetail3); userRegistrationRepository.save(userRegistration3);
 		 CardDetails carddetail4 = new CardDetails(new BigInteger("123424561234"),new BigInteger("7890789008907890"),956,localDate.now(),CardType.Silver,25000.0,CardStatus.Active,2000.0,null,UserTotallyRegister.False,userRegistration4);
 		 userRegistration4.setCardDetails(carddetail4);cardDetailsRepository.save(carddetail4); userRegistrationRepository.save(userRegistration4);
