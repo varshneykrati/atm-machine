@@ -95,32 +95,45 @@ public class AdminServiceImpl implements AdminService {
 
 		} else if (foundUserRequest.get().getRequest().equals("Card Replacement")) {
 			CardDetails cardDetailsOfRequestedUser = foundUserRequest.get().getUserRegistration().getCardDetails();
-			LocalDate oldValidThroughDate = cardDetailsOfRequestedUser.getValidThrough();
-			LocalDate newValidThroughDate = oldValidThroughDate.plusYears(5);
+			
 
-			cardDetailsOfRequestedUser.setValidThrough(newValidThroughDate);
+			if (cardDetailsOfRequestedUser.getAmount() < 250.0) {
+				smspojo.setTo(foundUserRequest.get().getUserRegistration().getPhoneNo());
+				smspojo.setMessage(
+						"An amount of INR " + 250.0 + " should be available in your account for card replacement on your Account Number"
+								+ cardDetailsOfRequestedUser.getAccountNumber() + " on " + org.joda.time.LocalDate.now()
+								+ ".Total Avail.bal INR " + cardDetailsOfRequestedUser.getAmount());
 
-			Double changedAmount = (cardDetailsOfRequestedUser.getAmount() - 250);
-			cardDetailsOfRequestedUser.setAmount(changedAmount);
-			this.cardDetailsRepository.save(cardDetailsOfRequestedUser);
+				smsController.smsSubmit(smspojo);
+			} else {
 
-			transaction.setCardDetails(cardDetailsOfRequestedUser);
-			transaction.setToAccountNumber(cardDetailsOfRequestedUser.getAccountNumber());
-			transaction.setTransactionDate(LocalDate.now());
+				Double changedAmount = (cardDetailsOfRequestedUser.getAmount() - 250);
+				LocalDate oldValidThroughDate = cardDetailsOfRequestedUser.getValidThrough();
+				LocalDate newValidThroughDate = oldValidThroughDate.plusYears(5);
 
-			transaction.setBalance(250.0);
-			this.transactionRepository.save(transaction);
+				cardDetailsOfRequestedUser.setValidThrough(newValidThroughDate);
+				cardDetailsOfRequestedUser.setAmount(changedAmount);
+				this.cardDetailsRepository.save(cardDetailsOfRequestedUser);
 
-			smspojo.setTo(foundUserRequest.get().getUserRegistration().getPhoneNo());
-			smspojo.setMessage("An amount of INR " + 250.0 + " has been debited from your Account "
-					+ cardDetailsOfRequestedUser.getAccountNumber() + " on " + org.joda.time.LocalDate.now()
-					+ ".Total Avail.bal INR " + cardDetailsOfRequestedUser.getAmount());
+				transaction.setCardDetails(cardDetailsOfRequestedUser);
+				transaction.setFromAccountNumber(cardDetailsOfRequestedUser.getAccountNumber());
+				transaction.setTransactionDate(LocalDate.now());
+				transaction.setParticulars("Card Replacement Request is Approved");
+				transaction.setBalance(250.0);
 
-			smsController.smsSubmit(smspojo);
+				this.transactionRepository.save(transaction);
 
-			foundUserRequest.get().setRequestStatus(RequestStatus.Approved);
-			this.cardDetailsRepository.save(cardDetailsOfRequestedUser);
-			this.userRequestRepository.save(foundUserRequest.get());
+				smspojo.setTo(foundUserRequest.get().getUserRegistration().getPhoneNo());
+				smspojo.setMessage("An amount of INR " + 250.0 + " has been debited from your Account "
+						+ cardDetailsOfRequestedUser.getAccountNumber() + " on " + org.joda.time.LocalDate.now()
+						+ ".Total Avail.bal INR " + cardDetailsOfRequestedUser.getAmount());
+
+				smsController.smsSubmit(smspojo);
+
+				foundUserRequest.get().setRequestStatus(RequestStatus.Approved);
+				this.cardDetailsRepository.save(cardDetailsOfRequestedUser);
+				this.userRequestRepository.save(foundUserRequest.get());
+			}
 
 		}
 
@@ -174,13 +187,12 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public Double changeCardLimit(CardLimit cardLimit) throws AdminException{
-		if(cardLimit.getCardType().equals("") && cardLimit.getChangedCardLimit().equals(0))
+	public Double changeCardLimit(CardLimit cardLimit) throws AdminException {
+		if (cardLimit.getCardType().equals("") && cardLimit.getChangedCardLimit().equals(0))
 			throw new AdminException("Check inputs properly");
 		List<CardDetails> foundCardDetails = this.cardDetailsRepository
 				.findByCardType(CardType.valueOf(cardLimit.getCardType()));
-		
-		
+
 		for (CardDetails c : foundCardDetails) {
 			c.setCardLimit(cardLimit.getChangedCardLimit());
 			this.cardDetailsRepository.save(c);
@@ -199,7 +211,5 @@ public class AdminServiceImpl implements AdminService {
 		return isValidAadhar;
 
 	}
-
-	
 
 }

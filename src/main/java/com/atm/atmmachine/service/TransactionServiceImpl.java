@@ -222,7 +222,7 @@ public class TransactionServiceImpl implements TransactionService {
 		}
 		
 		//check length of account no and patttern and null
-		Optional<CardDetails> cardOpt = this.cardRepo.findByAccountNumber(toAccountNumber);
+		Optional<CardDetails> cardOpt = this.cardDetailsRepository.findByAccountNumber(toAccountNumber);
 		if (!cardOpt.isPresent()) {
 			throw new TransactionException("Account no. dosen't exists,Re-enter the correct account number");
 		}
