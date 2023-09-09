@@ -4,8 +4,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
 import javax.validation.constraints.NotBlank;
 
 import org.hibernate.annotations.GenericGenerator;
@@ -40,8 +38,7 @@ public class Address {
 
 	public Address() {
 		super();
-		// TODO Auto-generated constructor stub
-	}
+		}
 
 	public Address(@NotBlank(message = "This field cant be empty or null") String street,
 			@NotBlank(message = "This field cant be empty or null") String district,

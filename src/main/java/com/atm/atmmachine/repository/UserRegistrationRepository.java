@@ -13,6 +13,7 @@ import com.atm.atmmachine.entity.UserRegistration.UserRegistrationApproval;
 
 @Repository
 public interface UserRegistrationRepository extends JpaRepository<UserRegistration, String>{
+	Optional<UserRegistration> findByUserId(String string);
 
 	Optional<UserRegistration> findByEmailId(String userId);
 

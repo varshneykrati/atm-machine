@@ -3,7 +3,6 @@ package com.atm.atmmachine;
 import java.math.BigInteger;
 import java.time.LocalDate;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -92,8 +91,6 @@ public class AtmMachineApplication implements CommandLineRunner{
 		 userRegistration4.setCardDetails(carddetail4);cardDetailsRepository.save(carddetail4); userRegistrationRepository.save(userRegistration4);
 		 CardDetails carddetail5 = new CardDetails(new BigInteger("678412341234"),new BigInteger("7891789078907890"),756,localDate.now(),CardType.Silver,25000.0,CardStatus.Active,2000.0,null,UserTotallyRegister.True,userRegistration5);
 		 userRegistration5.setCardDetails(carddetail5);cardDetailsRepository.save(carddetail5); userRegistrationRepository.save(userRegistration5);
-		 
-		 
 // Now Add Transaction which is link to -> Address
 		 TransactionDetails transaction1 = new TransactionDetails(carddetail1,null,new BigInteger("123412344321"),LocalDate.of(2002, 9, 01),500.0,null,null,null,TransactionType.Deposit);
 		 this.transactionRepository.save(transaction1);

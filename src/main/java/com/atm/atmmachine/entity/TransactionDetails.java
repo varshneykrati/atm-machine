@@ -1,10 +1,8 @@
-package com.atm.atmmachine.entity;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -26,6 +24,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
+
+
 public class TransactionDetails {
 	
 	public enum TransactionType{
@@ -37,8 +37,7 @@ public class TransactionDetails {
 	@GenericGenerator(name = "transaction_id", strategy = "com.atm.atmmachine.idGenerator.StringPrefixedSequenceIdGenerator", parameters = {
 			@org.hibernate.annotations.Parameter(name = StringPrefixedSequenceIdGenerator.INCREMENT_PARAM, value = "1"),
 			@org.hibernate.annotations.Parameter(name = StringPrefixedSequenceIdGenerator.VALUE_PREFIX_PARAMETER, value = "trans"),
-
-	})
+})
 	private String transactionId;
 
 	@ManyToOne
@@ -72,8 +71,7 @@ public class TransactionDetails {
 	
 	public TransactionDetails() {
 		super();
-		// TODO Auto-generated constructor stub
-	}
+		}
 
 	public TransactionDetails(CardDetails cardDetails,
 			@NotBlank(message = "It should contain 12 numbers") BigInteger toAccountNumber,
@@ -82,7 +80,7 @@ public class TransactionDetails {
 			@NotBlank(message = "Amount paid") Double balance,String particulars, ElectricityBill electricityBill, DTH dth,TransactionType transactionType) {
 		super();
 //		this.transactionId = transactionId;
-		this.cardDetails = cardDetails;
+     	this.cardDetails = cardDetails;
 		this.toAccountNumber = toAccountNumber;
 		this.fromAccountNumber = fromAccountNumber;
 		this.transactionDate = transactionDate;
