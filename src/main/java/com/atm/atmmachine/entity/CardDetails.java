@@ -16,14 +16,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -79,6 +77,8 @@ public class CardDetails {
 	@Enumerated(EnumType.STRING)
 	private CardType cardType;
 	
+	
+	
 	@NotBlank(message="This field cant be empty or null")
 	private Double cardLimit;
 	
@@ -101,10 +101,12 @@ public class CardDetails {
 	@JoinColumn(name= "user_id" ,referencedColumnName = "userId")
 	private UserRegistration userRegistration;
 
+
+	public double getcardLimit;
+
 	public CardDetails() {
 		super();
-		// TODO Auto-generated constructor stub
-	}
+		}
 
 	public CardDetails(@NotBlank(message = "This field cant be empty or null") BigInteger accountNumber,
 			@NotBlank(message = "This field cant be empty or null") BigInteger cardNumber,
@@ -125,12 +127,11 @@ public class CardDetails {
 		this.cardLimit = cardLimit;
 		this.cardstatus = cardstatus;
 		this.amount = amount;
+		
 		this.cardPin = cardPin;
 		this.userTotallyRegister = userTotallyRegister;
 		this.userRegistration = userRegistration;
 	}
-
-
 
 	public Double getCardLimit() {
 		return cardLimit;
@@ -144,67 +145,45 @@ public class CardDetails {
 		return cardId;
 	}
 
-
-
 	public void setCardId(String cardId) {
 		this.cardId = cardId;
 	}
-
-
 
 	public BigInteger getAccountNumber() {
 		return accountNumber;
 	}
 
-
-
 	public void setAccountNumber(BigInteger accountNumber) {
 		this.accountNumber = accountNumber;
 	}
-
-
 
 	public BigInteger getCardNumber() {
 		return cardNumber;
 	}
 
-
-
 	public void setCardNumber(BigInteger cardNumber) {
 		this.cardNumber = cardNumber;
 	}
-
-
 
 	public Integer getCvv() {
 		return cvv;
 	}
 
-
-
 	public void setCvv(Integer cvv) {
 		this.cvv = cvv;
 	}
-
-
 
 	public LocalDate getValidThrough() {
 		return validThrough;
 	}
 
-
-
 	public void setValidThrough(LocalDate validThrough) {
 		this.validThrough = validThrough;
 	}
 
-
-
 	public CardType getCardType() {
 		return cardType;
 	}
-
-
 
 	public void setCardType(CardType cardType) {
 		this.cardType = cardType;
@@ -216,63 +195,41 @@ public class CardDetails {
 		return cardstatus;
 	}
 
-
-
 	public void setCardstatus(CardStatus cardstatus) {
 		this.cardstatus = cardstatus;
 	}
-
-
 
 	public Double getAmount() {
 		return amount;
 	}
 
-
-
 	public void setAmount(Double amount) {
 		this.amount = amount;
 	}
-
-
 
 	public Integer getCardPin() {
 		return cardPin;
 	}
 
-
-
 	public void setCardPin(Integer cardPin) {
 		this.cardPin = cardPin;
 	}
-
-
 
 	public UserTotallyRegister getUserTotallyRegister() {
 		return userTotallyRegister;
 	}
 
-
-
 	public void setUserTotallyRegister(UserTotallyRegister userTotallyRegister) {
 		this.userTotallyRegister = userTotallyRegister;
 	}
-
-
 
 	public UserRegistration getUserRegistration() {
 		return userRegistration;
 	}
 
-
-
 	public void setUserRegistration(UserRegistration userRegistration) {
 		this.userRegistration = userRegistration;
 	}
 
-	
-
-	
-	
 	
 }

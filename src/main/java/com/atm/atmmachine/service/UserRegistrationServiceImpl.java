@@ -215,7 +215,7 @@ public class UserRegistrationServiceImpl implements UserRegistrationService{
 
 	@Override
 	public UserRegistration viewUserProfile(String userId) throws HandleException {
-		Optional<UserRegistration> getUserOpt = this.userRegistrationRepository.findByUserId(userId);
+		Optional<UserRegistration> getUserOpt = this.userRegistrationRepository.findById(userId);
 		if(getUserOpt.isPresent() && getUserOpt.get().getCardDetails().getUserTotallyRegister().equals(UserTotallyRegister.True)) {
 			return getUserOpt.get();
 		}
@@ -226,7 +226,7 @@ public class UserRegistrationServiceImpl implements UserRegistrationService{
 
 	@Override
 	public UserRegistration updateUserAddress(UserRegistration userRegistration, String userId) throws HandleException {
-		Optional<UserRegistration> getUserOpt = this.userRegistrationRepository.findByUserId(userId);
+		Optional<UserRegistration> getUserOpt = this.userRegistrationRepository.findById(userId);
 		if(getUserOpt.isPresent()) {
 			UserRegistration getUser = getUserOpt.get();
 			getUser.setPhoneNo(userRegistration.getPhoneNo()); 
@@ -259,7 +259,7 @@ public class UserRegistrationServiceImpl implements UserRegistrationService{
 
 	@Override
 	public UserRegistration savePassword(Password password, String userId) throws HandleException {
-		Optional<UserRegistration> getUserOpt = this.userRegistrationRepository.findByUserId(userId);
+		Optional<UserRegistration> getUserOpt = this.userRegistrationRepository.findById(userId);
 		if(getUserOpt.isPresent()) {
 			getUserOpt.get().setPassword(password.getPassword());
 			return this.userRegistrationRepository.save(getUserOpt.get());

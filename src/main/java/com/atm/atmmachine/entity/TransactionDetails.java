@@ -1,10 +1,10 @@
 package com.atm.atmmachine.entity;
 
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,7 +12,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedNativeQuery;
 import javax.persistence.OneToOne;
+import javax.persistence.SqlResultSetMapping;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotBlank;
@@ -21,9 +23,19 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.atm.atmmachine.dto.TransactionDateInfo;
 import com.atm.atmmachine.idGenerator.StringPrefixedSequenceIdGenerator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
+
+@NamedNativeQuery(name = "TransactionDetails.getSumOfTransaction",
+query = "SELECT transaction_date as transactionDate,sum(balance) as Balance from transaction_details group by transaction_date",
+resultSetMapping = "Mapping.TransactionDateInfo")
+@SqlResultSetMapping(name = "Mapping.TransactionDateInfo",
+   classes = @javax.persistence.ConstructorResult(targetClass = TransactionDateInfo.class,
+                                columns = {@javax.persistence.ColumnResult(name = "transactionDate",type=LocalDate.class),
+                                           @javax.persistence.ColumnResult(name = "Balance",type=Double.class)}))
 
 @Entity
 public class TransactionDetails {
@@ -37,8 +49,7 @@ public class TransactionDetails {
 	@GenericGenerator(name = "transaction_id", strategy = "com.atm.atmmachine.idGenerator.StringPrefixedSequenceIdGenerator", parameters = {
 			@org.hibernate.annotations.Parameter(name = StringPrefixedSequenceIdGenerator.INCREMENT_PARAM, value = "1"),
 			@org.hibernate.annotations.Parameter(name = StringPrefixedSequenceIdGenerator.VALUE_PREFIX_PARAMETER, value = "trans"),
-
-	})
+})
 	private String transactionId;
 
 	@ManyToOne
@@ -72,8 +83,7 @@ public class TransactionDetails {
 	
 	public TransactionDetails() {
 		super();
-		
-	}
+		}
 
 	public TransactionDetails(CardDetails cardDetails,
 			@NotBlank(message = "It should contain 12 numbers") BigInteger toAccountNumber,
@@ -82,7 +92,7 @@ public class TransactionDetails {
 			@NotBlank(message = "Amount paid") Double balance,String particulars, ElectricityBill electricityBill, DTH dth,TransactionType transactionType) {
 		super();
 //		this.transactionId = transactionId;
-		this.cardDetails = cardDetails;
+     	this.cardDetails = cardDetails;
 		this.toAccountNumber = toAccountNumber;
 		this.fromAccountNumber = fromAccountNumber;
 		this.transactionDate = transactionDate;

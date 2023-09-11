@@ -93,8 +93,6 @@ public class AtmMachineApplication implements CommandLineRunner{
 		 userRegistration4.setCardDetails(carddetail4);cardDetailsRepository.save(carddetail4); userRegistrationRepository.save(userRegistration4);
 		 CardDetails carddetail5 = new CardDetails(new BigInteger("678412341234"),new BigInteger("7891789078907890"),756,LocalDate.now(),CardType.Silver,25000.0,CardStatus.Active,2000.0,null,UserTotallyRegister.True,userRegistration5);
 		 userRegistration5.setCardDetails(carddetail5);cardDetailsRepository.save(carddetail5); userRegistrationRepository.save(userRegistration5);
-		 
-		 
 // Now Add Transaction which is link to -> Address
 		 TransactionDetails transaction1 = new TransactionDetails(carddetail1,null,new BigInteger("123412344321"),LocalDateTime.now(),500.0,null,null,null,TransactionType.Deposit);
 		 this.transactionRepository.save(transaction1);
@@ -146,11 +144,11 @@ public class AtmMachineApplication implements CommandLineRunner{
 
 //Now entering data in UserRequest which is link to our -> UserRegistration
 
-         UserRequest userRequest1 = new UserRequest(userRegistration1.getCardDetails().getAccountNumber(),"Card Replacement","My card is not working",LocalDate.now(),RequestStatus.Pending,null,userRegistration1);
+         UserRequest userRequest1 = new UserRequest(userRegistration6.getCardDetails().getAccountNumber(),"Card Replacement","My card is not working",LocalDate.now(),RequestStatus.Pending,null,userRegistration6);
 
          this.userRequestRepository.save(userRequest1);
 
-         UserRequest userRequest2 = new UserRequest(userRegistration1.getCardDetails().getAccountNumber(),"Card Lost","My card is not Lost",LocalDate.now(),RequestStatus.Pending,null,userRegistration1);
+         UserRequest userRequest2 = new UserRequest(userRegistration6.getCardDetails().getAccountNumber(),"Card Lost","My card is not Lost",LocalDate.now(),RequestStatus.Pending,null,userRegistration6);
 
          this.userRequestRepository.save(userRequest2);
 
@@ -166,9 +164,13 @@ public class AtmMachineApplication implements CommandLineRunner{
 
          this.userRequestRepository.save(userRequest5);
 
-         UserRequest userRequest6 = new UserRequest(userRegistration4.getCardDetails().getAccountNumber(),"Update Catrd","Please uopdate my Card",LocalDate.now(),RequestStatus.Pending,null,userRegistration1);
+         UserRequest userRequest6 = new UserRequest(userRegistration4.getCardDetails().getAccountNumber(),"Card Lost","Please uopdate my Card",LocalDate.now(),RequestStatus.Pending,null,userRegistration6);
 
          this.userRequestRepository.save(userRequest6);
+         
+         UserRequest userRequest7 = new UserRequest(userRegistration3.getCardDetails().getAccountNumber(),"Increment Card Type","Please update my Card",LocalDate.now(),RequestStatus.Pending,null,userRegistration3);
+
+         this.userRequestRepository.save(userRequest7);
 
          
 

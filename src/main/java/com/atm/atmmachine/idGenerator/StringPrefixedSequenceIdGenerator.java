@@ -1,20 +1,9 @@
 package com.atm.atmmachine.idGenerator;
-
-
-
-
 import java.io.Serializable;
-
 import java.util.Properties;
-
- 
-
 import org.hibernate.HibernateException;
-
 import org.hibernate.MappingException;
-
 import org.hibernate.engine.spi.SharedSessionContractImplementor;
-
 import org.hibernate.id.enhanced.SequenceStyleGenerator;
 
 import org.hibernate.internal.util.config.ConfigurationHelper;
