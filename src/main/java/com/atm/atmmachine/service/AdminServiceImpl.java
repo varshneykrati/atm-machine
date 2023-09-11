@@ -135,7 +135,7 @@ public class AdminServiceImpl implements AdminService {
 
 				transaction.setCardDetails(cardDetailsOfRequestedUser);
 				transaction.setFromAccountNumber(cardDetailsOfRequestedUser.getAccountNumber());
-				transaction.setTransactionDate(LocalDate.now());
+				transaction.setTransactionDate(LocalDateTime.now());
 				transaction.setParticulars("Card Replacement Request is Approved");
 				transaction.setBalance(250.0);
 				transaction.setTransactionType(TransactionType.Withdrawal);		
@@ -188,7 +188,7 @@ public class AdminServiceImpl implements AdminService {
 					
 					transaction.setCardDetails(cardDetailsOfRequestedUser);
 					transaction.setFromAccountNumber(cardDetailsOfRequestedUser.getAccountNumber());
-					transaction.setTransactionDate(LocalDate.now());
+					transaction.setTransactionDate(LocalDateTime.now());
 					transaction.setParticulars("Card Increment Request is Approved");
 					transaction.setBalance(250.0);
 					transaction.setTransactionType(TransactionType.Withdrawal);				
@@ -229,7 +229,7 @@ public class AdminServiceImpl implements AdminService {
 					
 					transaction.setCardDetails(cardDetailsOfRequestedUser);
 					transaction.setFromAccountNumber(cardDetailsOfRequestedUser.getAccountNumber());
-					transaction.setTransactionDate(LocalDate.now());
+					transaction.setTransactionDate(LocalDateTime.now());
 					transaction.setParticulars("Card Increment Request is Approved");
 					transaction.setBalance(350.0);
 					transaction.setTransactionType(TransactionType.Withdrawal);		
