@@ -14,6 +14,7 @@ import com.atm.atmmachine.dto.CardLimit;
 import com.atm.atmmachine.dto.TransactionDateInfo;
 import com.atm.atmmachine.entity.CardDetails;
 import com.atm.atmmachine.entity.TransactionDetails;
+import com.atm.atmmachine.entity.TransactionDetails.TransactionType;
 import com.atm.atmmachine.entity.CardDetails.CardStatus;
 import com.atm.atmmachine.entity.CardDetails.CardType;
 
@@ -137,6 +138,7 @@ public class AdminServiceImpl implements AdminService {
 				transaction.setTransactionDate(LocalDate.now());
 				transaction.setParticulars("Card Replacement Request is Approved");
 				transaction.setBalance(250.0);
+				transaction.setTransactionType(TransactionType.Withdrawal);		
 
 				this.transactionRepository.save(transaction);
 
@@ -189,7 +191,7 @@ public class AdminServiceImpl implements AdminService {
 					transaction.setTransactionDate(LocalDate.now());
 					transaction.setParticulars("Card Increment Request is Approved");
 					transaction.setBalance(250.0);
-
+					transaction.setTransactionType(TransactionType.Withdrawal);				
 					this.transactionRepository.save(transaction);
 					
 					
@@ -230,7 +232,7 @@ public class AdminServiceImpl implements AdminService {
 					transaction.setTransactionDate(LocalDate.now());
 					transaction.setParticulars("Card Increment Request is Approved");
 					transaction.setBalance(350.0);
-
+					transaction.setTransactionType(TransactionType.Withdrawal);		
 					this.transactionRepository.save(transaction);
 					
 				}
