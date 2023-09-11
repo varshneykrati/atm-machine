@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.atm.atmmachine.dto.AdminRemark;
 import com.atm.atmmachine.dto.CardLimit;
 import com.atm.atmmachine.dto.TransactionDateInfo;
+import com.atm.atmmachine.entity.CardDetails.CardType;
 import com.atm.atmmachine.entity.UserRegistration;
 import com.atm.atmmachine.entity.UserRequest;
 import com.atm.atmmachine.entity.UserRegistration.UserRegistrationApproval;
@@ -51,16 +52,12 @@ public class AdminController {
 	}
 
 	// used to display when admin wants to see all cardlost requests
-	@GetMapping("/admin/users/request/cardlost")
-	public List<UserRequest> displayCardLostRequests() {
-		return this.adminService.displayByRequest();
+	@GetMapping("/admin/users/request/{request}")
+	public List<UserRequest> displayCardLostRequests(@PathVariable("request") String request) {
+		return this.adminService.displayByRequest(request);
 	}
 
-	// used to display when admin wants to see all cardReplacement requests
-	@GetMapping("/admin/users/request/cardreplacement")
-	public List<UserRequest> displayCardReplacementRequests() {
-		return this.adminService.displayAllCardReplacementRequests();
-	}
+
 
 	// used to approve the cardLost request of specific requestid
 	@PatchMapping("/admin/request/status/{reqid}")
@@ -102,6 +99,8 @@ public class AdminController {
 			throw e;
 		}
 	}
+	
+	
 
 	// to change card limit of specific card type
 	@PatchMapping("/admin/cardlimit/")
@@ -123,12 +122,7 @@ public class AdminController {
 		return this.adminService.validAadharCard(user.get().getAadharNumber().toString());
 	}
 
-	// used to display when admin wants to see all increment card type requests
-	@GetMapping("/admin/users/request/cardtype")
-	public List<UserRequest> displayCardTypeRequests() {
-		return this.adminService.displayAllCardTypeRequests();
-	}
-	
+
 	//admin wants to see today's transaction sum
 	@GetMapping("/admin/transaction")
 	public List<TransactionDateInfo> sumOfTodayTransaction() {
