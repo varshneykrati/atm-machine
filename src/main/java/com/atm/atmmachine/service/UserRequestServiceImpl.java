@@ -5,9 +5,12 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.atm.atmmachine.entity.CardDetails;
+import com.atm.atmmachine.entity.CardDetails.CardType;
 import com.atm.atmmachine.entity.UserRegistration;
 import com.atm.atmmachine.entity.UserRequest;
 import com.atm.atmmachine.exceptions.RequestException;
+import com.atm.atmmachine.repository.CardDetailsRepository;
 import com.atm.atmmachine.repository.UserRegistrationRepository;
 import com.atm.atmmachine.repository.UserRequestRepository;
 
@@ -19,6 +22,8 @@ public class UserRequestServiceImpl implements UserRequestService {
 	 private UserRequestRepository requestRepository;
 	@Autowired
 	 private UserRegistrationRepository userRegistrationRepository;
+	@Autowired
+	private  CardDetailsRepository cardDetailsRepository;
 
 	@Override
 	public UserRequest getUserRequestById(String requestId) throws RequestException {
@@ -113,5 +118,19 @@ public class UserRequestServiceImpl implements UserRequestService {
 			return updatedrequest;
 		}
 		return null;
+	}
+
+	@Override
+	public CardType getCardType(String userId) throws RequestException {
+		Optional<UserRegistration> userRegistrationOpt = this.userRegistrationRepository.findById(userId);
+		if(userRegistrationOpt.isPresent())
+		{
+			UserRegistration getUser = userRegistrationOpt.get();
+			CardDetails foundCard=getUser.getCardDetails();
+			
+			return foundCard.getCardType();
+		}
+		else
+			throw new RequestException("User not present");	
 	}
 }
