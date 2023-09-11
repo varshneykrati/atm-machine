@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.atm.atmmachine.entity.CardDetails.CardType;
 import com.atm.atmmachine.entity.UserRegistration;
 import com.atm.atmmachine.entity.UserRequest;
 import com.atm.atmmachine.exceptions.RequestException;
@@ -70,6 +71,10 @@ public class RequestController {
 	public UserRequest updateRequest(@RequestBody UserRequest newRequest ) throws RequestException {
 
 		return this.userRequestService.updateRequest(newRequest);
+	}
+	@GetMapping("/request/cardtype/{userId}")
+	public CardType getCardType(@PathVariable("userId") String userId)throws RequestException{
+		return this.userRequestService.getCardType(userId);
 	}
 	
 	
