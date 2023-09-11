@@ -69,18 +69,26 @@ public class AtmMachineApplication implements CommandLineRunner{
 		
 //Entering user registration detail form with the -> address  -----
 		Address address1 = new Address("405/8 Nai Basti","Firozabad",283203,"Uttar Pradesh");
-		UserRegistration userRegistration1 = new UserRegistration("Krati Varshney",LocalDate.now(),"9760286311",962239611757L,"krativarshne@gmail.com","KVar@7777","KVar@7777",false,UserRegistrationApproval.Inactive,address1,null);
-		UserRegistration userRegistration2 = new UserRegistration("Shivam",LocalDate.now(),"+919307204212",301577650820L,"shivam@gmail.com","shivam@7777","shivam@7777",false,UserRegistrationApproval.Active,new Address("415/8 New Market","Agra",283203,"Uttar Pradesh"),null);
-		UserRegistration userRegistration3 = new UserRegistration("Sidhi",LocalDate.now(),"+918178234554",767678355011L,"sidhi@gmail.com","sidhi@7777","sidhi@7777",false,UserRegistrationApproval.Inactive,new Address("415/8 Old Market","Agra",283203,"Madhya Pradesh"),null);
-		UserRegistration userRegistration4 = new UserRegistration("Mansi",LocalDate.now(),"9760281156",679967896789L,"mansi@gmail.com","mansi@7777","mansi@7777",false,UserRegistrationApproval.Inactive,new Address("905/8 New Market","Agra",283203,"Uttar Pradesh"),null);
-		UserRegistration userRegistration5 = new UserRegistration("Ram",LocalDate.now(),"+919760286311",967739611757L,"ram@gmail.com","ram@7700","ram@7700",false,UserRegistrationApproval.Inactive,new Address("415/8 Navi Mumbai","Mumbai",283203,"Maharastra"),null);
-		UserRegistration userRegistration6 = new UserRegistration("Admin",LocalDate.now(),"+918178234554",967739981757L,"admin@gmail.com","admin","admin",true,UserRegistrationApproval.Active,new Address("415/8 Navi Mumbai","Mumbai",283203,"Maharastra"),null);
+		UserRegistration userRegistration1 = new UserRegistration("Krati Varshney",LocalDate.now(),"+919760086311",962239611757L,"krativarshne@gmail.com","KVar@7777","KVar@7777",UserRegistrationApproval.Active,address1,null);
+
+		UserRegistration userRegistration2 = new UserRegistration("Shivam",LocalDate.now(),"+919307204212",301577650820L,"shivam@gmail.com","shivam@7777","shivam@7777",UserRegistrationApproval.Active,new Address("415/8 New Market","Agra",283203,"Uttar Pradesh"),null);
+
+		UserRegistration userRegistration3 = new UserRegistration("Sidhi",LocalDate.now(),"+918178234554",767678355011L,"sidhi@gmail.com","sidhi@7777","sidhi@7777",UserRegistrationApproval.Inactive,new Address("415/8 Old Market","Agra",283203,"Madhya Pradesh"),null);
+
+		UserRegistration userRegistration4 = new UserRegistration("Mansi",LocalDate.now(),"+918178234554",679967896789L,"mansi@gmail.com","mansi@7777","mansi@7777",UserRegistrationApproval.Inactive,new Address("905/8 New Market","Agra",283203,"Uttar Pradesh"),null);
+
+		UserRegistration userRegistration5 = new UserRegistration("Ram",LocalDate.now(),"+918178234554",678967896700L,"ram@gmail.com","ram@7700","ram@7700",UserRegistrationApproval.Inactive,new Address("415/8 Navi Mumbai","Mumbai",283203,"Maharastra"),null);
+
 		userRegistrationRepository.save(userRegistration1);
+
 		userRegistrationRepository.save(userRegistration2);
+
 		userRegistrationRepository.save(userRegistration3);
+
 		userRegistrationRepository.save(userRegistration4);
+
 		userRegistrationRepository.save(userRegistration5);
-		userRegistrationRepository.save(userRegistration6);
+		
 		
 //Entering Card Detail of the user ->link with USER Registration
 		CardDetails carddetail1 = new CardDetails(new BigInteger("123412341234"),new BigInteger("7890789078907890"),456,LocalDate.now(),CardType.Silver,25000.0,CardStatus.Active,20000.0,3456,UserTotallyRegister.True,userRegistration2);
@@ -94,7 +102,7 @@ public class AtmMachineApplication implements CommandLineRunner{
 		 CardDetails carddetail5 = new CardDetails(new BigInteger("678412341234"),new BigInteger("7891789078907890"),756,LocalDate.now(),CardType.Silver,25000.0,CardStatus.Active,2000.0,null,UserTotallyRegister.True,userRegistration5);
 		 userRegistration5.setCardDetails(carddetail5);cardDetailsRepository.save(carddetail5); userRegistrationRepository.save(userRegistration5);
 // Now Add Transaction which is link to -> Address
-		 TransactionDetails transaction1 = new TransactionDetails(carddetail1,null,new BigInteger("123412344321"),LocalDateTime.now(),500.0,null,null,null,TransactionType.Deposit);
+		 TransactionDetails transaction1 = new TransactionDetails(carddetail1,null,new BigInteger("123412344321"),LocalDateTime.now(),1300.0,null,null,null,TransactionType.Deposit);
 		 this.transactionRepository.save(transaction1);
 		 TransactionDetails transaction2 = new TransactionDetails(carddetail1,null,new BigInteger("993412344321"),LocalDateTime.now(),1500.0,null,null,null,TransactionType.Deposit);
 		 this.transactionRepository.save(transaction2);
@@ -144,11 +152,11 @@ public class AtmMachineApplication implements CommandLineRunner{
 
 //Now entering data in UserRequest which is link to our -> UserRegistration
 
-         UserRequest userRequest1 = new UserRequest(userRegistration6.getCardDetails().getAccountNumber(),"Card Replacement","My card is not working",LocalDate.now(),RequestStatus.Pending,null,userRegistration6);
+         UserRequest userRequest1 = new UserRequest(userRegistration1.getCardDetails().getAccountNumber(),"Card Replacement","My card is not working",LocalDate.now(),RequestStatus.Pending,null,userRegistration1);
 
          this.userRequestRepository.save(userRequest1);
 
-         UserRequest userRequest2 = new UserRequest(userRegistration6.getCardDetails().getAccountNumber(),"Card Lost","My card is not Lost",LocalDate.now(),RequestStatus.Pending,null,userRegistration6);
+         UserRequest userRequest2 = new UserRequest(userRegistration1.getCardDetails().getAccountNumber(),"Card Lost","My card is not Lost",LocalDate.now(),RequestStatus.Pending,null,userRegistration1);
 
          this.userRequestRepository.save(userRequest2);
 
@@ -164,7 +172,7 @@ public class AtmMachineApplication implements CommandLineRunner{
 
          this.userRequestRepository.save(userRequest5);
 
-         UserRequest userRequest6 = new UserRequest(userRegistration4.getCardDetails().getAccountNumber(),"Card Lost","Please uopdate my Card",LocalDate.now(),RequestStatus.Pending,null,userRegistration6);
+         UserRequest userRequest6 = new UserRequest(userRegistration4.getCardDetails().getAccountNumber(),"Card Lost","Please uopdate my Card",LocalDate.now(),RequestStatus.Pending,null,userRegistration1);
 
          this.userRequestRepository.save(userRequest6);
          
