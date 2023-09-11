@@ -54,8 +54,8 @@ public class TransactionDetails {
 	private BigInteger fromAccountNumber;
 
 	@NotNull
-	@JsonFormat(pattern = "YYYY-MM-dd")
-	private LocalDate transactionDate;
+	@JsonFormat(pattern = "yyyy-MM-dd-HH:mm:ss")
+	private LocalDateTime transactionDate;
 
 	@NotNull
 	@NotBlank(message = "Amount paid")
@@ -72,13 +72,13 @@ public class TransactionDetails {
 	
 	public TransactionDetails() {
 		super();
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	public TransactionDetails(CardDetails cardDetails,
 			@NotBlank(message = "It should contain 12 numbers") BigInteger toAccountNumber,
 			@NotBlank(message = "It should contain 12 numbers") BigInteger fromAccountNumber,
-			@NotBlank(message = "It can't be empty") LocalDate transactionDate,
+			@NotBlank(message = "It can't be empty") LocalDateTime transactionDate,
 			@NotBlank(message = "Amount paid") Double balance,String particulars, ElectricityBill electricityBill, DTH dth,TransactionType transactionType) {
 		super();
 //		this.transactionId = transactionId;
@@ -126,11 +126,11 @@ public class TransactionDetails {
 		this.fromAccountNumber = fromAccountNumber;
 	}
 
-	public LocalDate getTransactionDate() {
+	public LocalDateTime getTransactionDate() {
 		return transactionDate;
 	}
 
-	public void setTransactionDate(LocalDate transactionDate) {
+	public void setTransactionDate(LocalDateTime transactionDate) {
 		this.transactionDate = transactionDate;
 	}
 

@@ -2,6 +2,7 @@ package com.atm.atmmachine.service;
 
 import java.math.BigInteger;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -93,7 +94,7 @@ public class TransactionServiceImpl implements TransactionService {
 			throw new TransactionException("Insufficient Balance");
 		}
 		List<TransactionDetails> cardLimitCheck = this.transRepository
-				.findByTransactionDateAndCardDetails(LocalDate.now(), foundCard);
+				.findByTransactionDateAndCardDetails(LocalDateTime.now(), foundCard);
 		if (cardLimitCheck.size() > 0) {
 
 			for (TransactionDetails transaction : cardLimitCheck)
@@ -109,15 +110,16 @@ public class TransactionServiceImpl implements TransactionService {
 		TransactionDetails transactionDetails = new TransactionDetails();
 		transactionDetails.setCardDetails(foundCard);
 		transactionDetails.setFromAccountNumber(foundCard.getAccountNumber());
-		transactionDetails.setParticulars(foundCard.getUserRegistration().getUserName());
-		transactionDetails.setTransactionDate(LocalDate.now());
+		transactionDetails.setToAccountNumber(null);
+		transactionDetails.setParticulars("Self Withdraw");
+		transactionDetails.setTransactionDate(LocalDateTime.now());
 		transactionDetails.setBalance(withdrawAmount);
 		transactionDetails.setTransactionType(TransactionType.Withdrawal);
 		this.transRepository.save(transactionDetails);
 
 		smspojo.setTo(foundUser.getPhoneNo());
 		smspojo.setMessage("An amount of INR " + withdrawAmount + " has been debited to your Account "
-				+ foundCard.getAccountNumber() + " on " + org.joda.time.LocalDate.now() + ".Total Avail.bal INR "
+				+ foundCard.getAccountNumber() + " on " + LocalDateTime.now() + ".Total Avail.bal INR "
 				+ foundCard.getAmount());
 
 		smsController.smsSubmit(smspojo);
@@ -159,15 +161,16 @@ public class TransactionServiceImpl implements TransactionService {
 		TransactionDetails transactionDetails = new TransactionDetails();
 		transactionDetails.setCardDetails(foundCard);
 		transactionDetails.setToAccountNumber(foundCard.getAccountNumber());
-		transactionDetails.setParticulars(foundCard.getUserRegistration().getUserName());
-		transactionDetails.setTransactionDate(LocalDate.now());
+		transactionDetails.setFromAccountNumber(null);
+		transactionDetails.setParticulars("Self Deposit");
+		transactionDetails.setTransactionDate(LocalDateTime.now());
 		transactionDetails.setBalance(addAmount);
 		transactionDetails.setTransactionType(TransactionType.Deposit);
 		this.transRepository.save(transactionDetails);
 
 		smspojo.setMessage(
 				"An amount of INR " + addAmount + " has been credited to your Account " + foundCard.getAccountNumber()
-						+ " on " + org.joda.time.LocalDate.now() + ".Total Avail.bal INR " + foundCard.getAmount());
+						+ " on " + LocalDateTime.now() + ".Total Avail.bal INR " + foundCard.getAmount());
 
 		smsController.smsSubmit(smspojo);
 		return foundCard.getAmount();
@@ -210,7 +213,7 @@ public class TransactionServiceImpl implements TransactionService {
 			throw new TransactionException("Insufficient Balance");
 		}
 		List<TransactionDetails> cardLimitCheck = this.transRepository
-				.findByTransactionDateAndCardDetails(LocalDate.now(), foundCard);
+				.findByTransactionDateAndCardDetails(LocalDateTime.now(), foundCard);
 		if (cardLimitCheck.size() > 0) {
 
 			for (TransactionDetails transaction : cardLimitCheck)
@@ -222,7 +225,7 @@ public class TransactionServiceImpl implements TransactionService {
 		}
 		
 		//check length of account no and patttern and null
-		Optional<CardDetails> cardOpt = this.cardRepo.findByAccountNumber(toAccountNumber);
+		Optional<CardDetails> cardOpt = this.cardDetailsRepository.findByAccountNumber(toAccountNumber);
 		if (!cardOpt.isPresent()) {
 			throw new TransactionException("Account no. dosen't exists,Re-enter the correct account number");
 		}
@@ -246,8 +249,9 @@ public class TransactionServiceImpl implements TransactionService {
 		TransactionDetails transactionDetails = new TransactionDetails();
 		transactionDetails.setCardDetails(foundCard);
 		transactionDetails.setToAccountNumber(toAccountNumber);
-		transactionDetails.setParticulars(cardOpt.get().getUserRegistration().getUserName());
-		transactionDetails.setTransactionDate(LocalDate.now());
+		transactionDetails.setFromAccountNumber(null);
+		transactionDetails.setParticulars("Transfered to"+tofoundCard.getUserRegistration().getUserName());
+		transactionDetails.setTransactionDate(LocalDateTime.now());
 		transactionDetails.setBalance(fundTransactionAmount);
 		transactionDetails.setTransactionType(TransactionType.Withdrawal);
 		this.transRepository.save(transactionDetails);
@@ -256,15 +260,16 @@ public class TransactionServiceImpl implements TransactionService {
 		this.cardDetailsRepository.save(tofoundCard);
 		smspojo.setTo(tofoundCard.getUserRegistration().getPhoneNo());
 		smspojo.setMessage("An amount of INR " + fundTransactionAmount + " has been credited to your Account "
-				+ tofoundCard.getAccountNumber() + " on " + LocalDate.now() + ".Total Avail.bal INR "
+				+ tofoundCard.getAccountNumber() + " on " + LocalDateTime.now() + ".Total Avail.bal INR "
 				+ tofoundCard.getAmount());
 
 		smsController.smsSubmit(smspojo);
 		TransactionDetails toTransactionDetails = new TransactionDetails();
 		toTransactionDetails.setCardDetails(tofoundCard);
 		toTransactionDetails.setFromAccountNumber(foundCard.getAccountNumber());
-		toTransactionDetails.setParticulars(tofoundCard.getUserRegistration().getUserName());
-		toTransactionDetails.setTransactionDate(LocalDate.now());
+		toTransactionDetails.setToAccountNumber(null);
+		toTransactionDetails.setParticulars("Transfered from : "+foundCard.getUserRegistration().getUserName());
+		toTransactionDetails.setTransactionDate(LocalDateTime.now());
 		toTransactionDetails.setBalance(fundTransactionAmount);
 		toTransactionDetails.setTransactionType(TransactionType.Deposit);
 		this.transRepository.save(toTransactionDetails);

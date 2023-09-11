@@ -5,6 +5,8 @@ import java.util.Optional;
 import java.util.regex.Pattern;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -106,14 +108,14 @@ public class AdminServiceImpl implements AdminService {
 
 			transaction.setCardDetails(cardDetailsOfRequestedUser);
 			transaction.setToAccountNumber(cardDetailsOfRequestedUser.getAccountNumber());
-			transaction.setTransactionDate(LocalDate.now());
+			transaction.setTransactionDate(LocalDateTime.now());
 
 			transaction.setBalance(250.0);
 			this.transactionRepository.save(transaction);
 
 			smspojo.setTo(foundUserRequest.get().getUserRegistration().getPhoneNo());
 			smspojo.setMessage("An amount of INR " + 250.0 + " has been debited from your Account "
-					+ cardDetailsOfRequestedUser.getAccountNumber() + " on " + org.joda.time.LocalDate.now()
+					+ cardDetailsOfRequestedUser.getAccountNumber() + " on " + LocalDateTime.now()
 					+ ".Total Avail.bal INR " + cardDetailsOfRequestedUser.getAmount());
 
 			smsController.smsSubmit(smspojo);
