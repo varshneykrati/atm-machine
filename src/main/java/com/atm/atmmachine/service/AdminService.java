@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import com.atm.atmmachine.dto.CardLimit;
 import com.atm.atmmachine.dto.TransactionDateInfo;
+import com.atm.atmmachine.entity.CardDetails.CardType;
 import com.atm.atmmachine.entity.UserRegistration;
 import com.atm.atmmachine.entity.UserRegistration.UserRegistrationApproval;
 import com.atm.atmmachine.exceptions.AdminException;
@@ -26,11 +27,9 @@ public interface AdminService {
 	
 
 	
-	public List<UserRequest> displayByRequest();
+	public List<UserRequest> displayByRequest(String request);
 	
-	public List<UserRequest> displayAllCardReplacementRequests();
 	
-	public List<UserRequest> displayAllCardTypeRequests();
 	
 	public UserRequest updateUserRequestStatus(String requestId) throws AdminException;
 	
