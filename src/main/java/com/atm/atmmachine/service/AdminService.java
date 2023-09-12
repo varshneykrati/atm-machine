@@ -40,5 +40,5 @@ public interface AdminService {
 	
 	public Double changeCardLimit(CardLimit cardLimit);
 	
-	public Boolean validAadharCard(String aadharNumber);
+	//public Boolean validAadharCard(String aadharNumber);
 }

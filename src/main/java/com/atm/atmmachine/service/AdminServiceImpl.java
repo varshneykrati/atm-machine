@@ -133,16 +133,16 @@ public class AdminServiceImpl implements AdminService {
 		
 	}
 
-	@Override
-	public Boolean validAadharCard(String aadharNumber) {
-		Pattern aadharPattern = Pattern.compile("\\d{12}");
-        boolean isValidAadhar = aadharPattern.matcher(aadharNumber).matches();
-        if(isValidAadhar){
-            isValidAadhar = VerhoeffAlgorithm.validateVerhoeff(aadharNumber);
-        }
-        return isValidAadhar;
-		
-	}
+//	@Override
+//	public Boolean validAadharCard(String aadharNumber) {
+//		Pattern aadharPattern = Pattern.compile("\\d{12}");
+//        boolean isValidAadhar = aadharPattern.matcher(aadharNumber).matches();
+//        if(isValidAadhar){
+//            isValidAadhar = VerhoeffAlgorithm.validateVerhoeff(aadharNumber);
+//        }
+//        return isValidAadhar;
+//		
+//	}
 
 
 }

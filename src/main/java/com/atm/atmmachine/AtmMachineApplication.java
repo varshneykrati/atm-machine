@@ -68,11 +68,11 @@ public class AtmMachineApplication implements CommandLineRunner{
 		
 //Entering user registration detail form with the -> address  -----
 		Address address1 = new Address("405/8 Nai Basti","Firozabad",283203,"Uttar Pradesh");
-		UserRegistration userRegistration1 = new UserRegistration("Krati Varshney",localDate.now(),"9760286311",962239611757L,"krativarshne@gmail.com","KVar@7777","KVar@7777",UserRegistrationApproval.Inactive,address1,null);
+		UserRegistration userRegistration1 = new UserRegistration("Krati Varshney",localDate.now(),"+919760286310",962239611757L,"krativarshne@gmail.com","KVar@7777","KVar@7777",UserRegistrationApproval.Active,address1,null);
 		UserRegistration userRegistration2 = new UserRegistration("Shivam",localDate.now(),"+919307204212",301577650820L,"shivam@gmail.com","shivam@7777","shivam@7777",UserRegistrationApproval.Active,new Address("415/8 New Market","Agra",283203,"Uttar Pradesh"),null);
 		UserRegistration userRegistration3 = new UserRegistration("Sidhi",localDate.now(),"9712121111",767678355011L,"sidhi@gmail.com","sidhi@7777","sidhi@7777",UserRegistrationApproval.Inactive,new Address("415/8 Old Market","Agra",283203,"Madhya Pradesh"),null);
 		UserRegistration userRegistration4 = new UserRegistration("Mansi",localDate.now(),"9760281156",679967896789L,"mansi@gmail.com","mansi@7777","mansi@7777",UserRegistrationApproval.Inactive,new Address("905/8 New Market","Agra",283203,"Uttar Pradesh"),null);
-		UserRegistration userRegistration5 = new UserRegistration("Ram",localDate.now(),"+919760286311",678967896700L,"ram@gmail.com","ram@7700","ram@7700",UserRegistrationApproval.Inactive,new Address("415/8 Navi Mumbai","Mumbai",283203,"Maharastra"),null);
+		UserRegistration userRegistration5 = new UserRegistration("Ram",localDate.now(),"+919760280011",678967896700L,"ram@gmail.com","ram@7700","ram@7700",UserRegistrationApproval.Inactive,new Address("415/8 Navi Mumbai","Mumbai",283203,"Maharastra"),null);
 		userRegistrationRepository.save(userRegistration1);
 		userRegistrationRepository.save(userRegistration2);
 		userRegistrationRepository.save(userRegistration3);
@@ -80,9 +80,9 @@ public class AtmMachineApplication implements CommandLineRunner{
 		userRegistrationRepository.save(userRegistration5);
 		
 //Entering Card Detail of the user ->link with USER Registration
-		CardDetails carddetail1 = new CardDetails(new BigInteger("123412341234"),new BigInteger("7890789078907890"),456,localDate.now(),CardType.Silver,25000.0,CardStatus.Active,20000.0,3456,UserTotallyRegister.True,userRegistration2);
+		CardDetails carddetail1 = new CardDetails(new BigInteger("123412341234"),new BigInteger("7890789078907890"),456,localDate.now(),CardType.Silver,25000.0,CardStatus.Active,20000.0,3456,UserTotallyRegister.False,userRegistration2);
 		 userRegistration2.setCardDetails(carddetail1);cardDetailsRepository.save(carddetail1); userRegistrationRepository.save(userRegistration2);
-		 CardDetails carddetail2 = new CardDetails(new BigInteger("123412344321"),new BigInteger("7890789078900965"),789,localDate.now(),CardType.Silver,25000.0,CardStatus.Inactive,2000.0,null,UserTotallyRegister.False,userRegistration1);
+		 CardDetails carddetail2 = new CardDetails(new BigInteger("123412344321"),new BigInteger("7890789078900965"),789,localDate.now(),CardType.Silver,25000.0,CardStatus.Active,2000.0,null,UserTotallyRegister.True,userRegistration1);
 		 userRegistration1.setCardDetails(carddetail2);cardDetailsRepository.save(carddetail2); userRegistrationRepository.save(userRegistration1);
 		 CardDetails carddetail3 = new CardDetails(new BigInteger("1234123456678"),new BigInteger("7890789078999890"),459,localDate.now(),CardType.Silver,25000.0,CardStatus.Inactive,2000.0,null,UserTotallyRegister.False,userRegistration3);
 		 userRegistration3.setCardDetails(carddetail3);cardDetailsRepository.save(carddetail3); userRegistrationRepository.save(userRegistration3);
@@ -201,7 +201,7 @@ public class AtmMachineApplication implements CommandLineRunner{
          this.transactionRepository.save(transaction10);
 
          
-
+ 
          
 
 //Now entering DTHBill which is link to -> CardDetail -> Transaction -> Vendors

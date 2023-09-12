@@ -111,13 +111,13 @@ public class AdminController {
 	}
 	
 	//to validate aadhar card
-	@GetMapping("/admin/validate/aadharcard/{userid}")
-	public Boolean validateAadharCard(@PathVariable("userid") String userId) throws AdminException{
-		Optional<UserRegistration> user = this.adminService.findByUserId(userId);
-		if(!user.isPresent())
-			throw new AdminException("User doesn't exist");
-		return this.adminService.validAadharCard(user.get().getAadharNumber().toString());
-	}
+//	@GetMapping("/admin/validate/aadharcard/{userid}")
+//	public Boolean validateAadharCard(@PathVariable("userid") String userId) throws AdminException{
+//		Optional<UserRegistration> user = this.adminService.findByUserId(userId);
+//		if(!user.isPresent())
+//			throw new AdminException("User doesn't exist");
+//		return this.adminService.validAadharCard(user.get().getAadharNumber().toString());
+//	}
 	
 
 }
