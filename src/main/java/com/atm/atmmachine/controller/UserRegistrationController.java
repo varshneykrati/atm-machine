@@ -15,8 +15,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.atm.atmmachine.dto.EmailDto;
+import com.atm.atmmachine.dto.OtpGeneration;
 import com.atm.atmmachine.dto.Password;
 import com.atm.atmmachine.dto.UserLogin;
+import com.atm.atmmachine.entity.Address;
 import com.atm.atmmachine.entity.CardDetails;
 import com.atm.atmmachine.entity.UserRegistration;
 import com.atm.atmmachine.entity.UserRequest;
@@ -31,7 +33,7 @@ public class UserRegistrationController {
 	@Autowired
 	UserRegistrationService userRegistrationService;
 	
-	UserRegistration userRegisterDetails=null;
+	//UserRegistration userRegisterDetails=null;
 	Integer otp=null;
 	
 //	@GetMapping("/")
@@ -39,50 +41,70 @@ public class UserRegistrationController {
 //		return "Hello welcome";
 //	}
 	
-	@PostMapping("/user/")
-	public Integer registerUser(@RequestBody UserRegistration userRegistration) throws HandleException {
-		//System.out.println("we are adding");
-		userRegisterDetails = userRegistration;
-		otp = this.userRegistrationService.userRegistrationDetails(userRegistration);
-		return otp;
+	@PostMapping("/user/otp/")
+	public OtpGeneration registerUser(@RequestBody UserRegistration userRegistration) throws HandleException {
+		
+		return this.userRegistrationService.userRegistrationDetails(userRegistration);
+		
 	}
 	
-	@PostMapping("/saveUser/")
+	@PostMapping("/user/")
 	public UserRegistration verifyAndSaveRegisterUser(@RequestBody UserRegistration userRegisterDetails) throws HandleException {
 		return this.userRegistrationService.saveUserDetail(userRegisterDetails);
 		
 	}
 	
-	@PatchMapping("/card/")
-	public CardDetails saveUserCard(@RequestBody CardDetails cardDetails) throws HandleException {
-		return this.userRegistrationService.addUserCard(userRegisterDetails, cardDetails);
+	@PatchMapping("/card/{userId}")
+	public CardDetails saveUserCard(@RequestBody CardDetails cardDetails,@PathVariable("userId") String userId) throws HandleException {
+		return this.userRegistrationService.addUserCard(userId, cardDetails);
 	}
 	
 	@PostMapping("/user/login/")
-	public String login(@RequestBody UserLogin userLogin) throws HandleException {
+	public UserRegistration login(@RequestBody UserLogin userLogin) throws HandleException {
 		return this.userRegistrationService.checkLoginDetails(userLogin); //redirect to portal after success.
 	}
 	
-	@GetMapping("/view/profile/{userId}")
-	public UserRegistration viewProfile(@PathVariable("userId") String userId) throws HandleException {
+	@GetMapping("/user/profile/{userId}")
+	public CardDetails viewProfile(@PathVariable("userId") String userId) throws HandleException {
 		return this.userRegistrationService.viewUserProfile(userId);
 	}
 	
-	@PatchMapping("/update/{userId}")
-	public UserRegistration updateAdress(@RequestBody UserRegistration userRegistration, @PathVariable("userId") String userId) throws HandleException {
-		return this.userRegistrationService.updateUserAddress(userRegistration, userId);
+	@PatchMapping("/user/otp/phoneNo/{userId}")
+	public Integer otpForUpdatePhoneNumber(@RequestBody UserRegistration userRegistration, @PathVariable("userId") String userId) throws HandleException {
+		return this.userRegistrationService.otpForUpdatingPhoneNumber(userRegistration, userId);
 	}
 	
-	@PostMapping("/email/")
-	public Integer verifyEmailAndSendOtp(@RequestBody EmailDto emailDto) throws HandleException {
+	@PatchMapping("/user/phoneNo/{userId}")
+	public UserRegistration updateUserPhoneNumber(@RequestBody UserRegistration userRegistration, @PathVariable("userId") String userId) throws HandleException {
+		return this.userRegistrationService.updatingUserPhoneNumber(userRegistration, userId);
+	}
+	
+	@GetMapping("/address/{userId}")
+	public Address getUserAddress(@PathVariable("userId") String userId) throws HandleException {
+		System.out.println("in controller");
+		return this.userRegistrationService.getAddress(userId);
+	}
+	
+	@PatchMapping("/user/address/{userId}")
+	public UserRegistration updateUserAddress(@RequestBody Address address,@PathVariable("userId") String userId) throws HandleException {
+		return this.userRegistrationService.changeUserAddress(address,userId);
+	}
+	
+	
+	@PostMapping("/user/email/{userId}")
+	public Integer verifyEmailAndSendOtp(@RequestBody EmailDto emailDto, @PathVariable("userId") String userId) throws HandleException {
 		//System.out.println("hii email dto");
-		otp = this.userRegistrationService.sendOtpOnEmail(emailDto, "user1");
+		otp = this.userRegistrationService.sendOtpOnEmail(emailDto, userId);
 		return otp;
 	}
 	
-	@PatchMapping("/password/")
-	public UserRegistration saveUpdatedPassword(@RequestBody Password password) throws HandleException {
-		return this.userRegistrationService.savePassword(password, "user1");
+	@PostMapping("/user/password/{userId}")
+	public UserRegistration saveUpdatedPassword(@RequestBody Password password,@PathVariable("userId") String userId) throws HandleException {
+		return this.userRegistrationService.savePassword(password, userId);
 	}
 
+	@PostMapping("/user/session/")
+	public UserRegistration fetchingUserToStoreInSessionAtLoginTime(@RequestBody UserLogin userLogin) throws HandleException {
+		return this.userRegistrationService.fetchingUser(userLogin);
+	}
 }

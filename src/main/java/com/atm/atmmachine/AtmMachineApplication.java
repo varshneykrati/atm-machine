@@ -211,7 +211,7 @@ public class AtmMachineApplication implements CommandLineRunner{
          this.transactionRepository.save(transaction10);
 
          
-
+ 
          
 
 //Now entering DTHBill which is link to -> CardDetail -> Transaction -> Vendors
