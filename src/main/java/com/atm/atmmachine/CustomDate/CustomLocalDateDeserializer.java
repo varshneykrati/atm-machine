@@ -11,7 +11,7 @@ import java.time.format.DateTimeFormatter;
 public class CustomLocalDateDeserializer extends JsonDeserializer<LocalDate> {
     @Override
     public LocalDate deserialize(JsonParser jsonParser, DeserializationContext context) throws IOException {
-        JsonNode node = jsonParser.getCodec().readTree(jsonParser);git 
+        JsonNode node = jsonParser.getCodec().readTree(jsonParser);
         String dateStr = node.asText();
         // Define the expected date format based on your input
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");

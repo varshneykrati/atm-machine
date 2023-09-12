@@ -52,7 +52,7 @@ public class AdminServiceImpl implements AdminService {
 	SMSController smsController;
 
 	SmsPojo smspojo = new SmsPojo();
-	TransactionDetails transaction = new TransactionDetails();
+	
 
 	@Override
 	public Optional<UserRegistration> findByUserId(String userId) {
@@ -120,6 +120,7 @@ public class AdminServiceImpl implements AdminService {
 				smsController.smsSubmit(smspojo);
 			} else {
 
+				TransactionDetails transaction = new TransactionDetails();
 				Double changedAmount = (cardDetailsOfRequestedUser.getAmount() - 250);
 				LocalDate oldValidThroughDate = cardDetailsOfRequestedUser.getValidThrough();
 				LocalDate newValidThroughDate = oldValidThroughDate.plusYears(5);
@@ -167,6 +168,7 @@ public class AdminServiceImpl implements AdminService {
 
 					smsController.smsSubmit(smspojo);
 				}else {
+					TransactionDetails transaction = new TransactionDetails();
 					//Double cardLimitOfGoldUsers = cardDetailsOfRequestedUser.getCardLimit();
 					cardDetailsOfRequestedUser.setCardType(CardType.Gold);
 					cardDetailsOfRequestedUser.setCardLimit(50000.0);
@@ -208,6 +210,7 @@ public class AdminServiceImpl implements AdminService {
 
 					smsController.smsSubmit(smspojo);
 				}else {
+					TransactionDetails transaction = new TransactionDetails();
 					//Double cardLimitOfPlatinumUsers = cardDetailsOfRequestedUser.getCardLimit();
 					cardDetailsOfRequestedUser.setCardType(CardType.Platinum);
 					cardDetailsOfRequestedUser.setCardLimit(75000.0);
