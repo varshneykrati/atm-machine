@@ -2,6 +2,7 @@ package com.atm.atmmachine.service;
 
 import java.math.BigInteger;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -221,7 +222,7 @@ public class UserRegistrationServiceImpl implements UserRegistrationService{
 
 	@Override
 	public CardDetails addUserCard(String userId, CardDetails cardDetails) throws HandleException {
-		Optional<UserRegistration> getUserOpt = this.userRegistrationRepository.findByUserId(userId);
+		Optional<UserRegistration> getUserOpt = this.userRegistrationRepository.findById(userId);
 		UserRegistration userRegisterDetails = getUserOpt.get();
 		if(userRegisterDetails==null) {
 			throw new HandleException("Please sign in first");
@@ -264,7 +265,7 @@ public class UserRegistrationServiceImpl implements UserRegistrationService{
 				TransactionDetails transaction = new TransactionDetails();
 				transaction.setCardDetails(userCard);
 				transaction.setToAccountNumber(userCard.getAccountNumber());
-				transaction.setTransactionDate(LocalDate.now());
+				transaction.setTransactionDate(LocalDateTime.now());
 				transaction.setBalance(2000.0);
 				transaction.setTransactionType(TransactionType.Deposit);
 				this.transactionRepository.save(transaction);
@@ -294,7 +295,7 @@ public class UserRegistrationServiceImpl implements UserRegistrationService{
 
 	@Override
 	public CardDetails viewUserProfile(String userId) throws HandleException {
-		Optional<UserRegistration> getUserOpt = this.userRegistrationRepository.findByUserId(userId);
+		Optional<UserRegistration> getUserOpt = this.userRegistrationRepository.findById(userId);
 		if(getUserOpt.isPresent()) {
 			//System.out.println(getUserOpt.get().getCardDetails().getCardPin());
 			return getUserOpt.get().getCardDetails();
@@ -306,7 +307,7 @@ public class UserRegistrationServiceImpl implements UserRegistrationService{
 
 	@Override
 	public Integer otpForUpdatingPhoneNumber(UserRegistration userRegistration, String userId) throws HandleException {
-		Optional<UserRegistration> getUserOpt = this.userRegistrationRepository.findByUserId(userId);
+		Optional<UserRegistration> getUserOpt = this.userRegistrationRepository.findById(userId);
 		if(!getUserOpt.isPresent()) {
 			throw new HandleException("user not present, register first");
 		}
@@ -330,7 +331,7 @@ public class UserRegistrationServiceImpl implements UserRegistrationService{
 	
 	@Override
 	public UserRegistration updatingUserPhoneNumber(UserRegistration userRegistration, String userId) throws HandleException {
-		Optional<UserRegistration> getUserOpt = this.userRegistrationRepository.findByUserId(userId);
+		Optional<UserRegistration> getUserOpt = this.userRegistrationRepository.findById(userId);
 		if(getUserOpt.isPresent()) {
 			UserRegistration user = getUserOpt.get();
 			user.setPhoneNo(userRegistration.getPhoneNo());
@@ -343,7 +344,7 @@ public class UserRegistrationServiceImpl implements UserRegistrationService{
 	
 	@Override
 	public Address getAddress(String userId) throws HandleException {
-		Optional<UserRegistration> getUserOpt = this.userRegistrationRepository.findByUserId(userId);
+		Optional<UserRegistration> getUserOpt = this.userRegistrationRepository.findById(userId);
 		if(getUserOpt.isPresent()) {
 			return getUserOpt.get().getAddress();
 		}
@@ -355,7 +356,7 @@ public class UserRegistrationServiceImpl implements UserRegistrationService{
 	
 	@Override
 	public UserRegistration changeUserAddress(Address address, String userId) throws HandleException {
-		Optional<UserRegistration> getUserOpt = this.userRegistrationRepository.findByUserId(userId);
+		Optional<UserRegistration> getUserOpt = this.userRegistrationRepository.findById(userId);
 		if(getUserOpt.isPresent()) {
 			UserRegistration user = getUserOpt.get();
 			user.setAddress(address);
