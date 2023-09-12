@@ -387,7 +387,7 @@ public class UserRegistrationServiceImpl implements UserRegistrationService{
 
 	@Override
 	public UserRegistration savePassword(Password password, String userId) throws HandleException {
-		Optional<UserRegistration> getUserOpt = this.userRegistrationRepository.findByUserId(userId);
+		Optional<UserRegistration> getUserOpt = this.userRegistrationRepository.findById(userId);
 		if(getUserOpt.isPresent()) {
 			//userRegistration.setPassword(BCrypt.hashpw(userRegistration.getPassword(), BCrypt.gensalt()));
 			getUserOpt.get().setPassword(BCrypt.hashpw(password.getPassword(), BCrypt.gensalt()));

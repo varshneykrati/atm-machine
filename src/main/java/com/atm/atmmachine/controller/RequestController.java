@@ -5,6 +5,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.atm.atmmachine.entity.CardDetails.CardType;
 import com.atm.atmmachine.entity.UserRegistration;
 import com.atm.atmmachine.entity.UserRequest;
 import com.atm.atmmachine.exceptions.RequestException;
@@ -21,6 +23,7 @@ import com.atm.atmmachine.repository.UserRequestRepository;
 import com.atm.atmmachine.service.UserRequestService;
 
 @RestController
+@CrossOrigin(origins="http://localhost:4200/")
 public class RequestController {
 	@Autowired
 	 private UserRequestService userRequestService;
@@ -65,9 +68,13 @@ public class RequestController {
 		return this.userRequestService.deleteRequest(Id);
 	}
 	@PutMapping("/request/")
-	public UserRequest updateRequest(  @RequestBody UserRequest newRequest ) throws RequestException {
+	public UserRequest updateRequest(@RequestBody UserRequest newRequest ) throws RequestException {
 
 		return this.userRequestService.updateRequest(newRequest);
+	}
+	@GetMapping("/request/cardtype/{userId}")
+	public CardType getCardType(@PathVariable("userId") String userId)throws RequestException{
+		return this.userRequestService.getCardType(userId);
 	}
 	
 	

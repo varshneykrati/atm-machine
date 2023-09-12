@@ -5,7 +5,8 @@ import java.util.List;
 import java.util.Optional;
 
 import com.atm.atmmachine.dto.CardLimit;
-
+import com.atm.atmmachine.dto.TransactionDateInfo;
+import com.atm.atmmachine.entity.CardDetails.CardType;
 import com.atm.atmmachine.entity.UserRegistration;
 import com.atm.atmmachine.entity.UserRegistration.UserRegistrationApproval;
 import com.atm.atmmachine.exceptions.AdminException;
@@ -26,9 +27,9 @@ public interface AdminService {
 	
 
 	
-	public List<UserRequest> displayByRequest();
+	public List<UserRequest> displayByRequest(String request);
 	
-	public List<UserRequest> displayAllCardReplacementRequests();
+	
 	
 	public UserRequest updateUserRequestStatus(String requestId) throws AdminException;
 	
@@ -38,7 +39,9 @@ public interface AdminService {
 	
 	public String setAdminRemark(String reqId,String remark) throws AdminException;
 	
-	public Double changeCardLimit(CardLimit cardLimit);
+	public Double changeCardLimit(CardLimit cardLimit) throws AdminException;
 	
-	//public Boolean validAadharCard(String aadharNumber);
+	public Boolean validAadharCard(String aadharNumber);
+	
+	public List<TransactionDateInfo> sumOfTodayTransaction();
 }

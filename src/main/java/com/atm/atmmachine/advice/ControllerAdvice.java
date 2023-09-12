@@ -12,7 +12,7 @@ import com.atm.atmmachine.exceptions.TransactionException;
 public class ControllerAdvice {
 
 	@ExceptionHandler({TransactionException.class})
-	public ResponseEntity<String> handleProductException(Exception exception){
+	public ResponseEntity<String> handleTransactionException(Exception exception){
 		return new ResponseEntity<String>(exception.getMessage(),HttpStatus.BAD_REQUEST);
 	}
 }

@@ -20,8 +20,7 @@ public interface UserRegistrationRepository extends JpaRepository<UserRegistrati
 
 	Optional<UserRegistration> findByAadharNumber(Long aadharNumber);
 
-	Optional<UserRegistration> findByUserId(String userId);
-
+	
 	Optional<UserRegistration> findByUserIdAndEmailId(String string, String email);
 	//admin
 //	public Optional<UserRegistration> findByUserId(String id);

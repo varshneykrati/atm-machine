@@ -5,9 +5,12 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.atm.atmmachine.entity.CardDetails;
+import com.atm.atmmachine.entity.CardDetails.CardType;
 import com.atm.atmmachine.entity.UserRegistration;
 import com.atm.atmmachine.entity.UserRequest;
 import com.atm.atmmachine.exceptions.RequestException;
+import com.atm.atmmachine.repository.CardDetailsRepository;
 import com.atm.atmmachine.repository.UserRegistrationRepository;
 import com.atm.atmmachine.repository.UserRequestRepository;
 
@@ -19,6 +22,8 @@ public class UserRequestServiceImpl implements UserRequestService {
 	 private UserRequestRepository requestRepository;
 	@Autowired
 	 private UserRegistrationRepository userRegistrationRepository;
+	@Autowired
+	private  CardDetailsRepository cardDetailsRepository;
 
 	@Override
 	public UserRequest getUserRequestById(String requestId) throws RequestException {
@@ -42,7 +47,7 @@ public class UserRequestServiceImpl implements UserRequestService {
 			UserRegistration getUser = getUserOpt.get();
 			newRequest.setUserRegistration(getUser);
 			newRequest.setAccountNumber(getUser.getCardDetails().getAccountNumber());
-		
+		    
 		boolean condition = true;
 		List<UserRequest> allUser = this.requestRepository.findAll();
 
@@ -58,7 +63,11 @@ public class UserRequestServiceImpl implements UserRequestService {
 		if (condition) {
 			return this.requestRepository.save(newRequest);
 		}
-		return null;
+		else
+		{
+			throw new RequestException("You make same request earlier");
+		}
+		
 	}
 
 	@Override
@@ -94,10 +103,34 @@ public class UserRequestServiceImpl implements UserRequestService {
 	@Override
 	public UserRequest updateRequest(UserRequest newRequest) throws RequestException {
 		Optional<UserRequest> getRequest = requestRepository.findById(newRequest.getRequestId());
+		newRequest.setDateOfRequest(LocalDate.now());
+		Optional<UserRegistration> getUserOpt = this.userRegistrationRepository.findById("user1");
+		if(!getUserOpt.isPresent())
+		{
+			throw new RequestException(" Can't add  as User id is  not present");
+		}
+			UserRegistration getUser = getUserOpt.get();
+			newRequest.setUserRegistration(getUser);
+			newRequest.setAccountNumber(getUser.getCardDetails().getAccountNumber());
+		
 		if (getRequest.isPresent()) {
 			UserRequest updatedrequest = this.requestRepository.save(newRequest);
 			return updatedrequest;
 		}
 		return null;
+	}
+
+	@Override
+	public CardType getCardType(String userId) throws RequestException {
+		Optional<UserRegistration> userRegistrationOpt = this.userRegistrationRepository.findById(userId);
+		if(userRegistrationOpt.isPresent())
+		{
+			UserRegistration getUser = userRegistrationOpt.get();
+			CardDetails foundCard=getUser.getCardDetails();
+			
+			return foundCard.getCardType();
+		}
+		else
+			throw new RequestException("User not present");	
 	}
 }

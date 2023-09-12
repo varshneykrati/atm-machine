@@ -42,9 +42,14 @@ public class DTH {
 
 	public DTH() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
+//	public DTH(CardDetails cardDetails, Double amountToBePaid, Vendors vendors) {
+//		super();
+//		this.cardDetails = cardDetails;
+//			this.amountToBePaid = amountToBePaid;
+//		this.vendors = vendors;
+//	}
 
 
 	
@@ -53,6 +58,14 @@ public class DTH {
 
 	public String getUserDthCardNumber() {
 		return userDthCardNumber;
+	}
+
+	public CardDetails getCardDetails() {
+		return cardDetails;
+	}
+
+	public void setCardDetails(CardDetails cardDetails) {
+		this.cardDetails = cardDetails;
 	}
 
 	public DTH(CardDetails cardDetails, Double amountToBePaid, Vendors vendors) {
