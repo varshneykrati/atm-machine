@@ -5,12 +5,16 @@ import java.util.Optional;
 import java.util.regex.Pattern;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.atm.atmmachine.dto.CardLimit;
+import com.atm.atmmachine.dto.TransactionDateInfo;
 import com.atm.atmmachine.entity.CardDetails;
 import com.atm.atmmachine.entity.TransactionDetails;
+import com.atm.atmmachine.entity.TransactionDetails.TransactionType;
 import com.atm.atmmachine.entity.CardDetails.CardStatus;
 import com.atm.atmmachine.entity.CardDetails.CardType;
 
@@ -41,12 +45,14 @@ public class AdminServiceImpl implements AdminService {
 
 	@Autowired
 	private TransactionRepository transactionRepository;
+	
+	
 
 	@Autowired
 	SMSController smsController;
 
 	SmsPojo smspojo = new SmsPojo();
-	TransactionDetails transaction = new TransactionDetails();
+	
 
 	@Override
 	public Optional<UserRegistration> findByUserId(String userId) {
@@ -66,66 +72,78 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public List<UserRequest> displayByRequest() {
-
-		return this.userRequestRepository.findByRequest("Card Lost");
+	public List<UserRequest> displayByRequest(String request) {
+		
+		return this.userRequestRepository.findByRequestAndRequestStatus(request,RequestStatus.Pending);
 	}
 
-	@Override
-	public List<UserRequest> displayAllCardReplacementRequests() {
-
-		return this.userRequestRepository.findByRequest("Card Replacement");
-	}
+	
 
 	@Override
 	public UserRequest updateUserRequestStatus(String requestId) throws AdminException {
 		Optional<UserRequest> foundUserRequest = this.userRequestRepository.findById(requestId);
 		if (!foundUserRequest.isPresent())
 			throw new AdminException("Request doesn't exist");
+		
+		CardDetails cardDetailsOfRequestedUser = foundUserRequest.get().getUserRegistration().getCardDetails();
+		
+		String accountNumber = cardDetailsOfRequestedUser.getAccountNumber().toString();
+		int lastFourDigitOfAccountNumber = Integer.parseInt(accountNumber.substring(8,12));
 
-		if (foundUserRequest.get().getRequest().equals("Card Lost")) {
+		if (foundUserRequest.get().getRequest().equals("Card Block")) {
 
-			CardDetails cardDetailsOfRequestedUser = foundUserRequest.get().getUserRegistration().getCardDetails();
+			
 			cardDetailsOfRequestedUser.setCardstatus(CardStatus.Inactive);
 
 			foundUserRequest.get().setRequestStatus(RequestStatus.Approved);
 			Optional<UserRegistration> foundUser = this.userRegistrationRepository.findById(requestId);
 			this.cardDetailsRepository.save(cardDetailsOfRequestedUser);
 			this.userRequestRepository.save(foundUserRequest.get());
+			
+			smspojo.setTo(foundUserRequest.get().getUserRegistration().getPhoneNo());
+			smspojo.setMessage("Your Card is Inactivated as per your card Lost Request on Account Number " + "XXXXXXXX"+lastFourDigitOfAccountNumber);
+
+			smsController.smsSubmit(smspojo);
 
 		} else if (foundUserRequest.get().getRequest().equals("Card Replacement")) {
-			CardDetails cardDetailsOfRequestedUser = foundUserRequest.get().getUserRegistration().getCardDetails();
+			
 			
 
+			
 			if (cardDetailsOfRequestedUser.getAmount() < 250.0) {
 				smspojo.setTo(foundUserRequest.get().getUserRegistration().getPhoneNo());
 				smspojo.setMessage(
-						"An amount of INR " + 250.0 + " should be available in your account for card replacement on your Account Number"
-								+ cardDetailsOfRequestedUser.getAccountNumber() + " on " + org.joda.time.LocalDate.now()
+						"An amount of INR " + 250.0 + " should be available in your account for card replacement on your Account Number "
+								+ "XXXXXXXX"+lastFourDigitOfAccountNumber + " on " + LocalDateTime.now()
 								+ ".Total Avail.bal INR " + cardDetailsOfRequestedUser.getAmount());
 
 				smsController.smsSubmit(smspojo);
 			} else {
 
+				TransactionDetails transaction = new TransactionDetails();
 				Double changedAmount = (cardDetailsOfRequestedUser.getAmount() - 250);
 				LocalDate oldValidThroughDate = cardDetailsOfRequestedUser.getValidThrough();
 				LocalDate newValidThroughDate = oldValidThroughDate.plusYears(5);
 
 				cardDetailsOfRequestedUser.setValidThrough(newValidThroughDate);
+				cardDetailsOfRequestedUser.setCardstatus(CardStatus.Active);
 				cardDetailsOfRequestedUser.setAmount(changedAmount);
 				this.cardDetailsRepository.save(cardDetailsOfRequestedUser);
 
 				transaction.setCardDetails(cardDetailsOfRequestedUser);
 				transaction.setFromAccountNumber(cardDetailsOfRequestedUser.getAccountNumber());
-				transaction.setTransactionDate(LocalDate.now());
+				transaction.setTransactionDate(LocalDateTime.now());
 				transaction.setParticulars("Card Replacement Request is Approved");
 				transaction.setBalance(250.0);
+				transaction.setTransactionType(TransactionType.Withdrawal);		
 
 				this.transactionRepository.save(transaction);
+				
+				
 
 				smspojo.setTo(foundUserRequest.get().getUserRegistration().getPhoneNo());
 				smspojo.setMessage("An amount of INR " + 250.0 + " has been debited from your Account "
-						+ cardDetailsOfRequestedUser.getAccountNumber() + " on " + org.joda.time.LocalDate.now()
+						+ "XXXXXXXX"+lastFourDigitOfAccountNumber + " on " + org.joda.time.LocalDate.now()
 						+ ".Total Avail.bal INR " + cardDetailsOfRequestedUser.getAmount());
 
 				smsController.smsSubmit(smspojo);
@@ -135,6 +153,96 @@ public class AdminServiceImpl implements AdminService {
 				this.userRequestRepository.save(foundUserRequest.get());
 			}
 
+		}
+		else if(foundUserRequest.get().getRequest().equals("Upgrade Card Type")) {
+			
+			if(cardDetailsOfRequestedUser.getCardType().equals(CardType.Silver)) {
+				
+				
+				if (cardDetailsOfRequestedUser.getAmount() < 250.0) {
+					smspojo.setTo(foundUserRequest.get().getUserRegistration().getPhoneNo());
+					smspojo.setMessage(
+							"An amount of INR " + 250.0 + " should be available in your account for increment card type in your Account Number "
+									+ "XXXXXXXX"+lastFourDigitOfAccountNumber +" on " + LocalDateTime.now()
+									+ ".Total Avail.bal INR " + cardDetailsOfRequestedUser.getAmount());
+
+					smsController.smsSubmit(smspojo);
+				}else {
+					TransactionDetails transaction = new TransactionDetails();
+					//Double cardLimitOfGoldUsers = cardDetailsOfRequestedUser.getCardLimit();
+					cardDetailsOfRequestedUser.setCardType(CardType.Gold);
+					cardDetailsOfRequestedUser.setCardLimit(50000.0);
+					Double changedAmount = (cardDetailsOfRequestedUser.getAmount() - 250);
+					cardDetailsOfRequestedUser.setAmount(changedAmount);
+					this.cardDetailsRepository.save(cardDetailsOfRequestedUser);
+					foundUserRequest.get().setRequestStatus(RequestStatus.Approved);
+					this.userRequestRepository.save(foundUserRequest.get());
+					
+					smspojo.setTo(foundUserRequest.get().getUserRegistration().getPhoneNo());
+					smspojo.setMessage(
+							"An amount of INR " + 250.0 + "  has been debited from your Account  "
+									+ "XXXXXXXX"+lastFourDigitOfAccountNumber + " on " + LocalDateTime.now()
+									+ ".Total Avail.bal INR " + cardDetailsOfRequestedUser.getAmount());
+
+					smsController.smsSubmit(smspojo);
+					
+					transaction.setCardDetails(cardDetailsOfRequestedUser);
+					transaction.setFromAccountNumber(cardDetailsOfRequestedUser.getAccountNumber());
+					transaction.setTransactionDate(LocalDateTime.now());
+					transaction.setParticulars("Card Increment Request is Approved");
+					transaction.setBalance(250.0);
+					transaction.setTransactionType(TransactionType.Withdrawal);				
+					this.transactionRepository.save(transaction);
+					
+					
+				}
+				
+				
+			}
+			
+			if(cardDetailsOfRequestedUser.getCardType().equals(CardType.Gold)) {
+				if (cardDetailsOfRequestedUser.getAmount() < 350.0) {
+					smspojo.setTo(foundUserRequest.get().getUserRegistration().getPhoneNo());
+					smspojo.setMessage(
+							"An amount of INR " + 350.0 + " should be available in your account for increment card type in your Account Number "
+									+ "XXXXXXXX"+lastFourDigitOfAccountNumber + " on " + LocalDateTime.now()
+									+ ".Total Avail.bal INR " + cardDetailsOfRequestedUser.getAmount());
+
+					smsController.smsSubmit(smspojo);
+				}else {
+					TransactionDetails transaction = new TransactionDetails();
+					//Double cardLimitOfPlatinumUsers = cardDetailsOfRequestedUser.getCardLimit();
+					cardDetailsOfRequestedUser.setCardType(CardType.Platinum);
+					cardDetailsOfRequestedUser.setCardLimit(75000.0);
+					Double changedAmount = (cardDetailsOfRequestedUser.getAmount() - 350);
+					cardDetailsOfRequestedUser.setAmount(changedAmount);
+					this.cardDetailsRepository.save(cardDetailsOfRequestedUser);
+					foundUserRequest.get().setRequestStatus(RequestStatus.Approved);
+					this.userRequestRepository.save(foundUserRequest.get());
+					
+					smspojo.setTo(foundUserRequest.get().getUserRegistration().getPhoneNo());
+					smspojo.setMessage(
+							"An amount of INR " + 350.0 + "  has been debited from your Account  "
+									+ "XXXXXXXX"+lastFourDigitOfAccountNumber + " on " + org.joda.time.LocalDate.now()
+									+ ".Total Avail.bal INR " + cardDetailsOfRequestedUser.getAmount());
+
+					smsController.smsSubmit(smspojo);
+					
+					transaction.setCardDetails(cardDetailsOfRequestedUser);
+					transaction.setFromAccountNumber(cardDetailsOfRequestedUser.getAccountNumber());
+					transaction.setTransactionDate(LocalDateTime.now());
+					transaction.setParticulars("Card Increment Request is Approved");
+					transaction.setBalance(350.0);
+					transaction.setTransactionType(TransactionType.Withdrawal);		
+					this.transactionRepository.save(transaction);
+					
+				}
+
+			}
+			
+			this.cardDetailsRepository.save(cardDetailsOfRequestedUser);
+			
+			
 		}
 
 		return foundUserRequest.get();
@@ -211,5 +319,14 @@ public class AdminServiceImpl implements AdminService {
 		return isValidAadhar;
 
 	}
+
+	@Override
+	public List<TransactionDateInfo> sumOfTodayTransaction() {
+		return this.transactionRepository.getSumOfTransaction();
+	}
+
+	
+	
+	
 
 }

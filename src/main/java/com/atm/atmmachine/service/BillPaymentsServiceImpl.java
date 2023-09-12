@@ -206,7 +206,7 @@ public class BillPaymentsServiceImpl implements BillPaymentsService {
 
 			// Now add this in transaction table
 			TransactionDetails dthTransaction = new TransactionDetails(getUserCard, getVendorOpt.get().getVendorAccountNumber(),
-					getUserCard.getAccountNumber(),LocalDate.now(), getUserDthOpt.get().getAmountToBePaid(), "DTH Bill",null, getUserDthOpt.get(),TransactionType.Withdrawal);
+					getUserCard.getAccountNumber(),LocalDateTime.now(), getUserDthOpt.get().getAmountToBePaid(), "DTH",null, getUserDthOpt.get(),TransactionType.Withdrawal);
 			this.transactionRepository.save(dthTransaction);
 			
 			smspojo.setTo(getUserOpt.get().getPhoneNo());
@@ -251,7 +251,7 @@ public class BillPaymentsServiceImpl implements BillPaymentsService {
 
 			// Now add this in transaction table
 			TransactionDetails dthTransaction = new TransactionDetails(getUserCard, getVendorOpt.get().getVendorAccountNumber(),
-					getUserCard.getAccountNumber(),LocalDate.now(), getUserElectrictyOpt.get().getAmountToBePaid(),"Electricity bill" ,getUserElectrictyOpt.get(), null,TransactionType.Withdrawal);
+					getUserCard.getAccountNumber(),LocalDateTime.now(), getUserElectrictyOpt.get().getAmountToBePaid(),"Electricity" ,getUserElectrictyOpt.get(), null,TransactionType.Withdrawal);
 			this.transactionRepository.save(dthTransaction);
 
 			String accountNumber = getUserCard.getAccountNumber().toString();

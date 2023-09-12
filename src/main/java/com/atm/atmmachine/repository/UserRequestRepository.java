@@ -19,7 +19,7 @@ public interface UserRequestRepository extends JpaRepository<UserRequest, String
 	//admin
 	public List<UserRequest> findByRequestStatus(RequestStatus status);
 	
-	public List<UserRequest> findByRequest(String request);
+	public List<UserRequest> findByRequestAndRequestStatus(String request,RequestStatus status);
 	
 	
 	

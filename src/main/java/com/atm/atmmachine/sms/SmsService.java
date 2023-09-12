@@ -24,11 +24,7 @@ public class SmsService {
 
 	        Message message = Message.creator(new PhoneNumber(sms.getTo()), new PhoneNumber(FROM_NUMBER), sms.getMessage())
 	                .create();
-	        System.out.println("here is my id:"+message.getSid());// Unique resource ID created to manage this transaction
-
-	    }
-
-	    public void receive(MultiValueMap<String, String> smscallback) {
+	        
 	    }
 	
 }

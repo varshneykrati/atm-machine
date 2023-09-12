@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,7 +13,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedNativeQuery;
 import javax.persistence.OneToOne;
+import javax.persistence.SqlResultSetMapping;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotBlank;
@@ -21,13 +24,21 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.atm.atmmachine.dto.TransactionDateInfo;
 import com.atm.atmmachine.idGenerator.StringPrefixedSequenceIdGenerator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+
+@NamedNativeQuery(name = "TransactionDetails.getSumOfTransaction",
+query = "SELECT transaction_date as transactionDate,sum(balance) as Balance from transaction_details group by transaction_date",
+resultSetMapping = "Mapping.TransactionDateInfo")
+@SqlResultSetMapping(name = "Mapping.TransactionDateInfo",
+   classes = @javax.persistence.ConstructorResult(targetClass = TransactionDateInfo.class,
+                                columns = {@javax.persistence.ColumnResult(name = "transactionDate",type=LocalDate.class),
+                                           @javax.persistence.ColumnResult(name = "Balance",type=Double.class)}))
+
 @Entity
-
-
 public class TransactionDetails {
 	
 	public enum TransactionType{
@@ -55,8 +66,8 @@ public class TransactionDetails {
 	private BigInteger fromAccountNumber;
 
 	@NotNull
-	@JsonFormat(pattern = "YYYY-MM-dd")
-	private LocalDate transactionDate;
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	private LocalDateTime transactionDate;
 
 	@NotNull
 	@NotBlank(message = "Amount paid")
@@ -78,7 +89,7 @@ public class TransactionDetails {
 	public TransactionDetails(CardDetails cardDetails,
 			@NotBlank(message = "It should contain 12 numbers") BigInteger toAccountNumber,
 			@NotBlank(message = "It should contain 12 numbers") BigInteger fromAccountNumber,
-			@NotBlank(message = "It can't be empty") LocalDate transactionDate,
+			@NotBlank(message = "It can't be empty") LocalDateTime transactionDate,
 			@NotBlank(message = "Amount paid") Double balance,String particulars, ElectricityBill electricityBill, DTH dth,TransactionType transactionType) {
 		super();
 //		this.transactionId = transactionId;
@@ -126,11 +137,11 @@ public class TransactionDetails {
 		this.fromAccountNumber = fromAccountNumber;
 	}
 
-	public LocalDate getTransactionDate() {
+	public LocalDateTime getTransactionDate() {
 		return transactionDate;
 	}
 
-	public void setTransactionDate(LocalDate transactionDate) {
+	public void setTransactionDate(LocalDateTime transactionDate) {
 		this.transactionDate = transactionDate;
 	}
 
