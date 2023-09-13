@@ -102,7 +102,7 @@ public class UserRegistrationController {
 	public UserRegistration saveUpdatedPassword(@RequestBody Password password,@PathVariable("userId") String userId) throws HandleException {
 		return this.userRegistrationService.savePassword(password, userId);
 	}
-	
+
 	@GetMapping("/verify/user/pin/{userId}")
 	public Integer sendUserEmailForPin(@PathVariable("userId") String userId) throws HandleException {
 		return this.userRegistrationService.sendUserEmailForUpdatePin(userId);
