@@ -67,7 +67,7 @@ public class TransactionController {
 		return this.transactionService.fundTransfer(fundTransfer);
 
 	}
-
+	
 	@PostMapping("/account/balance/")
 	public Double checkBalances(@RequestBody UserInfo checkBalance) throws TransactionException {
 
