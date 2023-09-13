@@ -436,51 +436,6 @@ public class UserRegistrationServiceImpl implements UserRegistrationService{
 		}
 		
 	}
-
-
-
-	@Override
-
-		public Integer sendUserEmailForUpdatePin(String userId) throws HandleException {
-			Optional<UserRegistration> getUserOpt = this.userRegistrationRepository.findById(userId);
-			if(getUserOpt.isPresent()) {
-				UserRegistration user = getUserOpt.get();
-				Random random = new Random();
-				generateOtp = random.nextInt(999999);
-
-				String message =""+"<h3>"+"Hey "+user.getUserName()+ ","+"</h3>"+
-							"<p>"+"As you are requested for changing card PIN"+"</p>"
-								+ ""+"<strong>"+"Your OTP is : "+"</strong>"+"" +generateOtp+ ""
-									+ "<p>"+" Please ensure to keep it safe with you, Dont't share it with anyone."+"</p>";
-					String subject = "Verify User Email";
-					String to = user.getEmailId();
-					String from = "krativarshne@gmail.com";
-					this.emailService.sendEmail(message,subject,to,from);
-						return generateOtp;
-
-			}else {
-				throw new HandleException("User nor present, Please Register.");
-			}
-	}
-
-		
-
-		@Override
-		public CardDetails changeUserCardPin(CardDetails cardDetails, String userId) throws HandleException {
-			Optional<UserRegistration> getUserOpt = this.userRegistrationRepository.findById(userId);
-			if(getUserOpt.isPresent()) {
-				UserRegistration user = getUserOpt.get();
-				CardDetails userCard = user.getCardDetails();
-				userCard.setCardPin(cardDetails.getCardPin());
-				return this.cardDetailsRepository.save(userCard);
-
-			}
-
-			else {
-				throw new HandleException("User not exist, Register first.");
-			}
-
-		}
 	
 	@Override
 	public UserRegistration fetchingUser(UserLogin userLogin) throws HandleException {
