@@ -180,11 +180,11 @@ public class BillPaymentsServiceImpl implements BillPaymentsService {
 	}
 
 	@Override
-	public DTH payUserBill(DthBill dthBill) throws BillPaymentsException {
+	public DTH payUserBill(String vendorName,DthBill dthBill) throws BillPaymentsException {
 
 		Double total = 0.0;
 
-		String vendorName = "Airtel";
+		//String vendorName = "Airtel";
 		Optional<DTH> getUserDthOpt = this.dthRepository.findByUserDthCardNumber(dthBill.getUserDthCardNumber());
 		
 			Optional<Vendors> getVendorOpt = this.vendorRepository.findByVendorName(vendorName);
@@ -227,9 +227,9 @@ public class BillPaymentsServiceImpl implements BillPaymentsService {
 	}
 
 	@Override
-	public ElectricityBill payElectricityUserBill(ElectricityBillDto electricityBill) throws BillPaymentsException {
+	public ElectricityBill payElectricityUserBill(String vendorName,ElectricityBillDto electricityBill) throws BillPaymentsException {
 		Double total = 0.0;
-		String vendorName = "Delhi", vendorType = "ElectricityBill";
+		//String vendorName = "Delhi", vendorType = "ElectricityBill";
 		Optional<ElectricityBill> getUserElectrictyOpt = this.electricityBillRepository
 				.findByUserElectricityId(electricityBill.getUserElectricityId());
 		

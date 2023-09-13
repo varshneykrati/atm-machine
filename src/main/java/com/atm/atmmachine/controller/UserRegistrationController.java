@@ -107,6 +107,11 @@ public class UserRegistrationController {
 	public Integer sendUserEmailForPin(@PathVariable("userId") String userId) throws HandleException {
 		return this.userRegistrationService.sendUserEmailForUpdatePin(userId);
 	}
+	
+	// @PatchMapping("/user/pin/{userId}")
+	// public CardDetails updateUserCardPin(@RequestBody CardDetails cardDetails, @PathVariable("userId") String userId) throws HandleException {
+	// 	return this.userRegistrationService.changeUserCardPin(cardDetails,userId);
+	// }
 
 	@PatchMapping("/user/pin/{userId}")
 	public CardDetails updateUserCardPin(@RequestBody CardDetails cardDetails, @PathVariable("userId") String userId) throws HandleException {

@@ -62,16 +62,16 @@ public class BillPaymentsController {
 	}
 
 	// 5/
-	@PostMapping("/dth/bill/")
-	public DTH payDthBill(@RequestBody DthBill dthBill) throws BillPaymentsException {
-		return this.billPaymentsService.payUserBill(dthBill);
+	@PostMapping("/dth/bill/{vendorName}")
+	public DTH payDthBill(@PathVariable("vendorName") String vendorName, @RequestBody DthBill dthBill) throws BillPaymentsException {
+		return this.billPaymentsService.payUserBill(vendorName,dthBill);
 	}
 
 	// 6/
-	@PostMapping("/electricity/bill")
-	public ElectricityBill payElectricityBill(@RequestBody ElectricityBillDto electricitybill)
+	@PostMapping("/electricity/bill/{vendorName}")
+	public ElectricityBill payElectricityBill(@PathVariable("vendorName") String vendorName, @RequestBody ElectricityBillDto electricitybill)
 			throws BillPaymentsException {
-		return this.billPaymentsService.payElectricityUserBill(electricitybill);
+		return this.billPaymentsService.payElectricityUserBill(vendorName,electricitybill);
 
 	}
 
