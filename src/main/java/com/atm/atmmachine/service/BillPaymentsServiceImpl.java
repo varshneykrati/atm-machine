@@ -64,10 +64,10 @@ public class BillPaymentsServiceImpl implements BillPaymentsService {
 	SmsPojo smspojo = new SmsPojo();
 
 	@Override
-	public Transaction createTransactionAmount(Integer amount) throws BillPaymentsException {
+	public Transaction createTransactionAmount(Integer amount,String userId) throws BillPaymentsException {
 
 		try {
-			Optional<UserRegistration> getUserOpt = this.userRegistrationRepository.findById("user2");
+			Optional<UserRegistration> getUserOpt = this.userRegistrationRepository.findById(userId);
 
 			CardDetails getUserCard = getUserOpt.get().getCardDetails();
 
@@ -109,7 +109,7 @@ public class BillPaymentsServiceImpl implements BillPaymentsService {
 	}
 
 	@Override
-	public Double getAmountToBePaid(DthBill dthBill) throws BillPaymentsException {
+	public Double getAmountToBePaid(DthBill dthBill,String userId) throws BillPaymentsException {
 
 		String userDthCardNumber = dthBill.getUserDthCardNumber();
 		Optional<DTH> DthOpt = this.dthRepository.findByUserDthCardNumber(userDthCardNumber);
@@ -118,7 +118,7 @@ public class BillPaymentsServiceImpl implements BillPaymentsService {
 			throw new BillPaymentsException("Wrong card number.");
 		}
 
-		Optional<UserRegistration> getUserOpt = this.userRegistrationRepository.findById("user1");
+		Optional<UserRegistration> getUserOpt = this.userRegistrationRepository.findById(userId);
 		CardDetails getUserCard = getUserOpt.get().getCardDetails();
 
 //		if (getUserCard.getUserTotallyRegister() == UserTotallyRegister.False) {
@@ -142,7 +142,7 @@ public class BillPaymentsServiceImpl implements BillPaymentsService {
 	}
 
 	@Override
-	public Double getElectricityAmountToBePaid(ElectricityBillDto electricityBill) throws BillPaymentsException {
+	public Double getElectricityAmountToBePaid(ElectricityBillDto electricityBill,String userId) throws BillPaymentsException {
 
 		String userElectricityId = electricityBill.getUserElectricityId();
 		Optional<ElectricityBill> electricityOpt = this.electricityBillRepository
@@ -152,7 +152,7 @@ public class BillPaymentsServiceImpl implements BillPaymentsService {
 			throw new BillPaymentsException("Wrong ElectricityBill Id");
 		}
 
-		Optional<UserRegistration> getUserOpt = this.userRegistrationRepository.findById("user1");
+		Optional<UserRegistration> getUserOpt = this.userRegistrationRepository.findById(userId);
 		CardDetails getUserCard = getUserOpt.get().getCardDetails();
 
 //		if (getUserCard.getUserTotallyRegister() == UserTotallyRegister.False) {
@@ -180,7 +180,7 @@ public class BillPaymentsServiceImpl implements BillPaymentsService {
 	}
 
 	@Override
-	public DTH payUserBill(String vendorName,DthBill dthBill) throws BillPaymentsException {
+	public DTH payUserBill(String vendorName,DthBill dthBill,String userId) throws BillPaymentsException {
 
 		Double total = 0.0;
 
@@ -188,7 +188,7 @@ public class BillPaymentsServiceImpl implements BillPaymentsService {
 		Optional<DTH> getUserDthOpt = this.dthRepository.findByUserDthCardNumber(dthBill.getUserDthCardNumber());
 		
 			Optional<Vendors> getVendorOpt = this.vendorRepository.findByVendorName(vendorName);
-			Optional<UserRegistration> getUserOpt = this.userRegistrationRepository.findById("user1");
+			Optional<UserRegistration> getUserOpt = this.userRegistrationRepository.findById(userId);
 
 			CardDetails getUserCard = getUserOpt.get().getCardDetails();
 				
@@ -206,7 +206,7 @@ public class BillPaymentsServiceImpl implements BillPaymentsService {
 
 			// Now add this in transaction table
 			TransactionDetails dthTransaction = new TransactionDetails(getUserCard, getVendorOpt.get().getVendorAccountNumber(),
-					getUserCard.getAccountNumber(),LocalDateTime.now(), getUserDthOpt.get().getAmountToBePaid(), "DTH",null, getUserDthOpt.get(),TransactionType.Withdrawal);
+					getUserCard.getAccountNumber(),LocalDateTime.now(), getUserDthOpt.get().getAmountToBePaid(), "DTH payment : "+vendorName,null, getUserDthOpt.get(),TransactionType.Withdrawal);
 			this.transactionRepository.save(dthTransaction);
 			
 			smspojo.setTo(getUserOpt.get().getPhoneNo());
@@ -227,14 +227,14 @@ public class BillPaymentsServiceImpl implements BillPaymentsService {
 	}
 
 	@Override
-	public ElectricityBill payElectricityUserBill(String vendorName,ElectricityBillDto electricityBill) throws BillPaymentsException {
+	public ElectricityBill payElectricityUserBill(String vendorName,ElectricityBillDto electricityBill,String userId) throws BillPaymentsException {
 		Double total = 0.0;
 		//String vendorName = "Delhi", vendorType = "ElectricityBill";
 		Optional<ElectricityBill> getUserElectrictyOpt = this.electricityBillRepository
 				.findByUserElectricityId(electricityBill.getUserElectricityId());
 		
 		Optional<Vendors> getVendorOpt = this.vendorRepository.findByVendorName(vendorName);
-			Optional<UserRegistration> getUserOpt = this.userRegistrationRepository.findById("user1");
+			Optional<UserRegistration> getUserOpt = this.userRegistrationRepository.findById(userId);
 			CardDetails getUserCard = getUserOpt.get().getCardDetails();
 
 			getUserElectrictyOpt.get().setCardDetails(getUserCard);
@@ -251,7 +251,7 @@ public class BillPaymentsServiceImpl implements BillPaymentsService {
 
 			// Now add this in transaction table
 			TransactionDetails dthTransaction = new TransactionDetails(getUserCard, getVendorOpt.get().getVendorAccountNumber(),
-					getUserCard.getAccountNumber(),LocalDateTime.now(), getUserElectrictyOpt.get().getAmountToBePaid(),"Electricity" ,getUserElectrictyOpt.get(), null,TransactionType.Withdrawal);
+					getUserCard.getAccountNumber(),LocalDateTime.now(), getUserElectrictyOpt.get().getAmountToBePaid(),"Electricity Bill payment : "+ vendorName ,getUserElectrictyOpt.get(), null,TransactionType.Withdrawal);
 			this.transactionRepository.save(dthTransaction);
 
 			String accountNumber = getUserCard.getAccountNumber().toString();
