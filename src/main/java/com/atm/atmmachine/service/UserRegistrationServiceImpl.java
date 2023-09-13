@@ -268,6 +268,7 @@ public class UserRegistrationServiceImpl implements UserRegistrationService{
 				transaction.setTransactionDate(LocalDateTime.now());
 				transaction.setBalance(2000.0);
 				transaction.setTransactionType(TransactionType.Deposit);
+				transaction.setParticulars("Created account with Rs.2000.");
 				this.transactionRepository.save(transaction);
 				
 				String accountNo = userCard.getAccountNumber().toString();
@@ -275,8 +276,6 @@ public class UserRegistrationServiceImpl implements UserRegistrationService{
 				smspojo.setTo(userRegisterDetails.getPhoneNo());
 				smspojo.setMessage("An amount of INR " + 2000.0 + " is debited to account No "+ "XXXXXXXX"+lastFourDigitOfAccNo + " on " + LocalDate.now()
 										+ ".Total Avail.bal INR " + userCard.getAmount());
-
- 
 
 				smsController.smsSubmit(smspojo);
 				
@@ -309,7 +308,7 @@ public class UserRegistrationServiceImpl implements UserRegistrationService{
 	public Integer otpForUpdatingPhoneNumber(UserRegistration userRegistration, String userId) throws HandleException {
 		Optional<UserRegistration> getUserOpt = this.userRegistrationRepository.findById(userId);
 		if(!getUserOpt.isPresent()) {
-			throw new HandleException("user not present, register first");
+			throw new HandleException("user not present, Please Register");
 		}
 		Optional<UserRegistration> userPhoneOpt = this.userRegistrationRepository.findByPhoneNo(userRegistration.getPhoneNo());
 		if(userPhoneOpt.isPresent() && !(userPhoneOpt.get().getUserId().equals(userId))){
@@ -338,7 +337,7 @@ public class UserRegistrationServiceImpl implements UserRegistrationService{
 			return this.userRegistrationRepository.save(user);
 		}
 		else {
-			throw new HandleException("User not exist, Register first");
+			throw new HandleException("User not exist, Please Register");
 		}
 	}
 	
@@ -398,6 +397,46 @@ public class UserRegistrationServiceImpl implements UserRegistrationService{
 			throw new HandleException("User not exist");
 		}
 	}
+	
+	@Override
+	public Integer sendUserEmailForUpdatePin(String userId) throws HandleException {
+		Optional<UserRegistration> getUserOpt = this.userRegistrationRepository.findById(userId);
+		if(getUserOpt.isPresent()) {
+			UserRegistration user = getUserOpt.get();
+			Random random = new Random();
+			generateOtp = random.nextInt(999999);
+			String message =""+"<h3>"+"Hey "+user.getUserName()+ ","+"</h3>"+
+					"<p>"+"As you are requested for changing card PIN"+"</p>"
+									+ ""+"<strong>"+"Your OTP is : "+"</strong>"+"" +generateOtp+ ""
+												+ "<p>"+" Please ensure to keep it safe with you, Dont't share it with anyone."+"</p>";
+												
+					String subject = "Verify User Email";
+					String to = user.getEmailId();
+					String from = "krativarshne@gmail.com";
+					this.emailService.sendEmail(message,subject,to,from);
+					return generateOtp;
+			
+		}else {
+			throw new HandleException("User nor present, Please Register.");
+		}
+	}
+	
+	@Override
+	public CardDetails changeUserCardPin(CardDetails cardDetails, String userId) throws HandleException {
+		Optional<UserRegistration> getUserOpt = this.userRegistrationRepository.findById(userId);
+		if(getUserOpt.isPresent()) {
+			UserRegistration user = getUserOpt.get();
+			CardDetails userCard = user.getCardDetails();
+			userCard.setCardPin(cardDetails.getCardPin());
+			return this.cardDetailsRepository.save(userCard);
+			
+		}
+		else {
+			throw new HandleException("User not exist, Register first.");
+		}
+		
+	}
+
 
 	@Override
 	public UserRegistration fetchingUser(UserLogin userLogin) throws HandleException {
@@ -409,5 +448,5 @@ public class UserRegistrationServiceImpl implements UserRegistrationService{
 			throw new HandleException("User with this Email not exist.");
 		}
 	}
-	
+
 }
