@@ -15,9 +15,9 @@ public interface BillPaymentsService {
 
 	List<Vendors> getVendorByName(TypeOfVendor typeOfVendor);
 
-	DTH payUserBill(DthBill dthBill) throws BillPaymentsException;
+	DTH payUserBill(String vendorName,DthBill dthBill) throws BillPaymentsException;
 
-	ElectricityBill payElectricityUserBill(ElectricityBillDto electricityBill) throws BillPaymentsException;
+	ElectricityBill payElectricityUserBill(String vendorName,ElectricityBillDto electricityBill) throws BillPaymentsException;
 
 	Double getAmountToBePaid(DthBill dthBill)throws BillPaymentsException;
 
