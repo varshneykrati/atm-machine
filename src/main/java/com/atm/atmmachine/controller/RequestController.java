@@ -51,15 +51,16 @@ public class RequestController {
 	@GetMapping("/requests/{userId}")
 	public List<UserRequest> getRequestOfUser(@PathVariable("userId") String userId) throws RequestException
 	{
+		System.out.println("Inside get all request");
 		List<UserRequest> getAllRequest;
 		getAllRequest = this.userRequestService.getRequestByUserId(userId);
 		return getAllRequest;
 	}
-	@PostMapping("/request/")//https://localhost8999/
-	public UserRequest addRequest(@Valid @RequestBody UserRequest newRequest) throws RequestException
+	@PostMapping("/request/{userId}")//https://localhost8999/
+	public UserRequest addRequest(@Valid @RequestBody UserRequest newRequest,@PathVariable("userId") String userId) throws RequestException
 	{
 		    
-			return this.userRequestService.addRequest(newRequest);
+			return this.userRequestService.addRequest(newRequest,userId);
 	}
    
 	@DeleteMapping("/request/{id}")
@@ -67,10 +68,10 @@ public class RequestController {
 
 		return this.userRequestService.deleteRequest(Id);
 	}
-	@PutMapping("/request/")
-	public UserRequest updateRequest(@RequestBody UserRequest newRequest ) throws RequestException {
+	@PutMapping("/request/{userId}")
+	public UserRequest updateRequest(@RequestBody UserRequest newRequest,@PathVariable("userId") String userId ) throws RequestException {
 
-		return this.userRequestService.updateRequest(newRequest);
+		return this.userRequestService.updateRequest(newRequest,userId);
 	}
 	@GetMapping("/request/cardtype/{userId}")
 	public CardType getCardType(@PathVariable("userId") String userId)throws RequestException{

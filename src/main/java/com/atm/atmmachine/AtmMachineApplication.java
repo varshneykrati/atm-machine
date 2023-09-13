@@ -93,13 +93,13 @@ public class AtmMachineApplication implements CommandLineRunner{
 //Entering Card Detail of the user ->link with USER Registration
 		CardDetails carddetail1 = new CardDetails(new BigInteger("123412341234"),new BigInteger("7890789078907890"),456,LocalDate.now(),CardType.Silver,25000.0,CardStatus.Active,20000.0,3456,UserTotallyRegister.True,userRegistration2);
 		 userRegistration2.setCardDetails(carddetail1);cardDetailsRepository.save(carddetail1); userRegistrationRepository.save(userRegistration2);
-		 CardDetails carddetail2 = new CardDetails(new BigInteger("123412344321"),new BigInteger("7890789078900965"),789,LocalDate.now(),CardType.Silver,25000.0,CardStatus.Active,2000.0,null,UserTotallyRegister.False,userRegistration1);
+		 CardDetails carddetail2 = new CardDetails(new BigInteger("123412344321"),new BigInteger("7890789078900965"),789,LocalDate.now(),CardType.Silver,25000.0,CardStatus.Active,2000.0,7897,UserTotallyRegister.True,userRegistration1);
 		 userRegistration1.setCardDetails(carddetail2);cardDetailsRepository.save(carddetail2); userRegistrationRepository.save(userRegistration1);
-		 CardDetails carddetail3 = new CardDetails(new BigInteger("1234123456678"),new BigInteger("7890789078999890"),459,LocalDate.now(),CardType.Silver,25000.0,CardStatus.Active,2000.0,null,UserTotallyRegister.False,userRegistration3);
+		 CardDetails carddetail3 = new CardDetails(new BigInteger("1234123456678"),new BigInteger("7890789078999890"),459,LocalDate.now(),CardType.Silver,25000.0,CardStatus.Active,2000.0,1234,UserTotallyRegister.False,userRegistration3);
 		 userRegistration3.setCardDetails(carddetail3);cardDetailsRepository.save(carddetail3); userRegistrationRepository.save(userRegistration3);
-		 CardDetails carddetail4 = new CardDetails(new BigInteger("123424561234"),new BigInteger("7890789008907890"),956,LocalDate.now(),CardType.Silver,25000.0,CardStatus.Active,2000.0,null,UserTotallyRegister.False,userRegistration4);
+		 CardDetails carddetail4 = new CardDetails(new BigInteger("123424561234"),new BigInteger("7890789008907890"),956,LocalDate.now(),CardType.Silver,25000.0,CardStatus.Active,2000.0,6754,UserTotallyRegister.False,userRegistration4);
 		 userRegistration4.setCardDetails(carddetail4);cardDetailsRepository.save(carddetail4); userRegistrationRepository.save(userRegistration4);
-		 CardDetails carddetail5 = new CardDetails(new BigInteger("678412341234"),new BigInteger("7891789078907890"),756,LocalDate.now(),CardType.Silver,25000.0,CardStatus.Active,2000.0,null,UserTotallyRegister.True,userRegistration5);
+		 CardDetails carddetail5 = new CardDetails(new BigInteger("678412341234"),new BigInteger("7891789078907890"),756,LocalDate.now(),CardType.Silver,25000.0,CardStatus.Active,2000.0,9898,UserTotallyRegister.True,userRegistration5);
 		 userRegistration5.setCardDetails(carddetail5);cardDetailsRepository.save(carddetail5); userRegistrationRepository.save(userRegistration5);
 // Now Add Transaction which is link to -> Address
 		 TransactionDetails transaction1 = new TransactionDetails(carddetail1,null,new BigInteger("123412344321"),LocalDateTime.now(),1300.0,null,null,null,TransactionType.Deposit);

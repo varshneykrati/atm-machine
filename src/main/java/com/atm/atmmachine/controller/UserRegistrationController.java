@@ -108,11 +108,16 @@ public class UserRegistrationController {
 		return this.userRegistrationService.sendUserEmailForUpdatePin(userId);
 	}
 	
+	// @PatchMapping("/user/pin/{userId}")
+	// public CardDetails updateUserCardPin(@RequestBody CardDetails cardDetails, @PathVariable("userId") String userId) throws HandleException {
+	// 	return this.userRegistrationService.changeUserCardPin(cardDetails,userId);
+	// }
+
 	@PatchMapping("/user/pin/{userId}")
 	public CardDetails updateUserCardPin(@RequestBody CardDetails cardDetails, @PathVariable("userId") String userId) throws HandleException {
 		return this.userRegistrationService.changeUserCardPin(cardDetails,userId);
 	}
-
+	
 	@PostMapping("/user/session/")
 	public UserRegistration fetchingUserToStoreInSessionAtLoginTime(@RequestBody UserLogin userLogin) throws HandleException {
 		return this.userRegistrationService.fetchingUser(userLogin);
