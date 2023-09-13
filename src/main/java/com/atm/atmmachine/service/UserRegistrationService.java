@@ -34,4 +34,8 @@ public interface UserRegistrationService {
 	public Address getAddress(String userId) throws HandleException;
 
 	public UserRegistration changeUserAddress(Address address, String userId) throws HandleException;
+
+	public Integer sendUserEmailForUpdatePin(String userId) throws HandleException;
+
+	public CardDetails changeUserCardPin(CardDetails cardDetails, String userId) throws HandleException;
 }

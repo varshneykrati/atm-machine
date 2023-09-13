@@ -121,9 +121,9 @@ public class BillPaymentsServiceImpl implements BillPaymentsService {
 		Optional<UserRegistration> getUserOpt = this.userRegistrationRepository.findById("user1");
 		CardDetails getUserCard = getUserOpt.get().getCardDetails();
 
-		if (getUserCard.getUserTotallyRegister() == UserTotallyRegister.False) {
-			throw new BillPaymentsException("User is not totally registered, please complete the user profile first.");
-		}
+//		if (getUserCard.getUserTotallyRegister() == UserTotallyRegister.False) {
+//			throw new BillPaymentsException("User is not totally registered, please complete the user profile first.");
+//		}
 
 		if (getUserCard.getCardstatus() == CardStatus.Inactive) {
 			throw new BillPaymentsException("Activate your card.");
@@ -155,9 +155,9 @@ public class BillPaymentsServiceImpl implements BillPaymentsService {
 		Optional<UserRegistration> getUserOpt = this.userRegistrationRepository.findById("user1");
 		CardDetails getUserCard = getUserOpt.get().getCardDetails();
 
-		if (getUserCard.getUserTotallyRegister() == UserTotallyRegister.False) {
-			throw new BillPaymentsException("User is not totally registered, please complete the user profile first.");
-		}
+//		if (getUserCard.getUserTotallyRegister() == UserTotallyRegister.False) {
+//			throw new BillPaymentsException("User is not totally registered, please complete the user profile first.");
+//		}
 
 		if (getUserCard.getCardstatus() == CardStatus.Inactive) {
 			throw new BillPaymentsException("Activate your card.");
