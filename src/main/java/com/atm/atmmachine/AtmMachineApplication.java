@@ -102,9 +102,9 @@ public class AtmMachineApplication implements CommandLineRunner{
 		 CardDetails carddetail5 = new CardDetails(new BigInteger("678412341234"),new BigInteger("7891789078907890"),756,LocalDate.now(),CardType.Silver,25000.0,CardStatus.Active,20000.0,9898,UserTotallyRegister.True,userRegistration5);
 		 userRegistration5.setCardDetails(carddetail5);cardDetailsRepository.save(carddetail5); userRegistrationRepository.save(userRegistration5);
 // Now Add Transaction which is link to -> Address
-		 TransactionDetails transaction1 = new TransactionDetails(carddetail1,null,new BigInteger("123412344321"),LocalDateTime.now(),1300.0,null,null,null,TransactionType.Deposit);
+		 TransactionDetails transaction1 = new TransactionDetails(carddetail1,null,new BigInteger("123412344321"),LocalDateTime.of(2017, 2, 13, 15, 56),1300.0,null,null,null,TransactionType.Deposit);
 		 this.transactionRepository.save(transaction1);
-		 TransactionDetails transaction2 = new TransactionDetails(carddetail1,null,new BigInteger("993412344321"),LocalDateTime.now(),1500.0,null,null,null,TransactionType.Deposit);
+		 TransactionDetails transaction2 = new TransactionDetails(carddetail1,null,new BigInteger("993412344321"),LocalDateTime.of(2017, 4, 13, 14, 56),1500.0,null,null,null,TransactionType.Deposit);
 		 this.transactionRepository.save(transaction2);
 		 TransactionDetails transaction3 = new TransactionDetails(carddetail1,null,new BigInteger("553412344321"),LocalDateTime.now(),200.0,null,null,null,TransactionType.Deposit);
 		 this.transactionRepository.save(transaction3);
