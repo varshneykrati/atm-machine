@@ -15,14 +15,14 @@ public interface BillPaymentsService {
 
 	List<Vendors> getVendorByName(TypeOfVendor typeOfVendor);
 
-	DTH payUserBill(DthBill dthBill) throws BillPaymentsException;
+	DTH payUserBill(String vendorName,DthBill dthBill,String userId) throws BillPaymentsException;
 
-	ElectricityBill payElectricityUserBill(ElectricityBillDto electricityBill) throws BillPaymentsException;
+	ElectricityBill payElectricityUserBill(String vendorName,ElectricityBillDto electricityBill,String userId) throws BillPaymentsException;
 
-	Double getAmountToBePaid(DthBill dthBill)throws BillPaymentsException;
+	Double getAmountToBePaid(DthBill dthBill,String userId)throws BillPaymentsException;
 
-	Double getElectricityAmountToBePaid(ElectricityBillDto electricityBill) throws BillPaymentsException;
+	Double getElectricityAmountToBePaid(ElectricityBillDto electricityBill,String userId) throws BillPaymentsException;
 
-	Transaction createTransactionAmount(Integer amount) throws BillPaymentsException;
+	Transaction createTransactionAmount(Integer amount,String userId) throws BillPaymentsException;
 	
 }

@@ -22,9 +22,9 @@ public interface UserRegistrationRepository extends JpaRepository<UserRegistrati
 
 	
 	Optional<UserRegistration> findByUserIdAndEmailId(String string, String email);
-	//admin
-//	public Optional<UserRegistration> findByUserId(String id);
 	
-	public List<UserRegistration> findByUserRegistrationApproval(UserRegistrationApproval userRegistrationApproval); 
+	public List<UserRegistration> findByUserRegistrationApproval(UserRegistrationApproval userRegistrationApproval);
+
+//	Optional<UserRegistration> findByUserIdAndPhoneNo(String userId, String phoneNo); 
 
 }

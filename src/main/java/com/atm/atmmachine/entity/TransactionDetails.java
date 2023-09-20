@@ -66,7 +66,7 @@ public class TransactionDetails {
 	private BigInteger fromAccountNumber;
 
 	@NotNull
-	@JsonFormat(pattern = "yyyy-MM-dd-HH:mm:ss")
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private LocalDateTime transactionDate;
 
 	@NotNull

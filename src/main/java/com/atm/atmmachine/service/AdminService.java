@@ -26,11 +26,9 @@ public interface AdminService {
 	
 
 	
-	public List<UserRequest> displayByRequest();
+	public List<UserRequest> displayByRequest(String request);
 	
-	public List<UserRequest> displayAllCardReplacementRequests();
 	
-	public List<UserRequest> displayAllCardTypeRequests();
 	
 	public UserRequest updateUserRequestStatus(String requestId) throws AdminException;
 	

@@ -36,6 +36,10 @@ public class TransactionController {
 		transactioncollection = this.transactionService.getAllTransactionsById(userId);
 		return transactioncollection;
 	}
+	@GetMapping("username/{accountNumber}")
+	public String getUsername(@PathVariable BigInteger accountNumber) {
+		return this.transactionService.getUsername(accountNumber);
+	}
 	@GetMapping("/transactions")
     public List<TransactionDetails>getAllTransactions()
 	{
@@ -63,7 +67,7 @@ public class TransactionController {
 		return this.transactionService.fundTransfer(fundTransfer);
 
 	}
-
+	
 	@PostMapping("/account/balance/")
 	public Double checkBalances(@RequestBody UserInfo checkBalance) throws TransactionException {
 

@@ -116,10 +116,11 @@ public class TransactionServiceImpl implements TransactionService {
 		transactionDetails.setBalance(withdrawAmount);
 		transactionDetails.setTransactionType(TransactionType.Withdrawal);
 		this.transRepository.save(transactionDetails);
-
+		String accountNumber = foundCard.getAccountNumber().toString();
+		int lastFourDigitOfAccountNumber = Integer.parseInt(accountNumber.substring(8,12));
 		smspojo.setTo(foundUser.getPhoneNo());
 		smspojo.setMessage("An amount of INR " + withdrawAmount + " has been debited to your Account "
-				+ foundCard.getAccountNumber() + " on " + LocalDateTime.now() + ".Total Avail.bal INR "
+				+  "XXXXXXXX"+lastFourDigitOfAccountNumber + " on " + LocalDateTime.now() + ".Total Avail.bal INR "
 				+ foundCard.getAmount());
 
 		smsController.smsSubmit(smspojo);
@@ -167,9 +168,10 @@ public class TransactionServiceImpl implements TransactionService {
 		transactionDetails.setBalance(addAmount);
 		transactionDetails.setTransactionType(TransactionType.Deposit);
 		this.transRepository.save(transactionDetails);
-
+		String accountNumber = foundCard.getAccountNumber().toString();
+		int lastFourDigitOfAccountNumber = Integer.parseInt(accountNumber.substring(8,12));
 		smspojo.setMessage(
-				"An amount of INR " + addAmount + " has been credited to your Account " + foundCard.getAccountNumber()
+				"An amount of INR " + addAmount + " has been credited to your Account " + "XXXXXXXX"+lastFourDigitOfAccountNumber
 						+ " on " + LocalDateTime.now() + ".Total Avail.bal INR " + foundCard.getAmount());
 
 		smsController.smsSubmit(smspojo);
@@ -240,16 +242,18 @@ public class TransactionServiceImpl implements TransactionService {
 		
 		foundCard.setAmount(foundCard.getAmount() - fundTransactionAmount);
 		this.cardDetailsRepository.save(foundCard);
+		String accountNumber = foundCard.getAccountNumber().toString();
+		int lastFourDigitOfAccountNumber = Integer.parseInt(accountNumber.substring(8,12));
 		smspojo.setTo(foundUser.getPhoneNo());
 		smspojo.setMessage("An amount of INR " + fundTransactionAmount + " has been debited to your Account "
-				+ foundCard.getAccountNumber() + " on " + LocalDate.now() + ".Total Avail.bal INR "
+				+ "XXXXXXXX"+lastFourDigitOfAccountNumber+ " on " + LocalDate.now() + ".Total Avail.bal INR "
 				+ foundCard.getAmount());
 
 		smsController.smsSubmit(smspojo);
 		TransactionDetails transactionDetails = new TransactionDetails();
 		transactionDetails.setCardDetails(foundCard);
 		transactionDetails.setToAccountNumber(toAccountNumber);
-		transactionDetails.setFromAccountNumber(null);
+		transactionDetails.setFromAccountNumber(foundCard.getAccountNumber());
 		transactionDetails.setParticulars("Transfered to"+tofoundCard.getUserRegistration().getUserName());
 		transactionDetails.setTransactionDate(LocalDateTime.now());
 		transactionDetails.setBalance(fundTransactionAmount);
@@ -258,16 +262,18 @@ public class TransactionServiceImpl implements TransactionService {
 
 		tofoundCard.setAmount(tofoundCard.getAmount() + fundTransactionAmount);
 		this.cardDetailsRepository.save(tofoundCard);
+		String toaccountNumber = tofoundCard.getAccountNumber().toString();
+		int lastFourDigitOfToAccountNumber = Integer.parseInt(toaccountNumber.substring(8,12));
 		smspojo.setTo(tofoundCard.getUserRegistration().getPhoneNo());
 		smspojo.setMessage("An amount of INR " + fundTransactionAmount + " has been credited to your Account "
-				+ tofoundCard.getAccountNumber() + " on " + LocalDateTime.now() + ".Total Avail.bal INR "
+				+ "XXXXXXXX"+lastFourDigitOfToAccountNumber + " on " + LocalDateTime.now() + ".Total Avail.bal INR "
 				+ tofoundCard.getAmount());
 
 		smsController.smsSubmit(smspojo);
 		TransactionDetails toTransactionDetails = new TransactionDetails();
 		toTransactionDetails.setCardDetails(tofoundCard);
 		toTransactionDetails.setFromAccountNumber(foundCard.getAccountNumber());
-		toTransactionDetails.setToAccountNumber(null);
+		toTransactionDetails.setToAccountNumber(tofoundCard.getAccountNumber());
 		toTransactionDetails.setParticulars("Transfered from : "+foundCard.getUserRegistration().getUserName());
 		toTransactionDetails.setTransactionDate(LocalDateTime.now());
 		toTransactionDetails.setBalance(fundTransactionAmount);
