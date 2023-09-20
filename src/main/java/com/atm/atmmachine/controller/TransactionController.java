@@ -22,7 +22,22 @@ import com.atm.atmmachine.exceptions.TransactionException;
 import com.atm.atmmachine.service.TransactionService;
 import com.atm.atmmachine.sms.SMSController;
 import com.atm.atmmachine.sms.SmsPojo;
-
+/********************************************************************************************************
+ * @author :Vaishnav Holkar
+ * Description: It is  a controller that provide the API for bank transaction like adding funds,fund withdrawal,
+                internal fund transfer,transaction history,check balance.It provides endpoints to 
+                interact with user data in the system.
+ *EndPoints-
+ *- GET/transactions/{userId}: User gets his/her transaction history sorted according to latest date
+ *- GET/username/{accountNumber}:It is used to get username after user inputs the bank account number
+ *- POST/selfwithdraw/funds/ :User can withdraw money from his/her account
+ *- POST/fund/deposit :User can add money to his/her account
+ *- POST/funds/transfer/:User can transfer fund to other account holder in this bank
+ *- POST/account/balance/:User can check his/her account balance
+ * Version: 1.0
+ * Created date: 04-09-2023
+ *********************************************************************************************************/
+ 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200/")
 public class TransactionController {
@@ -40,13 +55,7 @@ public class TransactionController {
 	public String getUsername(@PathVariable BigInteger accountNumber) {
 		return this.transactionService.getUsername(accountNumber);
 	}
-	@GetMapping("/transactions")
-    public List<TransactionDetails>getAllTransactions()
-	{
-		return this.transactionService.getAllTransactions();
-
-	}
-
+	
 	@PostMapping("/selfwithdraw/funds/")
 	public Double withdrawFunds(@RequestBody SelfTransferInfo withdraw) throws TransactionException {
 
