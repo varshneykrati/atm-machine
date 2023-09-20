@@ -2,8 +2,6 @@ package com.atm.atmmachine.dto;
 
 public class Transaction {
 
-	
-	
 		public String orderId ;
 		public String currency ;
 		public Integer amount ;

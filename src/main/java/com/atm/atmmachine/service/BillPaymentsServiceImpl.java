@@ -1,6 +1,6 @@
 package com.atm.atmmachine.service;
 
-import java.time.LocalDate;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -12,7 +12,6 @@ import com.atm.atmmachine.dto.DthBill;
 import com.atm.atmmachine.dto.ElectricityBillDto;
 import com.atm.atmmachine.entity.CardDetails;
 import com.atm.atmmachine.entity.CardDetails.CardStatus;
-import com.atm.atmmachine.entity.CardDetails.UserTotallyRegister;
 import com.atm.atmmachine.entity.DTH;
 import com.atm.atmmachine.entity.ElectricityBill;
 import com.atm.atmmachine.entity.TransactionDetails;
@@ -22,6 +21,7 @@ import com.atm.atmmachine.entity.UserRegistration;
 import com.atm.atmmachine.entity.Vendors;
 import com.atm.atmmachine.entity.Vendors.TypeOfVendor;
 import com.atm.atmmachine.exception.BillPaymentsException;
+import com.atm.atmmachine.exceptions.TransactionException;
 import com.atm.atmmachine.repository.CardDetailsRepository;
 import com.atm.atmmachine.repository.DthRepository;
 import com.atm.atmmachine.repository.ElectricityBillRepository;
@@ -76,6 +76,7 @@ public class BillPaymentsServiceImpl implements BillPaymentsService {
 				throw new BillPaymentsException("Insufficient Balance");
 
 			}
+			
 			JSONObject jsonObject = new JSONObject();
 			jsonObject.put("amount", (amount * 100));
 			jsonObject.put("currency", CURRENCY);
@@ -137,7 +138,19 @@ public class BillPaymentsServiceImpl implements BillPaymentsService {
 			throw new BillPaymentsException("Your DTH recharge is " + getUserDthOpt.get().getAmountToBePaid()
 					+ ". You have insufficient Balance. ");
 		}
-
+          Double total=0.0;
+//		List<TransactionDetails> cardLimitCheck = this.transactionRepository
+//				(LocalDateTime.now(), getUserCard);
+//		if (cardLimitCheck.size() > 0) {
+//
+//			for (TransactionDetails transaction : cardLimitCheck)
+//				total += transaction.getBalance();
+//
+//			if (getUserCard.getCardLimit() < getUserDthOpt.get().getAmountToBePaid() + total) {
+//
+//				throw new BillPaymentsException("Exceeds CardLimit");
+//			}
+//		}
 		return DthOpt.get().getAmountToBePaid();
 	}
 
@@ -190,7 +203,8 @@ public class BillPaymentsServiceImpl implements BillPaymentsService {
 			Optional<Vendors> getVendorOpt = this.vendorRepository.findByVendorName(vendorName);
 			Optional<UserRegistration> getUserOpt = this.userRegistrationRepository.findById(userId);
 
-			CardDetails getUserCard = getUserOpt.get().getCardDetails();
+			UserRegistration foundUser=getUserOpt.get();
+			CardDetails getUserCard = foundUser.getCardDetails();
 				
 			getUserDthOpt.get().setCardDetails(getUserCard);
 			getUserDthOpt.get().setVendors(getVendorOpt.get());
@@ -204,24 +218,37 @@ public class BillPaymentsServiceImpl implements BillPaymentsService {
 					getVendorOpt.get().getVendorAccountAmount() + getUserDthOpt.get().getAmountToBePaid());
 			this.vendorRepository.save(getVendorOpt.get());
 
-			// Now add this in transaction table
+//			 Now add this in transaction table
 			TransactionDetails dthTransaction = new TransactionDetails(getUserCard, getVendorOpt.get().getVendorAccountNumber(),
 					getUserCard.getAccountNumber(),LocalDateTime.now(), getUserDthOpt.get().getAmountToBePaid(), "DTH payment : "+vendorName,null, getUserDthOpt.get(),TransactionType.Withdrawal);
 			this.transactionRepository.save(dthTransaction);
-			
-			smspojo.setTo(getUserOpt.get().getPhoneNo());
-			String accountNumber = getUserCard.getAccountNumber().toString();
-
-			int lastFourDigitOfAccountNumber = Integer.parseInt(accountNumber.substring(8,12));
-			smspojo.setMessage("An amount of INR " + getUserDthOpt.get().getAmountToBePaid()
-					+ " has been debited from your Account "
-
-					+ "XXXXXXXX"+lastFourDigitOfAccountNumber + " on " + LocalDateTime.now() + ".Total Avail.bal INR "
-
-					+ getUserCard.getAmount());
-
-			smscontroller.smsSubmit(smspojo);
-		
+//		
+//			smspojo.setTo(getUserOpt.get().getPhoneNo());
+//			String accountNumber = getUserCard.getAccountNumber().toString();
+//
+//			int lastFourDigitOfAccountNumber = Integer.parseInt(accountNumber.substring(8,12));
+//			
+//			smspojo.setMessage(vendorName+" An amount of INR " + getUserDthOpt.get().getAmountToBePaid()
+//					+ " has been debited from your Account "
+//
+//					+ "XXXXXXXX"+lastFourDigitOfAccountNumber + " on " + LocalDateTime.now() + ".Total Avail.bal INR "
+//
+//					+ getUserCard.getAmount());
+//
+//			smscontroller.smsSubmit(smspojo);
+//			TransactionDetails dthTransactions=new TransactionDetails();
+//			dthTransactions.setBalance(getUserDthOpt.get().getAmountToBePaid());
+//			dthTransactions.setCardDetails(getUserCard);
+//			dthTransactions.setToAccountNumber(getVendorOpt.get().getVendorAccountNumber());
+//			dthTransactions.setFromAccountNumber(null);
+//			dthTransactions.setTransactionDate(LocalDateTime.now());
+//			dthTransactions.setTransactionType(TransactionType.Withdrawal);
+//			dthTransactions.setParticulars(vendorName);
+//			dthTransactions=this.transactionRepository.save(dthTransactions);
+//			System.out.println(getUserDthOpt.get().getAmountToBePaid());
+//			System.out.println(getUserCard);
+//			System.out.println(vendorName);
+//		
 			
 		return getUserDthOpt.get();
 	}

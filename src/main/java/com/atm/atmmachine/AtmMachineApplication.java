@@ -91,7 +91,7 @@ public class AtmMachineApplication implements CommandLineRunner{
 		
 		
 //Entering Card Detail of the user ->link with USER Registration
-		CardDetails carddetail1 = new CardDetails(new BigInteger("123412341234"),new BigInteger("7890789078907890"),456,LocalDate.now(),CardType.Silver,25000.0,CardStatus.Active,20000.0,3456,UserTotallyRegister.True,userRegistration2);
+		CardDetails carddetail1 = new CardDetails(new BigInteger("123412341234"),new BigInteger("7890789078907890"),456,LocalDate.now(),CardType.Silver,500.0,CardStatus.Active,2000.0,3456,UserTotallyRegister.True,userRegistration2);
 		 userRegistration2.setCardDetails(carddetail1);cardDetailsRepository.save(carddetail1); userRegistrationRepository.save(userRegistration2);
 		 CardDetails carddetail2 = new CardDetails(new BigInteger("123412344321"),new BigInteger("7890789078900965"),789,LocalDate.now(),CardType.Silver,25000.0,CardStatus.Active,20000.0,7897,UserTotallyRegister.True,userRegistration1);
 		 userRegistration1.setCardDetails(carddetail2);cardDetailsRepository.save(carddetail2); userRegistrationRepository.save(userRegistration1);
