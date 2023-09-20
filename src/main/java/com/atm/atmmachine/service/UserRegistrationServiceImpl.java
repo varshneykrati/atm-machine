@@ -33,6 +33,18 @@ import com.atm.atmmachine.repository.UserRegistrationRepository;
 import com.atm.atmmachine.sms.SMSController;
 import com.atm.atmmachine.sms.SmsPojo;
 
+/******************************************************************************
+ * @author Krati Varshney 
+ * Description UserRegistratiion Service is responsible for taking userDetails from user registration form,
+  			 then all the details like phone number and email got verify by sending OTP on Email and SMS as well as aadhar card number will verify,
+  			 After verfication user Account will get created and debit card will be send on email for that user,
+  			 then user has to submit his card details on portal using register card details form, then card Pin will be send on Email to that user,
+  			 then login form will be there for user, where we have forgot Password module as well, and also user can view Profile where he/she can update phone number,
+  			 and can update address as well, and change Card Pin functionality is also there.
+ * Version 1.0 
+ * Created Date 12-Sept-2023
+ ******************************************************************************/
+
 @Service
 public class UserRegistrationServiceImpl implements UserRegistrationService{
 
@@ -50,6 +62,14 @@ public class UserRegistrationServiceImpl implements UserRegistrationService{
 	Integer generateOtp = null;
 	Integer generateSmsOtp = null;
 	SmsPojo smspojo = new SmsPojo();
+	
+	/******************************************************************************
+	 * Method -userRegistrationDetails 
+	 * Description - verify user by sending different Generated OTP on email and on SMS, also verifying Aadhar card.
+	 * @return OtpGeneration - OTP on email and on SMS.
+	 * Created by Krati Varshney
+	 * Created Date 12-Sept-2023
+	 ******************************************************************************/
 	
 	@Override
 	public OtpGeneration userRegistrationDetails(UserRegistration userRegisteration) throws HandleException {
@@ -108,6 +128,14 @@ public class UserRegistrationServiceImpl implements UserRegistrationService{
 		}
 		
 	}
+	
+	/******************************************************************************
+	 * Method -saveUserDetail 
+	 * Description - after verifying OTPs, submit user details to create an account.
+	 * @return UserRegistration - user details.
+	 * Created by Krati Varshney
+	 * Created Date 12-Sept-2023
+	 ******************************************************************************/
 
 	@Override
 	public UserRegistration saveUserDetail(UserRegistration userRegistration) throws HandleException {
@@ -199,6 +227,14 @@ public class UserRegistrationServiceImpl implements UserRegistrationService{
 			throw new  HandleException("we dont have user");
 		}
 	}
+	
+	/******************************************************************************
+	 * Method - login 
+	 * Description - user login.
+	 * @return UserRegistration - user details.
+	 * Created by Krati Varshney
+	 * Created Date 12-Sept-2023
+	 ******************************************************************************/
 
 	@Override
 	public UserRegistration checkLoginDetails(UserLogin userLogin) throws HandleException {
@@ -219,6 +255,14 @@ public class UserRegistrationServiceImpl implements UserRegistrationService{
 		}
 
 	}
+	
+	/******************************************************************************
+	 * Method - addUserCard 
+	 * Description - add User debit card and sending card PIN on email.
+	 * @return CardDetails - user debit card details.
+	 * Created by Krati Varshney
+	 * Created Date 12-Sept-2023
+	 ******************************************************************************/
 
 	@Override
 	public CardDetails addUserCard(String userId, CardDetails cardDetails) throws HandleException {
@@ -291,6 +335,15 @@ public class UserRegistrationServiceImpl implements UserRegistrationService{
 			}
 		
 	}
+	
+	
+	/******************************************************************************
+	 * Method - viewUserProfile 
+	 * Description - view user profile.
+	 * @return CardDetails - user card details.
+	 * Created by Krati Varshney
+	 * Created Date 12-Sept-2023
+	 ******************************************************************************/
 
 	@Override
 	public CardDetails viewUserProfile(String userId) throws HandleException {
@@ -304,6 +357,14 @@ public class UserRegistrationServiceImpl implements UserRegistrationService{
 		}
 	}
 
+	/******************************************************************************
+	 * Method - otpForUpdatingPhoneNumber 
+	 * Description - sending Otp for verify phone number while updation.
+	 * @return Integer - generated otp.
+	 * Created by Krati Varshney
+	 * Created Date 12-Sept-2023
+	 ******************************************************************************/
+	
 	@Override
 	public Integer otpForUpdatingPhoneNumber(UserRegistration userRegistration, String userId) throws HandleException {
 		Optional<UserRegistration> getUserOpt = this.userRegistrationRepository.findById(userId);
@@ -328,6 +389,14 @@ public class UserRegistrationServiceImpl implements UserRegistrationService{
 		
 	}
 	
+	/******************************************************************************
+	 * Method - updatingUserPhoneNumber 
+	 * Description - update phone number after verify.
+	 * @return UserRegistration - user details.
+	 * Created by Krati Varshney
+	 * Created Date 12-Sept-2023
+	 ******************************************************************************/
+	
 	@Override
 	public UserRegistration updatingUserPhoneNumber(UserRegistration userRegistration, String userId) throws HandleException {
 		Optional<UserRegistration> getUserOpt = this.userRegistrationRepository.findById(userId);
@@ -341,6 +410,14 @@ public class UserRegistrationServiceImpl implements UserRegistrationService{
 		}
 	}
 	
+	/******************************************************************************
+	 * Method - getAddress 
+	 * Description - fetch user address.
+	 * @return Address - user address.
+	 * Created by Krati Varshney
+	 * Created Date 12-Sept-2023
+	 ******************************************************************************/
+	
 	@Override
 	public Address getAddress(String userId) throws HandleException {
 		Optional<UserRegistration> getUserOpt = this.userRegistrationRepository.findById(userId);
@@ -352,6 +429,13 @@ public class UserRegistrationServiceImpl implements UserRegistrationService{
 		}
 	}
 	
+	/******************************************************************************
+	 * Method - changeUserAddress 
+	 * Description - update user address.
+	 * @return UserRegistration - user details.
+	 * Created by Krati Varshney
+	 * Created Date 12-Sept-2023
+	 ******************************************************************************/
 	
 	@Override
 	public UserRegistration changeUserAddress(Address address, String userId) throws HandleException {
@@ -365,6 +449,14 @@ public class UserRegistrationServiceImpl implements UserRegistrationService{
 			throw new HandleException("User not exist, Please Register");
 		}
 	}
+	
+	/******************************************************************************
+	 * Method - sendOtpOnEmail 
+	 * Description - verifying email by sending otp on email for forgot password module.
+	 * @return Integer - generated otp.
+	 * Created by Krati Varshney
+	 * Created Date 12-Sept-2023
+	 ******************************************************************************/
 
 	@Override
 	public Integer sendOtpOnEmail(EmailDto emailDto, String string) throws HandleException {
@@ -384,6 +476,14 @@ public class UserRegistrationServiceImpl implements UserRegistrationService{
 			throw new HandleException("Email id is not present. Please register first");
 		}
 	}
+	
+	/******************************************************************************
+	 * Method - savePassword 
+	 * Description - save update password of forgot password module.
+	 * @return UserRegistration - user details.
+	 * Created by Krati Varshney
+	 * Created Date 12-Sept-2023
+	 ******************************************************************************/
 
 	@Override
 	public UserRegistration savePassword(Password password, String userId) throws HandleException {
@@ -397,6 +497,14 @@ public class UserRegistrationServiceImpl implements UserRegistrationService{
 			throw new HandleException("User not exist");
 		}
 	}
+	
+	/******************************************************************************
+	 * Method - sendUserEmailForUpdatePin 
+	 * Description - verify email for update card PIN.
+	 * @return Integer - generated OTP.
+	 * Created by Krati Varshney
+	 * Created Date 12-Sept-2023
+	 ******************************************************************************/
 	
 	@Override
 	public Integer sendUserEmailForUpdatePin(String userId) throws HandleException {
@@ -421,6 +529,14 @@ public class UserRegistrationServiceImpl implements UserRegistrationService{
 		}
 	}
 	
+	/******************************************************************************
+	 * Method - changeUserCardPin 
+	 * Description - after verification, update PIN.
+	 * @return CardDetails - card details.
+	 * Created by Krati Varshney
+	 * Created Date 12-Sept-2023
+	 ******************************************************************************/
+	
 	@Override
 	public CardDetails changeUserCardPin(CardDetails cardDetails, String userId) throws HandleException {
 		Optional<UserRegistration> getUserOpt = this.userRegistrationRepository.findById(userId);
@@ -436,7 +552,14 @@ public class UserRegistrationServiceImpl implements UserRegistrationService{
 		}
 		
 	}
-
+	
+	/******************************************************************************
+	 * Method - fetchingUser 
+	 * Description - fetch user detail to store user in session to track user onto the portal.
+	 * @return UserRegistration - user details.
+	 * Created by Krati Varshney
+	 * Created Date 12-Sept-2023
+	 ******************************************************************************/
 
 	@Override
 	public UserRegistration fetchingUser(UserLogin userLogin) throws HandleException {
