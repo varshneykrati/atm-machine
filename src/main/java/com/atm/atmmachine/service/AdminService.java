@@ -6,7 +6,6 @@ import java.util.Optional;
 
 import com.atm.atmmachine.dto.CardLimit;
 import com.atm.atmmachine.dto.TransactionDateInfo;
-import com.atm.atmmachine.entity.CardDetails.CardType;
 import com.atm.atmmachine.entity.UserRegistration;
 import com.atm.atmmachine.entity.UserRegistration.UserRegistrationApproval;
 import com.atm.atmmachine.exceptions.AdminException;

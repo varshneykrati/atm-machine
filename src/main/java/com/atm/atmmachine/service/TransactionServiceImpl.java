@@ -253,7 +253,7 @@ public class TransactionServiceImpl implements TransactionService {
 		TransactionDetails transactionDetails = new TransactionDetails();
 		transactionDetails.setCardDetails(foundCard);
 		transactionDetails.setToAccountNumber(toAccountNumber);
-		transactionDetails.setFromAccountNumber(null);
+		transactionDetails.setFromAccountNumber(foundCard.getAccountNumber());
 		transactionDetails.setParticulars("Transfered to"+tofoundCard.getUserRegistration().getUserName());
 		transactionDetails.setTransactionDate(LocalDateTime.now());
 		transactionDetails.setBalance(fundTransactionAmount);
@@ -273,7 +273,7 @@ public class TransactionServiceImpl implements TransactionService {
 		TransactionDetails toTransactionDetails = new TransactionDetails();
 		toTransactionDetails.setCardDetails(tofoundCard);
 		toTransactionDetails.setFromAccountNumber(foundCard.getAccountNumber());
-		toTransactionDetails.setToAccountNumber(null);
+		toTransactionDetails.setToAccountNumber(tofoundCard.getAccountNumber());
 		toTransactionDetails.setParticulars("Transfered from : "+foundCard.getUserRegistration().getUserName());
 		toTransactionDetails.setTransactionDate(LocalDateTime.now());
 		toTransactionDetails.setBalance(fundTransactionAmount);
