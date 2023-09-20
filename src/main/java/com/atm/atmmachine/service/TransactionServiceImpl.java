@@ -26,6 +26,16 @@ import com.atm.atmmachine.repository.UserRegistrationRepository;
 import com.atm.atmmachine.sms.SMSController;
 import com.atm.atmmachine.sms.SmsPojo;
 
+
+/********************************************************************************************************
+ * @author :Vaishnav Holkar
+ * Description: It is  a service implementation class that provide the service for bank transaction like adding funds,fund withdrawal,
+                internal fund transfer,transaction history,check balance
+ * Version: 1.0
+ * Created date: 04-09-2023
+ *********************************************************************************************************/
+ 
+
 @Service
 public class TransactionServiceImpl implements TransactionService {
 
