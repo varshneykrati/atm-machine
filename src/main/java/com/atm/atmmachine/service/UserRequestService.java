@@ -7,7 +7,14 @@ import com.atm.atmmachine.entity.CardDetails.CardType;
 import com.atm.atmmachine.entity.UserRequest;
 import com.atm.atmmachine.exceptions.RequestException;
 
-
+/********************************************************************************************************
+ * @author :Sidhi Jain
+ * Description: It is  a service  that provide the service for raising a request, view all the request
+ *              ,for updating and deleting the request.
+ * Version: 1.0
+ * Created date: 04-09-2023
+ *********************************************************************************************************/
+ 
 public interface UserRequestService {
 
 	UserRequest getUserRequestById(String id)throws RequestException;
