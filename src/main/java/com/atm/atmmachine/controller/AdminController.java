@@ -1,7 +1,6 @@
 package com.atm.atmmachine.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -15,13 +14,32 @@ import org.springframework.web.bind.annotation.RestController;
 import com.atm.atmmachine.dto.AdminRemark;
 import com.atm.atmmachine.dto.CardLimit;
 import com.atm.atmmachine.dto.TransactionDateInfo;
-import com.atm.atmmachine.entity.CardDetails.CardType;
-import com.atm.atmmachine.entity.UserRegistration;
 import com.atm.atmmachine.entity.UserRequest;
-import com.atm.atmmachine.entity.UserRegistration.UserRegistrationApproval;
 import com.atm.atmmachine.entity.UserRequest.RequestStatus;
 import com.atm.atmmachine.exceptions.AdminException;
 import com.atm.atmmachine.service.AdminService;
+
+/************************************************************************************
+ * @author Shivam 
+ * Description : It is a controller that provides the services
+ *         for displaying all pending requests,setting admin remark,change card
+ *         limit of specific card type, sum of daily transaction. 
+ *         Endpoints:
+ * 
+ *         - PATCH /admin/request/status/{reqid}: Approve pending requests if conditions
+ *         satisfied.
+ *         
+ *         - PATCH /admin/adminremark/{reqid}: set admin remark for specific request.
+ *         
+ *         - PATCH /admin/cardlimit/: change card limit of specific card type.
+ *         
+ *         - GET /admin/users/request/{request}: Retrieve all pending and specific request.
+ * 
+ *         - GET /admin/transaction: Retrieve the transaction sum datewise.
+ * 
+ *         
+ *         Created Date 12-Sept-2023
+ ************************************************************************************/
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200/")
@@ -34,16 +52,7 @@ public class AdminController {
 	public String krati() {
 		return "Hello welcome shivam";
 	}
-
-	// to display the requests by their id
-	@GetMapping("/admin/requests/{id}")
-	public Optional<UserRequest> displayRequestById(@PathVariable("id") String id) throws AdminException {
-		try {
-			return this.adminService.getRequestById(id);
-		} catch (AdminException e) {
-			throw e;
-		}
-	}
+	
 
 	// used when admin wants to display all pending requests
 	@GetMapping("/admin/requests")
@@ -51,15 +60,13 @@ public class AdminController {
 		return this.adminService.displayRequestByStatus();
 	}
 
-	// used to display when admin wants to see all cardlost requests
+	
 	@GetMapping("/admin/users/request/{request}")
 	public List<UserRequest> displayCardLostRequests(@PathVariable("request") String request) {
 		return this.adminService.displayByRequest(request);
 	}
 
-
-
-	// used to approve the cardLost request of specific requestid
+	//to change request status of specific requestId
 	@PatchMapping("/admin/request/status/{reqid}")
 	public RequestStatus changeRequestStatus(@PathVariable("reqid") String reqId) throws AdminException {
 
@@ -72,23 +79,6 @@ public class AdminController {
 		return currentUserRequest.getRequestStatus();
 	}
 
-	// to display users with status inactive
-	@GetMapping("/admin/users/inactive")
-	public List<UserRegistration> displayUsersWithStatusInactive() {
-		return this.adminService.displayUsersWithStatusInactive();
-	}
-
-	// to set user registration approval active
-	@PatchMapping("/admin/change/userregistrationapproval/{userid}")
-	public UserRegistrationApproval changeUserRegistrationApproval(@PathVariable("userid") String userId)
-			throws AdminException {
-		try {
-			return this.adminService.updateUserRegistrationApproval(userId);
-		} catch (AdminException e) {
-			throw e;
-		}
-	}
-
 	// to set the admin remark for specific req id
 	@PatchMapping("/admin/adminremark/{reqid}")
 	public String setAdminRemarkForRequest(@PathVariable("reqid") String reqId, @RequestBody AdminRemark adminRemark)
@@ -99,8 +89,6 @@ public class AdminController {
 			throw e;
 		}
 	}
-	
-	
 
 	// to change card limit of specific card type
 	@PatchMapping("/admin/cardlimit/")
@@ -113,21 +101,11 @@ public class AdminController {
 		}
 	}
 
-	// to validate aadhar card
-	@GetMapping("/admin/aadharcard/{userid}")
-	public Boolean validateAadharCard(@PathVariable("userid") String userId) throws AdminException {
-		Optional<UserRegistration> user = this.adminService.findByUserId(userId);
-		if (!user.isPresent())
-			throw new AdminException("User doesn't exist");
-		return this.adminService.validAadharCard(user.get().getAadharNumber().toString());
-	}
 
-
-	//admin wants to see today's transaction sum
+	// admin wants to see today's transaction sum
 	@GetMapping("/admin/transaction")
 	public List<TransactionDateInfo> sumOfTodayTransaction() {
 		return this.adminService.sumOfTodayTransaction();
 	}
-	
 
 }
